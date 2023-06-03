@@ -6,8 +6,36 @@
 
 void AbortWithError(const char *reason)
 {
-    MessageBox(NULL, reason, "Fatal Error", MB_OK);
+    MessageBox(NULL, reason, "Fatal Error", MB_OK | MB_ICONERROR);
     abort();
+}
+
+void InjectDLL(HANDLE process, const char *dllPath)
+{
+    size_t dllPathLength = strlen(dllPath);
+
+    FARPROC loadLibraryProc = GetProcAddress(GetModuleHandleA("Kernel32.dll"), "LoadLibraryA");
+    if (loadLibraryProc == NULL)
+        AbortWithError("Could not locate LoadLibraryA");
+
+    LPVOID remoteDllPath = VirtualAllocEx(process, NULL, dllPathLength + 1, MEM_COMMIT, PAGE_READWRITE); // Allocate DLL path in the target process
+    if (remoteDllPath == NULL)
+        AbortWithError("Could not allocate remote DLL path");
+    WriteProcessMemory(process, remoteDllPath, dllPath, dllPathLength + 1, NULL);
+
+    HANDLE remoteThread = CreateRemoteThread(process, NULL, 0, (LPTHREAD_START_ROUTINE)loadLibraryProc, remoteDllPath, 0, NULL); // Load the DLL and execute the entry point
+    if (remoteThread == NULL)
+        AbortWithError("Could not create remote thread");
+
+    WaitForSingleObject(remoteThread, INFINITE);
+
+    DWORD exitCode; // This will be 0 (NULL) if LoadLibraryA fails
+    GetExitCodeThread(remoteThread, &exitCode);
+    if (exitCode == 0)
+        AbortWithError("LoadLibraryA failed");
+
+    VirtualFreeEx(process, remoteDllPath, 0, MEM_RELEASE);
+    CloseHandle(remoteThread);
 }
 
 int WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, int cmdShow)
@@ -16,10 +44,22 @@ int WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, int cmdSh
     char **argV = __argv;
 
     const char *gamePath = "subrosa.exe";
+    const char *dllPath = "Suitium.dll";
 
-    for (int argNum = 1; argNum < argC; argNum++)
+    for (int argNum = 1; argNum < argC; argNum++) // TODO: this is shit
     {
-        gamePath = argV[argNum]; // TODO: this is shit
+        if (strcmp(argV[argNum], "--help") == 0)
+        {
+            MessageBox(NULL, "SuitiumLauncher.exe [gamePath=\"subrosa.exe\"] [dllPath=\"Suitium.dll\"]", "Help", MB_OK | MB_ICONINFORMATION);
+            return 0;
+        }
+
+        if (argNum == 1)
+            gamePath = argV[argNum];
+        else if (argNum == 2)
+            dllPath = argV[argNum];
+        else
+            AbortWithError("Too much args, try --help");
     }
 
     size_t gameDirectorySize = strlen(gamePath);
@@ -55,10 +95,9 @@ int WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, int cmdSh
         &startupInfo, &processInfo
     );
     if (!success)
-    {
         AbortWithError("Could not open process"); // TODO: Add better error description?
-    }
 
+    InjectDLL(processInfo.hProcess, dllPath);
     ResumeThread(processInfo.hThread); // We created a process using CREATE_SUSPENDED, remember? (Of course you do, if you don't, seek a doctor)
 
     WaitForSingleObject(processInfo.hProcess, INFINITE);
