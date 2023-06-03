@@ -1,0 +1,1 @@
+.\Output\SuitiumLauncher\Debug\SuitiumLauncher.exe %*
