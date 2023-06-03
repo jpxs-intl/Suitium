@@ -1,5 +1,6 @@
 # Suitium
 
+![Suitium Logo](/Assets/icon.png) \
 Suitium is a modding tool for [Sub Rosa](http://subrosagame.com).
 
 ## Features
