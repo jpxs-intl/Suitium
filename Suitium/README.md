@@ -20,3 +20,9 @@ Developers can script both the server and client, including new UI elements, and
 Status: ❓
 
 Developers can set files to be streamed to players, which won't need to download the files manually.
+
+### Better rendering engine
+
+Status: ❓
+
+Improve CS's OpenGL rendering engine, and maybe add support for other rendering APIs in the future.
