@@ -50,7 +50,7 @@ int WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, int cmdSh
         gamePath, NULL,
         NULL, NULL,
         FALSE,
-        CREATE_SUSPENDED | NORMAL_PRIORITY_CLASS, // We gotta create a suspended process so we can injected Suitium.dll before everything runs.
+        CREATE_SUSPENDED | NORMAL_PRIORITY_CLASS, // We gotta create a suspended process so we can inject Suitium.dll before anything runs
         NULL, gameDirectorySize > 0 ? gameDirectory : NULL,
         &startupInfo, &processInfo
     );
