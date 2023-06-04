@@ -1,11 +1,14 @@
+#include <cstdarg>
 #include <cstdint>
+#include <cstring>
+#include <sstream>
 #include <type_traits>
 
 // https://github.com/noche-x/client/blob/main/src/game.hpp
 #if _WIN32
-using DrawTextFunc = std::int64_t (*)(char *, float, float, float, int, float, float, float, float, ...);
+using DrawTextFunc = std::int64_t (*)(const char *, float, float, float, int, float, float, float, float, ...);
 #elif __linux__
-using DrawTextFunc = std::int64_t (*)(char *, int, int, int, float, float, float, float, float, float, float, void *);
+using DrawTextFunc = std::int64_t (*)(const char *, int, int, int, float, float, float, float, float, float, float, void *);
 #endif
 
 // I need stuff!!!!
@@ -18,19 +21,63 @@ using DrawTextFunc = std::int64_t (*)(char *, int, int, int, float, float, float
 static subhook::Hook *drawTextHook;
 
 #if _WIN32
-template<typename... Args>
-std::int64_t DrawTextHookFunc(char *arg1, float arg2, float arg3, float arg4, int arg5, float arg6, float arg7, float arg8, float arg9, Args&&... args)
+std::int64_t DrawTextHookFunc(const char *format, float arg2, float arg3, float arg4, int arg5, float arg6, float arg7, float arg8, float arg9, ...)
 {
     subhook::ScopedHookRemove scopedRemove(drawTextHook);
 
     const AddressInterface::AddressTable addressTable = GetAddressInterface()->GetAddressTable();
     DrawTextFunc originalFunc = (DrawTextFunc)(GetBaseAddress() + addressTable.at(AddressType::DrawTextFunc));
-    originalFunc(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, std::forward<Args>(args)...);
 
-    return 0;
+    std::stringstream newFormatStream;
+    
+    va_list vaList;
+    va_start(vaList, arg9);
+
+    std::size_t formatSize = std::strlen(format);
+    for (std::size_t formatCount = 0; formatCount < formatSize; formatCount++)
+    {
+        if (format[formatCount] != '/')
+        {
+            newFormatStream << format[formatCount];
+            continue;
+        }
+        
+        formatCount++;
+        if (formatCount >= formatSize)
+            break;
+
+        if (format[formatCount] == '/')
+            newFormatStream << "//";
+        else if (format[formatCount] == 'c')
+            newFormatStream << va_arg(vaList, char);
+        else if (format[formatCount] == 'i')
+            newFormatStream << va_arg(vaList, int);
+        else if (format[formatCount] == 'u')
+            newFormatStream << va_arg(vaList, unsigned int);
+        else if (format[formatCount] == 'x')
+            newFormatStream << std::hex << va_arg(vaList, unsigned int);
+        else if (format[formatCount] == 'f')
+            newFormatStream << va_arg(vaList, double); // floats in varargs are always doubles!
+        else if (format[formatCount] == 's')
+            newFormatStream << va_arg(vaList, const char *);
+        else if (format[formatCount] == 'I') // this is number separated by commas, like 1,000,000
+        {
+            // TODO:
+        }
+        else
+        {
+            newFormatStream = std::stringstream(); // Reset the stream, this is not supposed to happen
+            newFormatStream << "Suitium Error: //" << format[formatCount] << " not implemented.";
+            break;
+        }
+    }
+
+    va_end(vaList);
+
+    return originalFunc(newFormatStream.str().c_str(), arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 }
 #elif __linux__
-std::int64_t DrawTextHookFunc(char *, int, int, int, float, float, float, float, float, float, float, void *)
+std::int64_t DrawTextHookFunc(const char *, int, int, int, float, float, float, float, float, float, float, void *)
 {
     subhook::ScopedHookRemove scopedRemove(drawTextHook);
 }

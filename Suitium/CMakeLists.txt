@@ -15,7 +15,7 @@ add_library(
     ../subhook/subhook.c
 )
 
-set_property (TARGET Suitium PROPERTY CXX_STANDARD 17)
+set_property (TARGET Suitium PROPERTY CXX_STANDARD 20)
 
 if (WIN32)
     target_compile_definitions(Suitium PRIVATE SUBHOOK_STATIC) # Windows will give "dllimport" errors without this define.

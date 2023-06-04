@@ -14,7 +14,7 @@
 using HookEntry = std::pair<std::intptr_t, subhook::Hook **>;
 
 static const std::unordered_map<AddressType, HookEntry> hookFunctions = {
-    std::make_pair(AddressType::DrawTextFunc, std::make_pair((std::intptr_t)DrawTextHookFunc<std::int64_t[64]>, &drawTextHook))
+    std::make_pair(AddressType::DrawTextFunc, std::make_pair((std::intptr_t)DrawTextHookFunc, &drawTextHook))
 };
 
 static std::unordered_map<AddressType, subhook::Hook *> hooks;
