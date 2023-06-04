@@ -25,8 +25,10 @@ public:
 
     AddressInterface(const AddressInterface &) = delete;
 
+    using AddressTable = std::unordered_map<AddressType, std::intptr_t>;
+
     virtual bool CheckVersion() const = 0;
-    virtual const std::unordered_map<AddressType, intptr_t> &GetAddressTable() const = 0;
+    virtual const AddressTable &GetAddressTable() const = 0;
 };
 
 AddressInterface *GetAddressInterface();

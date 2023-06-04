@@ -14,5 +14,5 @@ public:
     AddressInterfaceWin32Client(const AddressInterfaceWin32Client &) = delete;
 
     virtual bool CheckVersion() const override;
-    virtual const std::unordered_map<AddressType, intptr_t> &GetAddressTable() const override;
+    virtual const AddressTable &GetAddressTable() const override;
 };

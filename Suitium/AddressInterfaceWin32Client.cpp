@@ -23,9 +23,9 @@ bool AddressInterfaceWin32Client::CheckVersion() const
 
     return actualGameVersionNum == GameVersionNum && actualGameVersionChar == GameVersionChar; 
 }
-const std::unordered_map<AddressType, intptr_t> &AddressInterfaceWin32Client::GetAddressTable() const
+const AddressInterface::AddressTable &AddressInterfaceWin32Client::GetAddressTable() const
 {
-    static std::unordered_map<AddressType, intptr_t> addressMap = {
+    static AddressInterface::AddressTable addressMap = {
         std::make_pair(AddressType::GameVersionNum, 0x2B231C),
         std::make_pair(AddressType::GameVersionChar, 0x2B23DC),
 
