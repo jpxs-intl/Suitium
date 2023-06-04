@@ -16,10 +16,10 @@ using DrawTextFunc = std::int64_t (*)(char *, int, int, int, float, float, float
 #if IMPLEMENT_HOOKS
 
 static subhook::Hook *drawTextHook;
-#include<windows.h>
+
 #if _WIN32
 template<typename... Args>
-std::int64_t DrawTextHookFunc(char * arg1, float arg2, float arg3, float arg4, int arg5, float arg6, float arg7, float arg8, float arg9, Args&&... args)
+std::int64_t DrawTextHookFunc(char *arg1, float arg2, float arg3, float arg4, int arg5, float arg6, float arg7, float arg8, float arg9, Args&&... args)
 {
     subhook::ScopedHookRemove scopedRemove(drawTextHook);
 
