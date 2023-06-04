@@ -1,1 +1,1 @@
-.\Output\SuitiumLauncher\Debug\SuitiumLauncher.exe %*
+@.\Output\SuitiumLauncher\Debug\SuitiumLauncher.exe %*

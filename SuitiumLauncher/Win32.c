@@ -40,6 +40,8 @@ void InjectDLL(HANDLE process, const char *dllPath)
 
 int WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, int cmdShow)
 {
+    (void)instance; (void)prevInstance; (void)cmdLine; (void)cmdShow;
+
     int argC = __argc;
     char **argV = __argv;
 
