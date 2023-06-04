@@ -1,10 +1,10 @@
+#include <bitset>
 #include <cstdarg>
 #include <cstdint>
 #include <cstring>
+#include <iomanip>
 #include <sstream>
 #include <type_traits>
-#include <iomanip>
-#include <bitset>
 
 // https://github.com/noche-x/client/blob/main/src/game.hpp
 #if _WIN32
@@ -18,7 +18,7 @@ using DrawTextFunc = std::int64_t (*)(const char *, int, int, int, float, float,
 #define IMPLEMENT_HOOKS 1
 #endif
 
-void gameFormatText(const char *format, std::stringstream& newFormatStream, va_list vaList) 
+void gameFormatText(const char *format, std::stringstream& newFormatStream, std::va_list vaList) 
 {
     std::size_t formatSize = std::strlen(format);
     for (std::size_t formatCount = 0; formatCount < formatSize; formatCount++)
@@ -32,7 +32,8 @@ void gameFormatText(const char *format, std::stringstream& newFormatStream, va_l
         formatCount++;
         if (formatCount >= formatSize)
             break;
-
+        
+        // I know I could've used a switch here
         if (format[formatCount] == '/')
             newFormatStream << "//";
         else if (format[formatCount] == 'c')
@@ -69,7 +70,8 @@ void gameFormatText(const char *format, std::stringstream& newFormatStream, va_l
                 newFormatStream << toFormat;
                 continue;
               }
-              else {
+              else 
+              {
                 newFormatStream << toFormat / 1000 % 1000;
               }
             }
@@ -102,14 +104,11 @@ std::int64_t DrawTextHookFunc(const char *format, float arg2, float arg3, float 
     DrawTextFunc originalFunc = (DrawTextFunc)(GetBaseAddress() + addressTable.at(AddressType::DrawTextFunc));
 
     std::stringstream newFormatStream;
-    
-    if((flags & 0x40) == 0)
+    if((flags & 0x40) == 0) // This flag is whether the text should be formatted or not
     {
-        va_list vaList;
+        std::va_list vaList;
         va_start(vaList, arg9);
-
         gameFormatText(format, newFormatStream, vaList);
-
         va_end(vaList);
     }
     else
