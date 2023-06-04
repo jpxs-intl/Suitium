@@ -12,7 +12,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved)
 {
     (void)instance; (void)reason; (void)reserved;
 
-    SetBaseAddress((std::intptr_t)GetModuleHandle(NULL));
+    RegisterBaseAddress((std::intptr_t)GetModuleHandle(NULL));
 
     switch (reason)
     {

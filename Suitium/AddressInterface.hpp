@@ -25,13 +25,13 @@ public:
 
     AddressInterface(const AddressInterface &) = delete;
 
-    using AddressTable = std::unordered_map<AddressType, std::intptr_t>;
+    using AddressMap = std::unordered_map<AddressType, std::intptr_t>;
 
     virtual bool CheckVersion() const = 0;
-    virtual const AddressTable &GetAddressTable() const = 0;
+    virtual const AddressMap &GetAddressMap() const = 0;
 };
 
 AddressInterface *GetAddressInterface();
 
-void SetBaseAddress(std::intptr_t address);
+void RegisterBaseAddress(std::intptr_t address);
 std::intptr_t GetBaseAddress(void);

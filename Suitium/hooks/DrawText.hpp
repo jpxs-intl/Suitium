@@ -13,12 +13,51 @@ using DrawTextFunc = std::int64_t (*)(const char *, float, float, float, int, fl
 using DrawTextFunc = std::int64_t (*)(const char *, int, int, int, float, float, float, float, float, float, float, void *);
 #endif
 
+void CSFormat(const char *format, std::stringstream& newFormatStream, std::va_list vaList);
+#if _WIN32
+std::int64_t DrawTextHookFunc(const char *format, float arg2, float arg3, float arg4, int flags, float arg6, float arg7, float arg8, float arg9, ...);
+#elif __linux__
+std::int64_t DrawTextHookFunc(const char *format, int, int, int, float, float, float, float, float, float, float, void *);
+#endif
+
 // I need stuff!!!!
 #if _VSCODE
 #define IMPLEMENT_HOOKS 1
 #endif
 
-void gameFormatText(const char *format, std::stringstream& newFormatStream, std::va_list vaList) 
+#if IMPLEMENT_HOOKS
+
+static subhook::Hook *drawTextHook;
+
+#if _WIN32
+std::int64_t DrawTextHookFunc(const char *format, float arg2, float arg3, float arg4, int flags, float arg6, float arg7, float arg8, float arg9, ...)
+{
+    subhook::ScopedHookRemove scopedRemove(drawTextHook);
+
+    const AddressInterface::AddressMap addressTable = GetAddressInterface()->GetAddressMap();
+    DrawTextFunc originalFunc = (DrawTextFunc)(GetBaseAddress() + addressTable.at(AddressType::DrawTextFunc));
+
+    std::stringstream newFormatStream;
+    if((flags & 0x40) == 0) // This flag is whether the text should be formatted or not
+    {
+        std::va_list vaList;
+        va_start(vaList, arg9);
+        CSFormat(format, newFormatStream, vaList);
+        va_end(vaList);
+    }
+    else
+        newFormatStream << format;
+
+    return originalFunc(newFormatStream.str().c_str(), arg2, arg3, arg4, flags, arg6, arg7, arg8, arg9);
+}
+#elif __linux__
+std::int64_t DrawTextHookFunc(const char *format, int, int, int, float, float, float, float, float, float, float, void *)
+{
+    subhook::ScopedHookRemove scopedRemove(drawTextHook);
+}
+#endif
+
+void CSFormat(const char *format, std::stringstream& newFormatStream, std::va_list vaList) 
 {
     std::size_t formatSize = std::strlen(format);
     for (std::size_t formatCount = 0; formatCount < formatSize; formatCount++)
@@ -90,37 +129,5 @@ void gameFormatText(const char *format, std::stringstream& newFormatStream, std:
         }
     }
 }
-
-#if IMPLEMENT_HOOKS
-
-static subhook::Hook *drawTextHook;
-
-#if _WIN32
-std::int64_t DrawTextHookFunc(const char *format, float arg2, float arg3, float arg4, int flags, float arg6, float arg7, float arg8, float arg9, ...)
-{
-    subhook::ScopedHookRemove scopedRemove(drawTextHook);
-
-    const AddressInterface::AddressTable addressTable = GetAddressInterface()->GetAddressTable();
-    DrawTextFunc originalFunc = (DrawTextFunc)(GetBaseAddress() + addressTable.at(AddressType::DrawTextFunc));
-
-    std::stringstream newFormatStream;
-    if((flags & 0x40) == 0) // This flag is whether the text should be formatted or not
-    {
-        std::va_list vaList;
-        va_start(vaList, arg9);
-        gameFormatText(format, newFormatStream, vaList);
-        va_end(vaList);
-    }
-    else
-        newFormatStream << format;
-
-    return originalFunc(newFormatStream.str().c_str(), arg2, arg3, arg4, flags, arg6, arg7, arg8, arg9);
-}
-#elif __linux__
-std::int64_t DrawTextHookFunc(const char *, int, int, int, float, float, float, float, float, float, float, void *)
-{
-    subhook::ScopedHookRemove scopedRemove(drawTextHook);
-}
-#endif
 
 #endif

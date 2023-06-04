@@ -2,7 +2,7 @@
 
 #include "AddressInterfaceWin32Client.hpp"
 
-static std::intptr_t baseAddress;
+static std::intptr_t baseAddress = 0;
 
 AddressInterface::AddressInterface()
 {
@@ -21,9 +21,10 @@ AddressInterface *GetAddressInterface()
 #endif
 }
 
-void SetBaseAddress(std::intptr_t address)
+void RegisterBaseAddress(std::intptr_t address)
 {
-    baseAddress = address;
+    if (baseAddress == 0) // why not?
+        baseAddress = address;
 }
 std::intptr_t GetBaseAddress()
 {
