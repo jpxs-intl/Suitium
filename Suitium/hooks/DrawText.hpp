@@ -42,7 +42,7 @@ void gameFormatText(const char *format, std::stringstream& newFormatStream, va_l
         else if (format[formatCount] == 'u')
             newFormatStream << va_arg(vaList, unsigned int);
         else if (format[formatCount] == 'x')
-            newFormatStream << std::hex << va_arg(vaList, unsigned int);
+            newFormatStream << std::hex << va_arg(vaList, unsigned int) << std::dec;
         else if (format[formatCount] == 'f')
             newFormatStream << va_arg(vaList, double); // floats in varargs are always doubles!
         else if (format[formatCount] == 's')
