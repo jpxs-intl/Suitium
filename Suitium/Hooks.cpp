@@ -9,12 +9,14 @@
 #include "AddressInterface.hpp"
 
 #define IMPLEMENT_HOOKS 1
+#include "hooks/ConnectMasterServer.hpp"
 #include "hooks/DrawText.hpp"
 
 using HookEntry = std::pair<std::intptr_t, subhook::Hook **>;
 
 static const std::unordered_map<AddressType, HookEntry> hookEntryMap = {
-    std::make_pair(AddressType::DrawTextFunc, std::make_pair((std::intptr_t)DrawTextHookFunc, &drawTextHook))
+    std::make_pair(AddressType::DrawTextFunc, std::make_pair((std::intptr_t)DrawTextHookFunc, &drawTextHook)),
+    std::make_pair(AddressType::ConnectMasterServerFunc, std::make_pair((std::intptr_t)ConnectMasterServerHookFunc, &connectMasterServerHook))
 };
 
 void PrepareHooks()

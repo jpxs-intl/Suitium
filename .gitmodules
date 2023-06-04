@@ -1,3 +1,6 @@
 [submodule "subhook"]
 	path = subhook
 	url = https://github.com/lalocli/subhook.git
+[submodule "cpp-httplib"]
+	path = cpp-httplib
+	url = https://github.com/lalocli/cpp-httplib.git

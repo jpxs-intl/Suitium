@@ -2,9 +2,14 @@
 #include <cstdarg>
 #include <cstdint>
 #include <cstring>
+#include <format>
 #include <iomanip>
 #include <sstream>
+#include <subhook.h>
 #include <type_traits>
+
+#include "../AddressInterface.hpp"
+#include "../Version.hpp"
 
 // https://github.com/noche-x/client/blob/main/src/game.hpp
 #if _WIN32
@@ -34,8 +39,8 @@ std::int64_t DrawTextHookFunc(const char *format, float x, float y, float size, 
 {
     subhook::ScopedHookRemove scopedRemove(drawTextHook);
 
-    const AddressInterface::AddressMap addressTable = GetAddressInterface()->GetAddressMap();
-    DrawTextFunc originalFunc = (DrawTextFunc)(GetBaseAddress() + addressTable.at(AddressType::DrawTextFunc));
+    const AddressInterface::AddressMap &addressMap = GetAddressInterface()->GetAddressMap();
+    DrawTextFunc originalFunc = (DrawTextFunc)(GetBaseAddress() + addressMap.at(AddressType::DrawTextFunc));
 
     std::stringstream newFormatStream;
     if((flags & 0x40) == 0) // This flag makes the text unformatted
@@ -51,16 +56,65 @@ std::int64_t DrawTextHookFunc(const char *format, float x, float y, float size, 
     unsigned int newFlags = flags;
     newFlags |= 0x40; // Add unformatted flag, since we already formatted it
 
-    if (std::strcmp(format, "Sub Rosa") == 0)
+    if (flags != newFlags) // This is to make sure the text is "constant"
     {
-        // The main menu is being drawn!
-        originalFunc("Suitium", x, y + 32, size * 0.85f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
-    }
-    else if (std::strcmp(format, "W1nters") == 0)
-    {
-        // The last credits menu section is being drawn!
-        originalFunc("Suitium is made by", x, y + 64, size, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
-        originalFunc("JPXS", x + 120, y + 64, size, newFlags, 1.0f, 0.75f, 0.0f, 1.0f);
+        if (std::strcmp(format, "Sub Rosa") == 0)
+        {
+            // The main menu is being drawn!
+
+            // TODO: This probably shouldnt be handled here...
+            int *authStatus = (int *)(GetBaseAddress() + GetAddressInterface()->GetAddressMap().at(AddressType::AuthStatus));
+            int *ticketRetrieved = (int *)(GetBaseAddress() + GetAddressInterface()->GetAddressMap().at(AddressType::AuthTicketRetrieved));
+            if (*authStatus == 0 && *ticketRetrieved)
+            {
+                *authStatus = 3; // We don't need the vanilla game anymore
+                MasterServer::GetSingleton()->RequestClientInfo();
+
+                *(int *)(GetBaseAddress() + GetAddressInterface()->GetAddressMap().at(AddressType::SteamEnabled)) = 0; // I'm not sure if this affects anything, but it's here to hide the "Steam" text
+            }
+
+            if (MasterServer::GetSingleton()->IsConnected())
+            {
+                // TODO: these colors might be not that good
+                if (MasterServer::GetSingleton()->IsClientValid())
+                    originalFunc(std::format("Welcome, {}!", MasterServer::GetSingleton()->GetClientName()).c_str(), x, y + 95, size * 1.5f, newFlags, 0.0f, 1.0f, 0.0f, 1.0f);
+                else if (!*ticketRetrieved)
+                    originalFunc("Hold up...", x, y + 95, size * 1.5f, newFlags, 1.0f, 1.0f, 0.0f, 1.0f);
+                else
+                {
+                    originalFunc("Uh-oh! Looks like you don't own the game.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
+                    originalFunc("Piracy is no party!", x, y + 120, size * 0.9f, newFlags, 1.0f, 0.35f, 0.0f, 1.0f);
+                }
+            }
+            else
+                originalFunc("Uh-oh! Suitium could not connect to the master server.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
+        
+            originalFunc(std::format("Suitium {}", SUITIUM_VERSION).c_str(), x, y + 25, size * 0.85f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
+            
+            return originalFunc(std::format("Sub Rosa 0.{}{}", GameVersionNum, GameVersionChar).c_str(), x, y, size * 1.25f, newFlags, red, green, blue, alpha);
+        }
+        else if (std::strcmp(newFormatStream.str().c_str(), std::format("ALPHA {}{}", GameVersionNum, GameVersionChar).c_str()) == 0)
+        {
+            return 0; // Remove version text
+        }
+        else if (std::strcmp(format, "W1nters") == 0)
+        {
+            // The last credits menu section is being drawn!
+            originalFunc("Suitium is made by", x, y + 64, size, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
+            originalFunc("JPXS", x + 120, y + 64, size, newFlags, 1.0f, 0.75f, 0.0f, 1.0f);
+        }
+        else if (std::strcmp(format, "generating") == 0)
+        {
+            return originalFunc("Generating...", x, y, size, newFlags, red, green, blue, alpha);
+        }
+        else if (std::strcmp(format, "connecting") == 0)
+        {
+            return originalFunc("Connecting...", x, y, size, newFlags, red, green, blue, alpha);
+        }
+        else if (std::strcmp(format, "CS Auth...") == 0)
+        {
+            return originalFunc("JPXS Auth...", x, y, size, newFlags, red, green, blue, alpha);
+        }
     }
 
     return originalFunc(newFormatStream.str().c_str(), x, y, size, newFlags, red, green, blue, alpha);

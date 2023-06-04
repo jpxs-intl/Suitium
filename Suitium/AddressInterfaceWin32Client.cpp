@@ -29,7 +29,16 @@ const AddressInterface::AddressMap &AddressInterfaceWin32Client::GetAddressMap()
         std::make_pair(AddressType::GameVersionNum, 0x2B231C),
         std::make_pair(AddressType::GameVersionChar, 0x2B23DC),
 
-        std::make_pair(AddressType::DrawTextFunc, 0x6D930)
+        std::make_pair(AddressType::AuthName, 0x11E4594C),
+        std::make_pair(AddressType::AuthStatus, 0x2B165F40),
+        std::make_pair(AddressType::AuthTicketRetrieved, 0x429F8FD8),
+
+        std::make_pair(AddressType::SteamEnabled, 0x429F8BC0),
+        std::make_pair(AddressType::SteamAppTicketLength, 0x429F8BD4),  
+        std::make_pair(AddressType::SteamAppTicketBuffer, 0x429F8BD8),
+
+        std::make_pair(AddressType::DrawTextFunc, 0x6D930),
+        std::make_pair(AddressType::ConnectMasterServerFunc, 0xA3F30)
     };
     return addressMap;
 }

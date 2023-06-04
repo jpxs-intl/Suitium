@@ -10,9 +10,18 @@ enum class AddressType
     GameVersionNum,
     GameVersionChar,
 
+    AuthName,
+    AuthStatus, // 0 = Steam Ticket/Auth..., 1 = CS Auth..., 2 = Ready
+    AuthTicketRetrieved,
+
+    SteamEnabled,
+    SteamAppTicketLength,
+    SteamAppTicketBuffer,
+
     // Functions
 
     DrawTextFunc,
+    ConnectMasterServerFunc,
 
     _Count
 };
