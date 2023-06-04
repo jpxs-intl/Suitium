@@ -122,29 +122,67 @@ std::string MasterServer::GetClientName() const
        return "?";
     return std::string((char *)(GetBaseAddress() + GetAddressInterface()->GetAddressMap().at(AddressType::AuthName)));
 }
+std::int32_t MasterServer::GetClientPurchaseID() const
+{
+    if (!this->IsClientValid())
+       return -1;
+    return this->_clientPurchaseID;
+}
+std::uint32_t MasterServer::GetClientPhoneNumber() const
+{
+    if (!this->IsClientValid())
+       return 0;
+    return this->_clientPhoneNumber;
+}
 
 void MasterServer::RequestClientInfo()
 {
     if (!this->IsConnected())
         return;
 
-    std::string authName = std::string((char *)(GetBaseAddress() + GetAddressInterface()->GetAddressMap().at(AddressType::AuthName)));
-    std::uint32_t ticketLength = *(std::uint32_t *)(GetBaseAddress() + GetAddressInterface()->GetAddressMap().at(AddressType::SteamAppTicketLength));
-    char *ticketBuffer = (char *)(GetBaseAddress() + GetAddressInterface()->GetAddressMap().at(AddressType::SteamAppTicketBuffer));
+    // Send
+    {
+        std::string authName = std::string((char *)(GetBaseAddress() + GetAddressInterface()->GetAddressMap().at(AddressType::AuthName)));
+        std::uint32_t ticketLength = *(std::uint32_t *)(GetBaseAddress() + GetAddressInterface()->GetAddressMap().at(AddressType::SteamAppTicketLength));
+        char *ticketBuffer = (char *)(GetBaseAddress() + GetAddressInterface()->GetAddressMap().at(AddressType::SteamAppTicketBuffer));
 
-    // 5 = magic
-    // 32 = name
-    // 4 = ticketlength
-    std::size_t packetSize = 5 + 32 + 4 + ticketLength;
-    char *packetBuffer = (char *)std::malloc(packetSize);
-    std::memset(packetBuffer, 0, packetSize);
-    std::memcpy(&packetBuffer[0], "7DFPH", 5);
-    std::memcpy(&packetBuffer[5], authName.c_str(), authName.size() /* <32*/);
-    std::memcpy(&packetBuffer[37], &ticketLength, 4);
-    std::memcpy(&packetBuffer[41], ticketBuffer, (std::size_t)ticketLength);
+        // 5 = magic
+        // 32 = name
+        // 4 = ticketlength
+        std::size_t packetSize = 5 + 32 + 4 + ticketLength;
+        char *packetBuffer = (char *)std::malloc(packetSize);
+        std::memset(packetBuffer, 0, packetSize);
+        std::memcpy(&packetBuffer[0], "7DFPH", 5);
+        std::memcpy(&packetBuffer[5], authName.c_str(), authName.size() /* <32*/);
+        std::memcpy(&packetBuffer[37], &ticketLength, 4);
+        std::memcpy(&packetBuffer[41], ticketBuffer, (std::size_t)ticketLength);
 
-    sendto(this->_socket, packetBuffer, packetSize, 0, (const sockaddr *)&this->_socketAddress, sizeof(sockaddr_in));
-    std::free(packetBuffer);
+        sendto(this->_socket, packetBuffer, packetSize, 0, (const sockaddr *)&this->_socketAddress, sizeof(sockaddr_in));
 
-    // TODO: Get response
+        std::free(packetBuffer);
+    }
+
+    // Receive
+    {
+        // 5 = magic
+        // 4 = game ID
+        // 4 = master auth
+        // 4 = phone number
+        std::size_t packetSize = 5 + 4 + 4 + 4;
+        char *packetBuffer = (char *)std::malloc(packetSize);
+
+        sockaddr fromAddress = {};
+        int fromAddressLen = sizeof(fromAddress);
+        if (recvfrom(this->_socket, packetBuffer, packetSize, 0, (sockaddr *)&fromAddress, &fromAddressLen) != packetSize) // TODO: timeout
+            goto label_bad;
+        if (memcmp(&packetBuffer[0], "7DFPH", 5) != 0)
+            goto label_bad; // Invalid magic
+        
+        this->_clientPurchaseID = *(std::int32_t *)(&packetBuffer[5]);
+        this->_clientPhoneNumber = *(std::uint32_t *)(&packetBuffer[13]);
+        this->_validClient = true;
+
+label_bad: {}
+        std::free(packetBuffer);
+    }
 }
