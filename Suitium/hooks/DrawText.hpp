@@ -77,7 +77,7 @@ std::int64_t DrawTextHookFunc(const char *format, float x, float y, float size, 
             {
                 // TODO: these colors might be not that good
                 if (MasterServer::GetSingleton()->IsClientValid())
-                    originalFunc(std::format("Welcome, {}!", MasterServer::GetSingleton()->GetClientPhoneNumber()).c_str(), x, y + 95, size * 1.5f, newFlags, 0.0f, 1.0f, 0.0f, 1.0f);
+                    originalFunc(std::format("Welcome, {}!", MasterServer::GetSingleton()->GetClientName()).c_str(), x, y + 95, size * 1.5f, newFlags, 0.0f, 1.0f, 0.0f, 1.0f);
                 else if (!*ticketRetrieved)
                     originalFunc("Hold up...", x, y + 95, size * 1.5f, newFlags, 1.0f, 1.0f, 0.0f, 1.0f);
                 else
