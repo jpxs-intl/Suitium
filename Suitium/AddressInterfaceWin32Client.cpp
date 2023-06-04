@@ -19,7 +19,7 @@ bool AddressInterfaceWin32Client::CheckVersion() const
     char *gameVersionCharPtr = (char *)(GetBaseAddress() + 0x2B23DC);
 
     int actualGameVersionNum = *gameVersionNumPtr;
-    char actualGameVersionChar = (*gameVersionCharPtr) + 97;
+    char actualGameVersionChar = (*gameVersionCharPtr) + 97; // 97 is 'a', CS uses numbers to define the patch version, but they are converted to letters.
 
     return actualGameVersionNum == GameVersionNum && actualGameVersionChar == GameVersionChar; 
 }
