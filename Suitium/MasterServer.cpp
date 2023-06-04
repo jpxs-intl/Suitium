@@ -22,6 +22,8 @@ MasterServer::MasterServer()
 #elif __linux__
     this->_socket = -1;
 #endif
+
+    this->_validClient = false;
 }
 MasterServer::~MasterServer()
 {
@@ -95,6 +97,8 @@ bool MasterServer::Connect(std::string providerAddress)
 #elif __linux__
     // TODO:
 #endif
+
+    this->_validClient = false;
 
     return true;
 }
