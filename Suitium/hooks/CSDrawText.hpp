@@ -179,7 +179,7 @@ std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size
         }
     }
 
-    return addresses::CSDrawTextFunc(newFormatStream.str().c_str(), x, y, size, newFlags, red, 1, blue, alpha);
+    return addresses::CSDrawTextFunc(newFormatStream.str().c_str(), x, y, size, newFlags, red, green, blue, alpha);
 }
 #elif __linux__
 std::int64_t CSDrawTextHookFunc(const char *format, int, int, int, float, float, float, float, float, float, float, void *)
