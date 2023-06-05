@@ -14,9 +14,9 @@
 
 // https://github.com/noche-x/client/blob/main/src/game.hpp
 #if _WIN32
-std::int64_t DrawTextHookFunc(const char *format, float x, float y, float size, unsigned int flags, float red, float green, float blue, float alpha, ...);
+std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size, unsigned int flags, float red, float green, float blue, float alpha, ...);
 #elif __linux__
-std::int64_t DrawTextHookFunc(const char *format, int, int, int, float, float, float, float, float, float, float, void *);
+std::int64_t CSDrawTextHookFunc(const char *format, int, int, int, float, float, float, float, float, float, float, void *);
 #endif
 
 // I need stuff!!!!
@@ -102,7 +102,7 @@ static void csFormat(const char *format, std::stringstream& newFormatStream, std
 }
 
 #if _WIN32
-std::int64_t DrawTextHookFunc(const char *format, float x, float y, float size, unsigned int flags, float red, float green, float blue, float alpha, ...)
+std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size, unsigned int flags, float red, float green, float blue, float alpha, ...)
 {
     subhook::ScopedHookRemove scopedRemove(drawTextHook);
 
@@ -142,22 +142,22 @@ std::int64_t DrawTextHookFunc(const char *format, float x, float y, float size, 
             {
                 // TODO: these colors might be not that good
                 if (MasterServer::GetSingleton()->IsClientValid())
-                    addresses::DrawTextFunc(std::format("Welcome, {}!", MasterServer::GetSingleton()->GetClientName()).c_str(), x, y + 95, size * 1.5f, newFlags, 0.0f, 1.0f, 0.0f, 1.0f);
+                    addresses::CSDrawTextFunc(std::format("Welcome, {}!", MasterServer::GetSingleton()->GetClientName()).c_str(), x, y + 95, size * 1.5f, newFlags, 0.0f, 1.0f, 0.0f, 1.0f);
                 else if (!*addresses::SteamTicketRetrieved.ptr && *addresses::SteamEnabled.ptr)
-                    addresses::DrawTextFunc("Hold up...", x, y + 95, size * 1.5f, newFlags, 1.0f, 1.0f, 0.0f, 1.0f);
+                    addresses::CSDrawTextFunc("Hold up...", x, y + 95, size * 1.5f, newFlags, 1.0f, 1.0f, 0.0f, 1.0f);
                 else if (!*addresses::SteamTicketRetrieved.ptr && !*addresses::SteamEnabled.ptr)
-                    addresses::DrawTextFunc("Uh-oh! Looks like Steam is not open.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
+                    addresses::CSDrawTextFunc("Uh-oh! Looks like Steam is not open.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
                 else
                 {
-                    addresses::DrawTextFunc("Uh-oh! Looks like you don't own the game.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
-                    addresses::DrawTextFunc("Piracy is no party!", x, y + 120, size * 0.9f, newFlags, 1.0f, 0.35f, 0.0f, 1.0f);
+                    addresses::CSDrawTextFunc("Uh-oh! Looks like you don't own the game.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
+                    addresses::CSDrawTextFunc("Piracy is no party!", x, y + 120, size * 0.9f, newFlags, 1.0f, 0.35f, 0.0f, 1.0f);
                 }
             }
             else
-                addresses::DrawTextFunc("Uh-oh! Suitium could not connect to the master server.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
+                addresses::CSDrawTextFunc("Uh-oh! Suitium could not connect to the master server.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
 
-            addresses::DrawTextFunc(std::format("Suitium {}", SUITIUM_VERSION).c_str(), x, y + 14.5f, size * 0.85f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
-            return addresses::DrawTextFunc(std::format("Sub Rosa 0.{}{}", *addresses::GameVersionNumber.ptr, (char)(*addresses::GameVersionPatchNumber.ptr + 97)).c_str(), x, y, size * 1.25f, newFlags, red, green, blue, alpha);
+            addresses::CSDrawTextFunc(std::format("Suitium {}", SUITIUM_VERSION).c_str(), x, y + 14.5f, size * 0.85f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
+            return addresses::CSDrawTextFunc(std::format("Sub Rosa 0.{}{}", *addresses::GameVersionNumber.ptr, (char)(*addresses::GameVersionPatchNumber.ptr + 97)).c_str(), x, y, size * 1.25f, newFlags, red, green, blue, alpha);
         }
         else if (std::strcmp(newFormatStream.str().c_str(), std::format("ALPHA {}{}", *addresses::GameVersionNumber.ptr, (char)(*addresses::GameVersionPatchNumber.ptr + 97)).c_str()) == 0)
         {
@@ -166,23 +166,23 @@ std::int64_t DrawTextHookFunc(const char *format, float x, float y, float size, 
         else if (std::strcmp(format, "W1nters") == 0)
         {
             // The last credits menu section is being drawn!
-            addresses::DrawTextFunc("Suitium is made by", x, y + 64, size, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
-            addresses::DrawTextFunc("JPXS", x + 120, y + 64, size, newFlags, 1.0f, 0.75f, 0.0f, 1.0f);
+            addresses::CSDrawTextFunc("Suitium is made by", x, y + 64, size, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
+            addresses::CSDrawTextFunc("JPXS", x + 120, y + 64, size, newFlags, 1.0f, 0.75f, 0.0f, 1.0f);
         }
         else if (std::strcmp(format, "generating") == 0)
         {
-            return addresses::DrawTextFunc("Generating...", x, y, size, newFlags, red, green, blue, alpha);
+            return addresses::CSDrawTextFunc("Generating...", x, y, size, newFlags, red, green, blue, alpha);
         }
         else if (std::strcmp(format, "connecting") == 0)
         {
-            return addresses::DrawTextFunc("Connecting...", x, y, size, newFlags, red, green, blue, alpha);
+            return addresses::CSDrawTextFunc("Connecting...", x, y, size, newFlags, red, green, blue, alpha);
         }
     }
 
-    return addresses::DrawTextFunc(newFormatStream.str().c_str(), x, y, size, newFlags, red, 1, blue, alpha);
+    return addresses::CSDrawTextFunc(newFormatStream.str().c_str(), x, y, size, newFlags, red, 1, blue, alpha);
 }
 #elif __linux__
-std::int64_t DrawTextHookFunc(const char *format, int, int, int, float, float, float, float, float, float, float, void *)
+std::int64_t CSDrawTextHookFunc(const char *format, int, int, int, float, float, float, float, float, float, float, void *)
 {
     subhook::ScopedHookRemove scopedRemove(drawTextHook);
 }

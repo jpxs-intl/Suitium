@@ -5,13 +5,15 @@
 
 DataAddress<int> addresses::GameVersionNumber;
 DataAddress<std::uint8_t> addresses::GameVersionPatchNumber;
+DataAddress<ItemType> addresses::ItemTypes;
+DataAddress<VehicleType> addresses::VehicleTypes;
 DataAddress<char> addresses::AuthName;
 DataAddress<int> addresses::AuthStatus;
 DataAddress<int> addresses::SteamEnabled;
 DataAddress<int> addresses::SteamTicketRetrieved;
 DataAddress<int> addresses::SteamTicketLength;
 DataAddress<char> addresses::SteamTicketBuffer;
-FuncAddress<addresses::DrawTextFuncType> addresses::DrawTextFunc;
+FuncAddress<addresses::CSDrawTextFuncType> addresses::CSDrawTextFunc;
 FuncAddress<addresses::ConnectMasterServerFuncType> addresses::ConnectMasterServerFunc;
 
 bool MapAddressesForWin32(std::uintptr_t baseAddress)
@@ -23,14 +25,19 @@ label_client: {}
     if (*addresses::GameVersionNumber.ptr != GameVersionNumber || *addresses::GameVersionPatchNumber.ptr != GameVersionPatch - 97)
         goto label_dedicated;
 
+    addresses::ItemTypes.Register(baseAddress + 0x42A7E180);
+    addresses::VehicleTypes.Register(baseAddress + 0x52E9A680);
+
     addresses::AuthName.Register(baseAddress + 0x11E4594C);
     addresses::AuthStatus.Register(baseAddress + 0x2B165F40);
+
     addresses::SteamEnabled.Register(baseAddress + 0x429F8BC0);
     addresses::SteamTicketLength.Register(baseAddress + 0x429F8BD4);
     addresses::SteamTicketBuffer.Register(baseAddress + 0x429F8BD8);
     addresses::SteamTicketRetrieved.Register(baseAddress + 0x429F8FD8);
+
     addresses::ConnectMasterServerFunc.Register(baseAddress + 0xA3F30);
-    addresses::DrawTextFunc.Register(baseAddress + 0x6D930);
+    addresses::CSDrawTextFunc.Register(baseAddress + 0x6D930);
 
     return true;
 

@@ -17,7 +17,7 @@ using HookEntry = std::pair<void **, std::pair<void *, subhook::Hook **>>;
 static std::vector<HookEntry> hookEntries = 
 {
     std::make_pair((void **)&addresses::ConnectMasterServerFunc.ptr, std::make_pair((void *)&ConnectMasterServerHookFunc, &connectMasterServerHook)),
-    std::make_pair((void **)&addresses::DrawTextFunc.ptr, std::make_pair((void *)&DrawTextHookFunc, &drawTextHook))
+    std::make_pair((void **)&addresses::CSDrawTextFunc.ptr, std::make_pair((void *)&CSDrawTextHookFunc, &drawTextHook))
 };
 
 void PrepareHooks()
