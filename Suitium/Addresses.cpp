@@ -26,12 +26,11 @@ label_client: {}
     addresses::AuthName.Register(baseAddress + 0x11E4594C);
     addresses::AuthStatus.Register(baseAddress + 0x2B165F40);
     addresses::SteamEnabled.Register(baseAddress + 0x429F8BC0);
-    addresses::SteamTicketRetrieved.Register(baseAddress + 0x429F8FD8);
     addresses::SteamTicketLength.Register(baseAddress + 0x429F8BD4);
     addresses::SteamTicketBuffer.Register(baseAddress + 0x429F8BD8);
-
-    addresses::DrawTextFunc.Register(baseAddress + 0x6D930);
+    addresses::SteamTicketRetrieved.Register(baseAddress + 0x429F8FD8);
     addresses::ConnectMasterServerFunc.Register(baseAddress + 0xA3F30);
+    addresses::DrawTextFunc.Register(baseAddress + 0x6D930);
 
     return true;
 
