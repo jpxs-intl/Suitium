@@ -6,7 +6,6 @@
 #include <iomanip>
 #include <sstream>
 #include <subhook.h>
-#include <type_traits>
 
 #include "../Addresses.hpp"
 #include "../MasterServer.hpp"
@@ -127,8 +126,6 @@ std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size
             // The main menu is being drawn!
   
             // TODO: This probably shouldnt be handled here...
-            int *authStatus = addresses::AuthStatus.ptr;
-            int *ticketRetrieved = addresses::SteamTicketRetrieved.ptr;
             if (*addresses::AuthStatus.ptr == 0 && *addresses::SteamTicketRetrieved.ptr)
             {
                 *addresses::AuthStatus.ptr = 3; // We don't need the vanilla game anymore
@@ -137,7 +134,6 @@ std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size
                 *addresses::SteamEnabled.ptr = 0; // I'm not sure if this affects anything, but it's here to hide the "Steam" text
             }
 
-            int *steamEnabled = addresses::SteamEnabled.ptr;
             if (MasterServer::GetSingleton()->IsConnected())
             {
                 // TODO: these colors might be not that good
@@ -146,7 +142,7 @@ std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size
                 else if (!*addresses::SteamTicketRetrieved.ptr && *addresses::SteamEnabled.ptr)
                     addresses::CSDrawTextFunc("Hold up...", x, y + 95, size * 1.5f, newFlags, 1.0f, 1.0f, 0.0f, 1.0f);
                 else if (!*addresses::SteamTicketRetrieved.ptr && !*addresses::SteamEnabled.ptr)
-                    addresses::CSDrawTextFunc("Uh-oh! Looks like Steam is not open.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
+                    addresses::CSDrawTextFunc("Uh-oh! Suitium could not retrieve your Steam ticket.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
                 else
                 {
                     addresses::CSDrawTextFunc("Uh-oh! Looks like you don't own the game.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);

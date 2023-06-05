@@ -1,6 +1,11 @@
 #include "Addresses.hpp"
 
+#include <cstdint>
+
 #include "Address.hpp"
+#include "structs/Common.hpp"
+#include "structs/ItemType.hpp"
+#include "structs/VehicleType.hpp"
 #include "Version.hpp"
 
 DataAddress<bool> addresses::IsDedicated;
@@ -10,8 +15,8 @@ DataAddress<ItemType> addresses::ItemTypes;
 DataAddress<VehicleType> addresses::VehicleTypes;
 DataAddress<char> addresses::AuthName;
 DataAddress<int> addresses::AuthStatus;
-DataAddress<int> addresses::SteamEnabled;
-DataAddress<int> addresses::SteamTicketRetrieved;
+DataAddress<CBoolean> addresses::SteamEnabled;
+DataAddress<CBoolean> addresses::SteamTicketRetrieved;
 DataAddress<int> addresses::SteamTicketLength;
 DataAddress<char> addresses::SteamTicketBuffer;
 DataAddress<void *> addresses::SDLWindowPtr;
@@ -38,9 +43,9 @@ label_client: {}
     addresses::AuthStatus.Register(baseAddress + 0x2B165F40);
 
     addresses::SteamEnabled.Register(baseAddress + 0x429F8BC0);
+    addresses::SteamTicketRetrieved.Register(baseAddress + 0x429F8FD8);
     addresses::SteamTicketLength.Register(baseAddress + 0x429F8BD4);
     addresses::SteamTicketBuffer.Register(baseAddress + 0x429F8BD8);
-    addresses::SteamTicketRetrieved.Register(baseAddress + 0x429F8FD8);
 
     addresses::SDLWindowPtr.Register(baseAddress + 0x20FC47C8);
 

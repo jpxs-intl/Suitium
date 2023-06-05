@@ -12,6 +12,7 @@
 static subhook::Hook *mainMenuHook;
 
 #if _WIN32
+
 #include <windows.h>
 
 typedef struct SDL_RWops SDL_RWops_t;

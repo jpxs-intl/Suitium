@@ -4,7 +4,6 @@
 #include <utility>
 #include <vector>
 
-#include "Address.hpp"
 #include "Addresses.hpp"
 
 #define IMPLEMENT_HOOKS 1

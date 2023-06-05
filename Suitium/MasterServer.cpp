@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
-#include <format>
 #include <httplib.h>
 #include <sstream>
 
@@ -142,6 +141,8 @@ std::uint32_t MasterServer::GetClientPhoneNumber() const
 void MasterServer::RequestClientInfo()
 {
     if (!this->IsConnected())
+        return;
+    if (*addresses::IsDedicated.ptr)
         return;
 
     // Send

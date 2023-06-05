@@ -3,7 +3,7 @@
 #include <cstdint>
 
 #include "Address.hpp"
-
+#include "structs/Common.hpp"
 #include "structs/ItemType.hpp"
 #include "structs/VehicleType.hpp"
 
@@ -20,10 +20,10 @@ namespace addresses
     extern DataAddress<char> AuthName;
     extern DataAddress<int> AuthStatus;
 
-    extern DataAddress<int> SteamEnabled;
+    extern DataAddress<CBoolean> SteamEnabled;
+    extern DataAddress<CBoolean> SteamTicketRetrieved;
     extern DataAddress<int> SteamTicketLength;
     extern DataAddress<char> SteamTicketBuffer;
-    extern DataAddress<int> SteamTicketRetrieved;
 
     extern DataAddress<void *> SDLWindowPtr;
 
