@@ -7,7 +7,7 @@
 #include <httplib.h>
 #include <sstream>
 
-#include "AddressInterface.hpp"
+#include "Addresses.hpp"
 
 #if _WIN32
 #include <WinSock2.h>
@@ -124,7 +124,7 @@ std::string MasterServer::GetClientName() const
 {
     if (!this->IsClientValid())
        return "?";
-    return std::string((char *)(GetBaseAddress() + GetAddressInterface()->GetAddressMap().at(AddressType::AuthName)));
+    return addresses::AuthName.ptr;
 }
 std::int32_t MasterServer::GetClientPurchaseID() const
 {
@@ -146,9 +146,9 @@ void MasterServer::RequestClientInfo()
 
     // Send
     {
-        std::string authName = std::string((char *)(GetBaseAddress() + GetAddressInterface()->GetAddressMap().at(AddressType::AuthName)));
-        std::uint32_t ticketLength = *(std::uint32_t *)(GetBaseAddress() + GetAddressInterface()->GetAddressMap().at(AddressType::SteamAppTicketLength));
-        char *ticketBuffer = (char *)(GetBaseAddress() + GetAddressInterface()->GetAddressMap().at(AddressType::SteamAppTicketBuffer));
+        std::string authName = addresses::AuthName.ptr;
+        int ticketLength = *addresses::SteamTicketLength.ptr;
+        char *ticketBuffer = addresses::SteamTicketBuffer.ptr;
 
         // 5 = magic
         // 32 = name
@@ -185,6 +185,9 @@ void MasterServer::RequestClientInfo()
         this->_clientPurchaseID = *(std::int32_t *)(&packetBuffer[5]);
         this->_clientPhoneNumber = *(std::uint32_t *)(&packetBuffer[13]);
         this->_validClient = true;
+
+        if (this->_clientPhoneNumber == 0) // looks like the ticket wasn't valid
+            this->_validClient = false;
 
 label_bad: {}
         std::free(packetBuffer);

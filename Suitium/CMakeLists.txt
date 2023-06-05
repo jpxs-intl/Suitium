@@ -7,8 +7,8 @@ add_library(
     Win32.cpp
 
     # Other source files
-    AddressInterface.cpp
-    AddressInterfaceWin32Client.cpp
+    Address.cpp
+    Addresses.cpp
     Hooks.cpp
     MasterServer.cpp
 

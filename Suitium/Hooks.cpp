@@ -1,38 +1,32 @@
 #include "Hooks.hpp"
 
-#include <array>
-#include <cstdint>
-#include <memory>
 #include <subhook.h>
 #include <utility>
+#include <vector>
 
-#include "AddressInterface.hpp"
+#include "Address.hpp"
+#include "Addresses.hpp"
 
 #define IMPLEMENT_HOOKS 1
 #include "hooks/ConnectMasterServer.hpp"
 #include "hooks/DrawText.hpp"
 
-using HookEntry = std::pair<std::intptr_t, subhook::Hook **>;
+// FuncAddress, hook function and hook object
+using HookEntry = std::pair<void **, std::pair<void *, subhook::Hook **>>;
 
-static const std::unordered_map<AddressType, HookEntry> hookEntryMap = {
-    std::make_pair(AddressType::DrawTextFunc, std::make_pair((std::intptr_t)DrawTextHookFunc, &drawTextHook)),
-    std::make_pair(AddressType::ConnectMasterServerFunc, std::make_pair((std::intptr_t)ConnectMasterServerHookFunc, &connectMasterServerHook))
+static std::vector<HookEntry> hookEntries = 
+{
+    std::make_pair((void **)&addresses::ConnectMasterServerFunc.ptr, std::make_pair((void *)&ConnectMasterServerHookFunc, &connectMasterServerHook)),
+    std::make_pair((void **)&addresses::DrawTextFunc.ptr, std::make_pair((void *)&DrawTextHookFunc, &drawTextHook))
 };
 
 void PrepareHooks()
 {
-    const AddressInterface::AddressMap &addressMap = GetAddressInterface()->GetAddressMap();
-    for (std::size_t addressCount = 0; addressCount < (std::size_t)AddressType::_Count; addressCount++)
+    for (auto it = hookEntries.begin(); it != hookEntries.end(); ++it)
     {
-        if (addressCount < (std::size_t)AddressType::DrawTextFunc || addressCount >= (std::size_t)AddressType::_Count)
-            continue;
+        subhook::Hook *hook = new subhook::Hook(*(*it).first, (*it).second.first, subhook::HookFlag64BitOffset);
+        hook->Install();
 
-        if (addressMap.count((AddressType)addressCount) > 0 && hookEntryMap.count((AddressType)addressCount) > 0)
-        {
-            HookEntry hookEntry = hookEntryMap.at((AddressType)addressCount);
-            *hookEntry.second = new subhook::Hook((void *)(GetBaseAddress() + addressMap.at((AddressType)addressCount)), (void *)hookEntry.first, subhook::HookFlag64BitOffset); // TODO: we really want to use new?
-            
-            (*hookEntry.second)->Install();
-        }
+        *(*it).second.second = hook;
     }
 }
