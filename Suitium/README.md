@@ -11,7 +11,7 @@ Suitium is a modding tool for [Sub Rosa](http://subrosagame.com).
 
 ### Function hooking
 
-Status: ⚒️
+Status: ✅
 
 This is the base feature of Suitium, the ability to hook functions and add logic to the game.
 
