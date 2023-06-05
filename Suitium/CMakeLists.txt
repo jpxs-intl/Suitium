@@ -11,6 +11,7 @@ add_library(
     Addresses.cpp
     Hooks.cpp
     MasterServer.cpp
+    Version.cpp
 
     # Libraries
     ../subhook/subhook.c

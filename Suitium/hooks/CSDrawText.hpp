@@ -125,6 +125,10 @@ std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size
         if (std::strcmp(format, "Sub Rosa") == 0)
         {
             // The main menu is being drawn!
+            for (int c = 0; c < VehicleType::VanillaCount; c++)
+            {
+                addresses::VehicleTypes.ptr[c].useUnstablePhysics = true;
+            }
 
             // TODO: This probably shouldnt be handled here...
             int *authStatus = addresses::AuthStatus.ptr;

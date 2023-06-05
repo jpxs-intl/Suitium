@@ -9,6 +9,8 @@
 
 namespace addresses
 {
+    extern DataAddress<bool> IsDedicated;
+
     extern DataAddress<int> GameVersionNumber;
     extern DataAddress<std::uint8_t> GameVersionPatchNumber;
 
@@ -23,8 +25,13 @@ namespace addresses
     extern DataAddress<char> SteamTicketBuffer;
     extern DataAddress<int> SteamTicketRetrieved;
 
+    extern DataAddress<void *> SDLWindowPtr;
+
     using ConnectMasterServerFuncType = void ();
     extern FuncAddress<ConnectMasterServerFuncType> ConnectMasterServerFunc;
+
+    using MainMenuFuncType = void ();
+    extern FuncAddress<MainMenuFuncType> MainMenuFunc;
 
 #if _WIN32
     using CSDrawTextFuncType = std::int64_t (const char *format, float x, float y, float size, unsigned int flags, float red, float green, float blue, float alpha, ...);
