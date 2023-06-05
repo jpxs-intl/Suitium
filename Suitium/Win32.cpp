@@ -23,7 +23,6 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved)
                 MessageBox(NULL, text, "Fatal Error", MB_OK | MB_ICONERROR);
                 std::abort();
             }
-
             PrepareHooks();
             break;
         }

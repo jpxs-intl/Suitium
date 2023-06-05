@@ -8,7 +8,7 @@ struct VehicleType
 {
     static constexpr std::size_t VanillaCount = 17;
 
-    int usesExternalModel;
+    CBoolean usesExternalModel;
     CBoolean useUnstablePhysics; // Only available on Win32 client? (I'm not actually sure)
     int controllerType;
     CPad pad2[8];
