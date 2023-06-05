@@ -39,7 +39,7 @@ namespace addresses
     using CSDrawTextFuncType = std::int64_t (const char *format, int, int, int, float, float, float, float, float, float, float, void *);
 #endif
     extern FuncAddress<CSDrawTextFuncType> CSDrawTextFunc;
-}
 
-bool MapAddressesForWin32(std::uintptr_t baseAddress);
-bool MapAddressesForLinux(std::uintptr_t baseAddress);
+    bool MapForWin32(std::uintptr_t baseAddress);
+    bool MapForLinux(std::uintptr_t baseAddress);
+}

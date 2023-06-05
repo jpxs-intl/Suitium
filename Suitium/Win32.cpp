@@ -16,14 +16,14 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved)
     {
     case DLL_PROCESS_ATTACH:
         {
-            if (!MapAddressesForWin32((std::uintptr_t)GetModuleHandle(NULL)))
+            if (!addresses::MapForWin32((std::uintptr_t)GetModuleHandle(NULL)))
             {
                 char text[256];
-                std::snprintf(text, sizeof(char[256]), "Executable is not compatible with this Suitium version!\nAre you sure this is %d%c?", GameVersionNumber, GameVersionPatch);
+                std::snprintf(text, sizeof(char[256]), "Executable is not compatible with this Suitium version!\nAre you sure this is %d%c?", SUITIUM_GAME_VERSION_NUMBER, SUITIUM_GAME_VERSION_PATCH);
                 MessageBox(NULL, text, "Fatal Error", MB_OK | MB_ICONERROR);
                 std::abort();
             }
-            PrepareHooks();
+            InstallHooks();
             break;
         }
     }

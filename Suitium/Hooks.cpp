@@ -21,7 +21,7 @@ static std::vector<HookEntry> hookEntries =
     std::make_pair((void **)&addresses::MainMenuFunc.ptr, std::make_pair((void *)&MainMenuHookFunc, &mainMenuHook))
 };
 
-void PrepareHooks()
+void InstallHooks()
 {
     for (auto it = hookEntries.begin(); it != hookEntries.end(); ++it)
     {
