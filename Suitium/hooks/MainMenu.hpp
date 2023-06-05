@@ -30,12 +30,14 @@ void MainMenuHookFunc()
 
     HMODULE sdlModule = GetModuleHandle("SDL2.dll");
     SDL_RWFromFile_t sdlRWFromFile = (SDL_RWFromFile_t)GetProcAddress(sdlModule, "SDL_RWFromFile");
-    SDL_LoadBMP_RW_t sdlLoadBMPRW = (SDL_LoadBMP_RW_t)GetProcAddress(sdlModule, "SDL_LoadBMP_RW");
+    SDL_LoadBMP_RW_t sdlLoadBMP_RW = (SDL_LoadBMP_RW_t)GetProcAddress(sdlModule, "SDL_LoadBMP_RW");
     SDL_FreeSurface_t sdlFreeSurface = (SDL_FreeSurface_t)GetProcAddress(sdlModule, "SDL_FreeSurface");
     SDL_SetWindowIcon_t sdlSetWindowIcon = (SDL_SetWindowIcon_t)GetProcAddress(sdlModule, "SDL_SetWindowIcon");
     // Maybe we should check if Windows could actually found the functions, but whatever
 
-    SDL_Surface_t *iconBMP = sdlLoadBMPRW(sdlRWFromFile("subrosa.bmp", "r"), 1);
+    // SDL_LoadBMP is a macro (not a function) defined like
+    // #define SDL_LoadBMP(filePath) SDL_LoadBMP_RW(SDL_RWFromFile(filePath, "r"), 1)
+    SDL_Surface_t *iconBMP = sdlLoadBMP_RW(sdlRWFromFile("subrosa.bmp", "r"), 1);
     if (iconBMP)
     {
         sdlSetWindowIcon((SDL_Window_t *)*addresses::SDLWindowPtr.ptr, iconBMP);
