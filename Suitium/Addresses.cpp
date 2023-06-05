@@ -11,12 +11,12 @@
 DataAddress<bool> addresses::IsDedicated;
 DataAddress<int> addresses::GameVersionNumber;
 DataAddress<std::uint8_t> addresses::GameVersionPatchNumber;
-DataAddress<ItemType> addresses::ItemTypes;
-DataAddress<VehicleType> addresses::VehicleTypes;
+DataAddress<structs::ItemType> addresses::ItemTypes;
+DataAddress<structs::VehicleType> addresses::VehicleTypes;
 DataAddress<char> addresses::AuthName;
 DataAddress<int> addresses::AuthStatus;
-DataAddress<CBoolean> addresses::SteamEnabled;
-DataAddress<CBoolean> addresses::SteamTicketRetrieved;
+DataAddress<structs::CBoolean> addresses::SteamEnabled;
+DataAddress<structs::CBoolean> addresses::SteamTicketRetrieved;
 DataAddress<int> addresses::SteamTicketLength;
 DataAddress<char> addresses::SteamTicketBuffer;
 DataAddress<void *> addresses::SDLWindowPtr;

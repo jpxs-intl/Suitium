@@ -14,14 +14,14 @@ namespace addresses
     extern DataAddress<int> GameVersionNumber;
     extern DataAddress<std::uint8_t> GameVersionPatchNumber;
 
-    extern DataAddress<ItemType> ItemTypes;
-    extern DataAddress<VehicleType> VehicleTypes;
+    extern DataAddress<structs::ItemType> ItemTypes;
+    extern DataAddress<structs::VehicleType> VehicleTypes;
 
     extern DataAddress<char> AuthName;
     extern DataAddress<int> AuthStatus;
 
-    extern DataAddress<CBoolean> SteamEnabled;
-    extern DataAddress<CBoolean> SteamTicketRetrieved;
+    extern DataAddress<structs::CBoolean> SteamEnabled;
+    extern DataAddress<structs::CBoolean> SteamTicketRetrieved;
     extern DataAddress<int> SteamTicketLength;
     extern DataAddress<char> SteamTicketBuffer;
 
