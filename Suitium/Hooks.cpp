@@ -12,25 +12,28 @@
 #include "hooks/MainMenu.hpp"
 
 // FuncAddress, hook function and hook object
-using HookEntry = std::pair<void **, std::pair<void *, subhook::Hook **>>;
+struct HookEntry {
+  void** sourceFunction;
+  void* hookedFunction;
+  subhook::Hook** hook;
+};
 
-static std::vector<HookEntry> hookEntries = 
+static std::vector<HookEntry> hookEntries =
 {
-    std::make_pair((void **)&addresses::ConnectMasterServerFunc.ptr, std::make_pair((void *)&ConnectMasterServerHookFunc, &connectMasterServerHook)),
-    std::make_pair((void **)&addresses::CSDrawTextFunc.ptr, std::make_pair((void *)&CSDrawTextHookFunc, &drawTextHook)),
-    std::make_pair((void **)&addresses::MainMenuFunc.ptr, std::make_pair((void *)&MainMenuHookFunc, &mainMenuHook))
+    {(void **)&addresses::ConnectMasterServerFunc.ptr, (void *)&ConnectMasterServerHookFunc, &connectMasterServerHook},
+    {(void **)&addresses::CSDrawTextFunc.ptr, (void *)&CSDrawTextHookFunc, &drawTextHook},
+    {(void **)&addresses::MainMenuFunc.ptr, (void *)&MainMenuHookFunc, &mainMenuHook},
 };
 
 void PrepareHooks()
 {
-    for (auto it = hookEntries.begin(); it != hookEntries.end(); ++it)
-    {
-        if (!*(*it).first) // Some versions might not contain one or two hooks
-            continue;
+    for (auto entry : hookEntries) {
+        if (!*entry.sourceFunction) // Some versions might not contain one or two hooks
+          continue ;
 
-        subhook::Hook *hook = new subhook::Hook(*(*it).first, (*it).second.first, subhook::HookFlag64BitOffset);
+        subhook::Hook *hook = new subhook::Hook(*entry.sourceFunction, entry.hookedFunction, subhook::HookFlag64BitOffset);
         hook->Install();
 
-        *(*it).second.second = hook;
+        *entry.hook = hook;
     }
 }
