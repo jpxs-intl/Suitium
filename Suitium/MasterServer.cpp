@@ -176,10 +176,12 @@ void MasterServer::RequestClientInfo()
         std::size_t packetSize = 5 + 4 + 4 + 4;
         char *packetBuffer = (char *)std::malloc(packetSize);
 
-        sockaddr fromAddress = {};
-        int fromAddressLen = sizeof(fromAddress);
+        sockaddr_in fromAddress = {};
+        int fromAddressLen = sizeof(sockaddr_in);
         if (recvfrom(this->_socket, packetBuffer, packetSize, 0, (sockaddr *)&fromAddress, &fromAddressLen) != packetSize) // TODO: timeout
             goto label_bad;
+        if (memcmp(&fromAddress, &this->_socketAddress, sizeof(sockaddr_in)) != 0)
+            goto label_bad; // Packet is not from master server
         if (memcmp(&packetBuffer[0], "7DFPH", 5) != 0)
             goto label_bad; // Invalid magic
         

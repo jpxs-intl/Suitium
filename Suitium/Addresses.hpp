@@ -4,6 +4,7 @@
 
 #include "Address.hpp"
 #include "structs/Common.hpp"
+#include "structs/Human.hpp"
 #include "structs/ItemType.hpp"
 #include "structs/VehicleType.hpp"
 
@@ -16,6 +17,7 @@ namespace addresses
 
     extern DataAddress<structs::ItemType> ItemTypes;
     extern DataAddress<structs::VehicleType> VehicleTypes;
+    extern DataAddress<structs::Human> Humans;
 
     extern DataAddress<char> AuthName;
     extern DataAddress<int> AuthStatus;

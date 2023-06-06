@@ -38,6 +38,7 @@ label_client: {}
 
     addresses::ItemTypes.Register(baseAddress + 0x42A7E180);
     addresses::VehicleTypes.Register(baseAddress + 0x52E9A680);
+    addresses::Humans.Register(baseAddress + 0x4329E308);
 
     addresses::AuthName.Register(baseAddress + 0x11E4594C);
     addresses::AuthStatus.Register(baseAddress + 0x2B165F40);
