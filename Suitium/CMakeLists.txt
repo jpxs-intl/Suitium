@@ -10,6 +10,7 @@ add_library(
     Address.cpp
     Addresses.cpp
     Hooks.cpp
+    Hotfixes.cpp
     MasterServer.cpp
     Version.cpp
 
