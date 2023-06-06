@@ -14,14 +14,14 @@ namespace addresses
     extern DataAddress<int> GameVersionNumber;
     extern DataAddress<std::uint8_t> GameVersionPatchNumber;
 
-    extern DataAddress<ItemType> ItemTypes;
-    extern DataAddress<VehicleType> VehicleTypes;
+    extern DataAddress<structs::ItemType> ItemTypes;
+    extern DataAddress<structs::VehicleType> VehicleTypes;
 
     extern DataAddress<char> AuthName;
     extern DataAddress<int> AuthStatus;
 
-    extern DataAddress<CBoolean> SteamEnabled;
-    extern DataAddress<CBoolean> SteamTicketRetrieved;
+    extern DataAddress<structs::CBoolean> SteamEnabled;
+    extern DataAddress<structs::CBoolean> SteamTicketRetrieved;
     extern DataAddress<int> SteamTicketLength;
     extern DataAddress<char> SteamTicketBuffer;
 
@@ -39,7 +39,7 @@ namespace addresses
     using CSDrawTextFuncType = std::int64_t (const char *format, int, int, int, float, float, float, float, float, float, float, void *);
 #endif
     extern FuncAddress<CSDrawTextFuncType> CSDrawTextFunc;
-}
 
-bool MapAddressesForWin32(std::uintptr_t baseAddress);
-bool MapAddressesForLinux(std::uintptr_t baseAddress);
+    bool MapForWin32(std::uintptr_t baseAddress);
+    bool MapForLinux(std::uintptr_t baseAddress);
+}

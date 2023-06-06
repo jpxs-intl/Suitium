@@ -11,12 +11,12 @@
 DataAddress<bool> addresses::IsDedicated;
 DataAddress<int> addresses::GameVersionNumber;
 DataAddress<std::uint8_t> addresses::GameVersionPatchNumber;
-DataAddress<ItemType> addresses::ItemTypes;
-DataAddress<VehicleType> addresses::VehicleTypes;
+DataAddress<structs::ItemType> addresses::ItemTypes;
+DataAddress<structs::VehicleType> addresses::VehicleTypes;
 DataAddress<char> addresses::AuthName;
 DataAddress<int> addresses::AuthStatus;
-DataAddress<CBoolean> addresses::SteamEnabled;
-DataAddress<CBoolean> addresses::SteamTicketRetrieved;
+DataAddress<structs::CBoolean> addresses::SteamEnabled;
+DataAddress<structs::CBoolean> addresses::SteamTicketRetrieved;
 DataAddress<int> addresses::SteamTicketLength;
 DataAddress<char> addresses::SteamTicketBuffer;
 DataAddress<void *> addresses::SDLWindowPtr;
@@ -26,14 +26,14 @@ FuncAddress<addresses::ConnectMasterServerFuncType> addresses::ConnectMasterServ
 
 static bool isDedicated = false;
 
-bool MapAddressesForWin32(std::uintptr_t baseAddress)
+bool addresses::MapForWin32(std::uintptr_t baseAddress)
 {
     addresses::IsDedicated.Register((std::uintptr_t)&isDedicated);
 
 label_client: {}
     addresses::GameVersionNumber.Register(baseAddress + 0x2B231C);
     addresses::GameVersionPatchNumber.Register(baseAddress + 0x2B23DC);
-    if (*addresses::GameVersionNumber.ptr != GameVersionNumber || *addresses::GameVersionPatchNumber.ptr != GameVersionPatch - 97)
+    if (*addresses::GameVersionNumber.ptr != SUITIUM_GAME_VERSION_NUMBER || *addresses::GameVersionPatchNumber.ptr != SUITIUM_GAME_VERSION_PATCH - 97)
         goto label_dedicated;
 
     addresses::ItemTypes.Register(baseAddress + 0x42A7E180);
@@ -65,7 +65,7 @@ label_dedicated: {}
 label_error: {}
     return false;
 }
-bool MapAddressesForLinux(std::uintptr_t baseAddress)
+bool addresses::MapForLinux(std::uintptr_t baseAddress)
 {
     addresses::IsDedicated.Register((std::uintptr_t)&isDedicated);
 

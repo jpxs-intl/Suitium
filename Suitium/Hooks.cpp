@@ -25,7 +25,7 @@ static std::vector<HookEntry> hookEntries =
     {(void **)&addresses::MainMenuFunc.ptr, (void *)&MainMenuHookFunc, &mainMenuHook},
 };
 
-void PrepareHooks()
+void InstallHooks()
 {
     for (auto entry : hookEntries) {
         if (!*entry.sourceFunction) // Some versions might not contain one or two hooks
