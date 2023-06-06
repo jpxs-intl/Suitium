@@ -2,6 +2,8 @@
 
 #include "../Addresses.hpp"
 
+void MainMenuHookFunc();
+
 // I need stuff!!!!
 #if _VSCODE
 #define IMPLEMENT_HOOKS 1
@@ -41,7 +43,7 @@ void MainMenuHookFunc()
     SDL_Surface_t *iconBMP = sdlLoadBMP_RW(sdlRWFromFile("subrosa.bmp", "r"), 1);
     if (iconBMP)
     {
-        sdlSetWindowIcon((SDL_Window_t *)*addresses::SDLWindowPtr.ptr, iconBMP);
+        sdlSetWindowIcon((SDL_Window_t *)*addresses::SDLWindowPtr, iconBMP);
         sdlFreeSurface(iconBMP);
     }
 

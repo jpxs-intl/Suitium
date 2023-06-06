@@ -2,6 +2,8 @@
 
 #include "../MasterServer.hpp"
 
+void ConnectMasterServerHookFunc();
+
 // I need stuff!!!!
 #if _VSCODE
 #define IMPLEMENT_HOOKS 1

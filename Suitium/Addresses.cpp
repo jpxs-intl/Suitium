@@ -4,7 +4,9 @@
 
 #include "Address.hpp"
 #include "structs/Common.hpp"
+#include "structs/Human.hpp"
 #include "structs/ItemType.hpp"
+#include "structs/Vehicle.hpp"
 #include "structs/VehicleType.hpp"
 #include "Version.hpp"
 
@@ -13,6 +15,8 @@ DataAddress<int> addresses::GameVersionNumber;
 DataAddress<std::uint8_t> addresses::GameVersionPatchNumber;
 DataAddress<structs::ItemType> addresses::ItemTypes;
 DataAddress<structs::VehicleType> addresses::VehicleTypes;
+DataAddress<structs::Human> addresses::Humans;
+DataAddress<structs::Vehicle> addresses::Vehicles;
 DataAddress<char> addresses::AuthName;
 DataAddress<int> addresses::AuthStatus;
 DataAddress<structs::CBoolean> addresses::SteamEnabled;
@@ -20,9 +24,10 @@ DataAddress<structs::CBoolean> addresses::SteamTicketRetrieved;
 DataAddress<int> addresses::SteamTicketLength;
 DataAddress<char> addresses::SteamTicketBuffer;
 DataAddress<void *> addresses::SDLWindowPtr;
+FuncAddress<addresses::ConnectMasterServerFuncType> addresses::ConnectMasterServerFunc;
+FuncAddress<addresses::CreateVehicleFuncType> addresses::CreateVehicleFunc;
 FuncAddress<addresses::CSDrawTextFuncType> addresses::CSDrawTextFunc;
 FuncAddress<addresses::MainMenuFuncType> addresses::MainMenuFunc;
-FuncAddress<addresses::ConnectMasterServerFuncType> addresses::ConnectMasterServerFunc;
 
 static bool isDedicated = false;
 
@@ -39,6 +44,7 @@ label_client: {}
     addresses::ItemTypes.Register(baseAddress + 0x42A7E180);
     addresses::VehicleTypes.Register(baseAddress + 0x52E9A680);
     addresses::Humans.Register(baseAddress + 0x4329E308);
+    addresses::Vehicles.Register(baseAddress + 0x1F2D9200);
 
     addresses::AuthName.Register(baseAddress + 0x11E4594C);
     addresses::AuthStatus.Register(baseAddress + 0x2B165F40);
@@ -51,8 +57,9 @@ label_client: {}
     addresses::SDLWindowPtr.Register(baseAddress + 0x20FC47C8);
 
     addresses::ConnectMasterServerFunc.Register(baseAddress + 0xA3F30);
-    addresses::MainMenuFunc.Register(baseAddress + 0x96440);
+    addresses::CreateVehicleFunc.Register(baseAddress + 0x5BCA0);
     addresses::CSDrawTextFunc.Register(baseAddress + 0x6D930);
+    addresses::MainMenuFunc.Register(baseAddress + 0x96440);
 
     isDedicated = false;
     return true;

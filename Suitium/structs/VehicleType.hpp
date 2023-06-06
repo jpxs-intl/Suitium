@@ -12,7 +12,7 @@ namespace structs
 
         CBoolean usesExternalModel;
         CBoolean useUnstablePhysics;
-        int controllerType;
+        int controllerTypeID;
         CPad pad1[8];
         char name[32];
         int price;
