@@ -2,5 +2,8 @@
 
 #include <cstdint>
 
-bool MakeHotfixesForWin32(std::uintptr_t baseAddress);
-bool MakeHotfixesForLinux(std::uintptr_t baseAddress);
+namespace hotfixes
+{
+    bool MakeForWin32(std::uintptr_t baseAddress);
+    bool MakeForLinux(std::uintptr_t baseAddress);
+}

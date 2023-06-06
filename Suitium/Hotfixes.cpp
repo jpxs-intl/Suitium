@@ -8,8 +8,9 @@
 #include <windows.h>
 #endif
 
-bool MakeHotfixesForWin32(std::uintptr_t baseAddress)
+bool hotfixes::MakeForWin32(std::uintptr_t baseAddress)
 {
+#if _WIN32
     // When a bullet hits a train, it skips the hit code
     // This makes the code jump directly into the hit code for the hull (ignores windows) 
     if (!*addresses::IsDedicated.ptr)
@@ -28,8 +29,15 @@ bool MakeHotfixesForWin32(std::uintptr_t baseAddress)
     }
 
     return true;
+#else
+    return false;
+#endif
 }
-bool MakeHotfixesForLinux(std::uintptr_t baseAddress)
+bool hotfixes::MakeForLinux(std::uintptr_t baseAddress)
 {
+#if __linux__
     return true;
+#else
+    return false;
+#endif
 }
