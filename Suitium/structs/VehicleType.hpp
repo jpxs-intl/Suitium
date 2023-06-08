@@ -10,6 +10,11 @@ namespace structs
     {
         static constexpr std::size_t VanillaCount = 17;
 
+        struct CustomData
+        {
+            int health;
+        };
+
         CBoolean usesExternalModel;
         CBoolean useUnstablePhysics;
         int controllerTypeID;
@@ -17,6 +22,8 @@ namespace structs
         char name[32];
         int price;
         float mass;
-        CPad pad2[99716];
+        
+        CPad pad2[99716 - sizeof(CustomData)];
+        CustomData customData;
     };
 }

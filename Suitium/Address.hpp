@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <type_traits>
 
@@ -11,6 +12,10 @@ struct DataAddress
     auto &operator *() const
     {
         return *ptr;
+    }
+    auto &operator [](std::size_t n) const
+    {
+        return ptr[n];
     }
 
     void Register(std::uintptr_t iptr)

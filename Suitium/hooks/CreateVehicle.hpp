@@ -19,6 +19,11 @@ int CreateVehicleHookFunc(int typeID, structs::CVector3 *position, structs::CVec
     subhook::ScopedHookRemove scopedRemove(createVehicleHook);
 
     int vehicleID = addresses::CreateVehicleFunc(typeID, position, velocity, orientation, colorID);
+    if (vehicleID < 0)
+        return -1;
+
+    addresses::Vehicles[vehicleID].health = addresses::VehicleTypes[typeID].customData.health;
+
     return vehicleID;
 }
 

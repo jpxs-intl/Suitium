@@ -2,13 +2,12 @@
 #include <cstdarg>
 #include <cstdint>
 #include <cstring>
-#include <format>
+#include <fmt/format.h>
 #include <iomanip>
 #include <sstream>
 #include <subhook.h>
 
 #include "../Addresses.hpp"
-#include "../MasterServer.hpp"
 #include "../Version.hpp"
 
 // https://github.com/noche-x/client/blob/main/src/game.hpp
@@ -124,38 +123,16 @@ std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size
         if (std::strcmp(format, "Sub Rosa") == 0)
         {
             // The main menu is being drawn!
-  
-            // TODO: This probably shouldnt be handled here...
-            if (*addresses::AuthStatus == 0 && *addresses::SteamTicketRetrieved)
-            {
-                *addresses::AuthStatus = 3; // We don't need the vanilla game anymore
-                MasterServer::GetSingleton()->RequestClientInfo();
 
-                *addresses::SteamEnabled = 0; // I'm not sure if this affects anything, but it's here to hide the "Steam" text
-            }
-
-            if (MasterServer::GetSingleton()->IsConnected())
-            {
-                // TODO: these colors might be not that good
-                if (MasterServer::GetSingleton()->IsClientValid())
-                    addresses::CSDrawTextFunc(std::format("Welcome, {}!", MasterServer::GetSingleton()->GetClientName()).c_str(), x, y + 95, size * 1.5f, newFlags, 0.0f, 1.0f, 0.0f, 1.0f);
-                else if (!*addresses::SteamTicketRetrieved && *addresses::SteamEnabled)
-                    addresses::CSDrawTextFunc("Hold up...", x, y + 95, size * 1.5f, newFlags, 1.0f, 1.0f, 0.0f, 1.0f);
-                else if (!*addresses::SteamTicketRetrieved && !*addresses::SteamEnabled)
-                    addresses::CSDrawTextFunc("Uh-oh! Suitium could not retrieve your Steam ticket.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
-                else
-                {
-                    addresses::CSDrawTextFunc("Uh-oh! Looks like you don't own the game.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
-                    addresses::CSDrawTextFunc("Piracy is no party!", x, y + 120, size * 0.9f, newFlags, 1.0f, 0.35f, 0.0f, 1.0f);
-                }
-            }
+            if (*addresses::AuthStatus == 2)
+                addresses::CSDrawTextFunc(fmt::format("Welcome, {}!", &addresses::AuthName[0]).c_str(), x, y + 65.0f, size * 1.75f, newFlags, 1.0f, 1.0f, 1.0f, 1.0f);
             else
-                addresses::CSDrawTextFunc("Uh-oh! Suitium could not connect to the master server.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
+                addresses::CSDrawTextFunc("Connecting...", x, y + 65.0f, size * 1.75f, newFlags, 1.0f, 1.0f, 1.0f, 1.0f);    
 
-            addresses::CSDrawTextFunc(std::format("Suitium {}", SUITIUM_VERSION).c_str(), x, y + 14.5f, size * 0.85f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
-            return addresses::CSDrawTextFunc(std::format("Sub Rosa 0.{}{}", *addresses::GameVersionNumber, (char)(*addresses::GameVersionPatchNumber + 97)).c_str(), x, y, size * 1.25f, newFlags, red, green, blue, alpha);
+            addresses::CSDrawTextFunc(fmt::format("Suitium {}", SUITIUM_VERSION).c_str(), x, y + 14.5f, size * 0.85f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
+            return addresses::CSDrawTextFunc(fmt::format("Sub Rosa 0.{}{}", *addresses::GameVersionNumber, (char)(*addresses::GameVersionPatchNumber + 97)).c_str(), x, y, size * 1.25f, newFlags, red, green, blue, alpha);
         }
-        else if (std::strcmp(newFormatStream.str().c_str(), std::format("ALPHA {}{}", *addresses::GameVersionNumber, (char)(*addresses::GameVersionPatchNumber + 97)).c_str()) == 0)
+        else if (std::strcmp(newFormatStream.str().c_str(), fmt::format("ALPHA {}{}", *addresses::GameVersionNumber, (char)(*addresses::GameVersionPatchNumber + 97)).c_str()) == 0)
         {
             return 0; // Remove version text
         }

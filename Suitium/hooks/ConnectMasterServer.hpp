@@ -1,6 +1,6 @@
 #include <subhook.h>
 
-#include "../MasterServer.hpp"
+#include "../Addresses.hpp"
 
 void ConnectMasterServerHookFunc();
 
@@ -17,7 +17,7 @@ void ConnectMasterServerHookFunc()
 {
     subhook::ScopedHookRemove scopedRemove(connectMasterServerHook);
 
-    MasterServer::GetSingleton()->Connect("ms.jpxs.io");
+    return addresses::ConnectMasterServerFunc(); // This might be used in the future
 }
 
 #endif

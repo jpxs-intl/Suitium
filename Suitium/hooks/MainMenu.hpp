@@ -1,6 +1,7 @@
 #include <subhook.h>
 
 #include "../Addresses.hpp"
+#include "../structs/VehicleType.hpp"
 
 void MainMenuHookFunc();
 
@@ -47,6 +48,9 @@ void MainMenuHookFunc()
         sdlFreeSurface(iconBMP);
     }
 
+    for (int vehicleTypeID = 0; vehicleTypeID < structs::VehicleType::VanillaCount; vehicleTypeID++)
+        addresses::VehicleTypes[vehicleTypeID].customData.health = 100; // lets just make it the default for now
+
     addresses::MainMenuFunc();
 }
 #elif __linux__
@@ -55,6 +59,9 @@ void MainMenuHookFunc()
     subhook::ScopedHookRemove scopedRemove(mainMenuHook);
 
     // TODO: Icon?
+
+    for (int vehicleTypeID = 0; vehicleTypeID < structs::VehicleType::VanillaCount; vehicleTypeID++)
+        addresses::VehicleTypes[vehicleTypeID].customData.health = 100; // lets just make it the default for now
 
     addresses::MainMenuFunc();
 }

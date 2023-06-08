@@ -11,14 +11,14 @@ add_library(
     Addresses.cpp
     Hooks.cpp
     Hotfixes.cpp
-    MasterServer.cpp
     Version.cpp
 
     # Libraries
-    ../subhook/subhook.c
+    ${CMAKE_SOURCE_DIR}/subhook/subhook.c
+    ${CMAKE_SOURCE_DIR}/fmt/src/format.cc
 )
 
-set_property (TARGET Suitium PROPERTY CXX_STANDARD 20)
+set_property (TARGET Suitium PROPERTY CXX_STANDARD 17)
 
 if (WIN32)
     target_compile_definitions(Suitium PRIVATE SUBHOOK_STATIC) # Windows will give "dllimport" errors without this define.
@@ -26,4 +26,4 @@ if (WIN32)
 endif ()
 
 target_include_directories(Suitium PRIVATE ${CMAKE_SOURCE_DIR}/subhook)
-target_include_directories(Suitium PRIVATE ${CMAKE_SOURCE_DIR}/cpp-httplib)
+target_include_directories(Suitium PRIVATE ${CMAKE_SOURCE_DIR}/fmt/include)
