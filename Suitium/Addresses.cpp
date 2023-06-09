@@ -31,35 +31,35 @@ FuncAddress<addresses::MainMenuFuncType> addresses::MainMenuFunc;
 
 static bool isDedicated = false;
 
-bool addresses::MapForWin32(std::uintptr_t baseAddress)
+bool addresses::Map(std::uintptr_t baseAddress)
 {
     addresses::IsDedicated.Register((std::uintptr_t)&isDedicated);
 
 label_client: {}
-    addresses::GameVersionNumber.Register(baseAddress + 0x2B231C);
-    addresses::GameVersionPatchNumber.Register(baseAddress + 0x2B23DC);
+    addresses::GameVersionNumber.Register(baseAddress + DYNADDR(0x2B231C, 0x0));
+    addresses::GameVersionPatchNumber.Register(baseAddress + DYNADDR(0x2B23DC, 0x0));
     if (*addresses::GameVersionNumber.ptr != SUITIUM_GAME_VERSION_NUMBER || *addresses::GameVersionPatchNumber.ptr != SUITIUM_GAME_VERSION_PATCH - 97)
         goto label_dedicated;
 
-    addresses::ItemTypes.Register(baseAddress + 0x42A7E180);
-    addresses::VehicleTypes.Register(baseAddress + 0x52E9A680);
-    addresses::Humans.Register(baseAddress + 0x4329E308);
-    addresses::Vehicles.Register(baseAddress + 0x1F2D9200);
+    addresses::ItemTypes.Register(baseAddress + DYNADDR(0x42A7E180, 0x0));
+    addresses::VehicleTypes.Register(baseAddress + DYNADDR(0x52E9A680, 0x0));
+    addresses::Humans.Register(baseAddress + DYNADDR(0x4329E308, 0x0));
+    addresses::Vehicles.Register(baseAddress + DYNADDR(0x1F2D9200, 0x0));
 
-    addresses::AuthName.Register(baseAddress + 0x11E4594C);
-    addresses::AuthStatus.Register(baseAddress + 0x2B165F40);
+    addresses::AuthName.Register(baseAddress + DYNADDR(0x11E4594C, 0x0));
+    addresses::AuthStatus.Register(baseAddress + DYNADDR(0x2B165F40, 0x0));
 
-    addresses::SteamEnabled.Register(baseAddress + 0x429F8BC0);
-    addresses::SteamTicketRetrieved.Register(baseAddress + 0x429F8FD8);
-    addresses::SteamTicketLength.Register(baseAddress + 0x429F8BD4);
-    addresses::SteamTicketBuffer.Register(baseAddress + 0x429F8BD8);
+    addresses::SteamEnabled.Register(baseAddress + DYNADDR(0x429F8BC0, 0x0));
+    addresses::SteamTicketRetrieved.Register(baseAddress + DYNADDR(0x429F8FD8, 0x0));
+    addresses::SteamTicketLength.Register(baseAddress + DYNADDR(0x429F8BD4, 0x0));
+    addresses::SteamTicketBuffer.Register(baseAddress + DYNADDR(0x429F8BD8, 0x0));
 
-    addresses::SDLWindowPtr.Register(baseAddress + 0x20FC47C8);
+    addresses::SDLWindowPtr.Register(baseAddress + DYNADDR(0x20FC47C8, 0x0));
 
-    addresses::ConnectMasterServerFunc.Register(baseAddress + 0xA3F30);
-    addresses::CreateVehicleFunc.Register(baseAddress + 0x5BCA0);
-    addresses::CSDrawTextFunc.Register(baseAddress + 0x6D930);
-    addresses::MainMenuFunc.Register(baseAddress + 0x96440);
+    addresses::ConnectMasterServerFunc.Register(baseAddress + DYNADDR(0xA3F30, 0x0));
+    addresses::CreateVehicleFunc.Register(baseAddress + DYNADDR(0x5BCA0, 0x0));
+    addresses::CSDrawTextFunc.Register(baseAddress + DYNADDR(0x6D930, 0x0));
+    addresses::MainMenuFunc.Register(baseAddress + DYNADDR(0x96440, 0x0));
 
     isDedicated = false;
     return true;
@@ -72,10 +72,4 @@ label_dedicated: {}
 
 label_error: {}
     return false;
-}
-bool addresses::MapForLinux(std::uintptr_t baseAddress)
-{
-    addresses::IsDedicated.Register((std::uintptr_t)&isDedicated);
-
-    return false; // TODO:
 }

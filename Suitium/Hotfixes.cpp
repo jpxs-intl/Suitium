@@ -8,7 +8,7 @@
 #include <windows.h>
 #endif
 
-bool hotfixes::MakeForWin32(std::uintptr_t baseAddress)
+bool hotfixes::Make(std::uintptr_t baseAddress)
 {
 #if _WIN32
     // When a bullet hits a train, it skips the hit code
@@ -27,17 +27,13 @@ bool hotfixes::MakeForWin32(std::uintptr_t baseAddress)
 
         VirtualProtect((LPVOID)(baseAddress + 0x2CABD), 0x8, oldProtect, &oldProtect);
     }
+    else
+    {
+        // TODO:
+    }
 
     return true;
 #else
-    return false;
-#endif
-}
-bool hotfixes::MakeForLinux(std::uintptr_t baseAddress)
-{
-#if __linux__
-    return true;
-#else
-    return false;
+    return false; // TODO:
 #endif
 }

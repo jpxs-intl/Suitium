@@ -4,6 +4,12 @@
 #include <cstdint>
 #include <type_traits>
 
+#if _WIN32
+#define DYNADDR(windows, linux) windows
+#elif __linux__
+#define DYNADDR(windows, linux) linux
+#endif
+
 template<class T>
 struct DataAddress
 {

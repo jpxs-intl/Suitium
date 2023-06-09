@@ -47,6 +47,5 @@ namespace addresses
     using MainMenuFuncType = void ();
     extern FuncAddress<MainMenuFuncType> MainMenuFunc;
 
-    bool MapForWin32(std::uintptr_t baseAddress);
-    bool MapForLinux(std::uintptr_t baseAddress);
+    bool Map(std::uintptr_t baseAddress);
 }
