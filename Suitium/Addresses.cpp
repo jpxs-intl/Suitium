@@ -11,8 +11,8 @@
 #include "Version.hpp"
 
 DataAddress<bool> addresses::IsDedicated;
-DataAddress<int> addresses::GameVersionNumber;
-DataAddress<std::uint8_t> addresses::GameVersionPatchNumber;
+DataAddress<const int> addresses::GameVersionNumber;
+DataAddress<const std::uint8_t> addresses::GameVersionPatchNumber;
 DataAddress<structs::ItemType> addresses::ItemTypes;
 DataAddress<structs::VehicleType> addresses::VehicleTypes;
 DataAddress<structs::Human> addresses::Humans;
@@ -28,6 +28,7 @@ FuncAddress<addresses::ConnectMasterServerFuncType> addresses::ConnectMasterServ
 FuncAddress<addresses::CreateVehicleFuncType> addresses::CreateVehicleFunc;
 FuncAddress<addresses::CSDrawTextFuncType> addresses::CSDrawTextFunc;
 FuncAddress<addresses::MainMenuFuncType> addresses::MainMenuFunc;
+FuncAddress<addresses::PrintfFuncType> addresses::PrintfFunc;
 
 static bool isDedicated = false;
 
@@ -61,11 +62,18 @@ label_client: {}
     addresses::CSDrawTextFunc.Register(baseAddress + DYNADDR(0x6D930, 0x0));
     addresses::MainMenuFunc.Register(baseAddress + DYNADDR(0x96440, 0x0));
 
+    addresses::PrintfFunc.Register(0);
+
     isDedicated = false;
     return true;
 
 label_dedicated: {}
-    goto label_error; // TODO:
+    addresses::GameVersionNumber.Register(baseAddress + DYNADDR(0xF7ADC, 0x0)); // This is probably not the real address, but the only read only data I could find containing the right value
+    addresses::GameVersionPatchNumber.Register(baseAddress + DYNADDR(0xF79DC, 0x0));  // This is probably not the real address, but the only read only data I could find containing the right value
+    if (*addresses::GameVersionNumber.ptr != SUITIUM_GAME_VERSION_NUMBER || *addresses::GameVersionPatchNumber.ptr != SUITIUM_GAME_VERSION_PATCH_DEDICATED - 97)
+        goto label_error;
+
+    addresses::PrintfFunc.Register(baseAddress + DYNADDR(0xB36F0, 0x0));
 
     isDedicated = true;
     return true;

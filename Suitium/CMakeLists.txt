@@ -6,6 +6,9 @@ add_library(
     # Main source files
     Win32.cpp
 
+    # API source files
+    api/Logging.cpp
+
     # Other source files
     Address.cpp
     Addresses.cpp

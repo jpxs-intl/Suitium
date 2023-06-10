@@ -13,8 +13,8 @@ namespace addresses
 {
     extern DataAddress<bool> IsDedicated;
 
-    extern DataAddress<int> GameVersionNumber;
-    extern DataAddress<std::uint8_t> GameVersionPatchNumber;
+    extern DataAddress<const int> GameVersionNumber;
+    extern DataAddress<const std::uint8_t> GameVersionPatchNumber;
 
     extern DataAddress<structs::ItemType> ItemTypes;
     extern DataAddress<structs::VehicleType> VehicleTypes;
@@ -46,6 +46,9 @@ namespace addresses
 
     using MainMenuFuncType = void ();
     extern FuncAddress<MainMenuFuncType> MainMenuFunc;
+
+    using PrintfFuncType = int (const char *format, ...);
+    extern FuncAddress<PrintfFuncType> PrintfFunc;
 
     bool Map(std::uintptr_t baseAddress);
 }
