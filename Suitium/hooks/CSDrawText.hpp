@@ -1,14 +1,14 @@
+#pragma once
+
 #include <bitset>
 #include <cstdarg>
 #include <cstdint>
-#include <cstring>
-#include <format>
+#include <fmt/format.h>
 #include <iomanip>
 #include <sstream>
 #include <subhook.h>
 
 #include "../Addresses.hpp"
-#include "../MasterServer.hpp"
 #include "../Version.hpp"
 
 // https://github.com/noche-x/client/blob/main/src/game.hpp
@@ -101,6 +101,7 @@ static void csFormat(const char *format, std::stringstream& newFormatStream, std
 }
 
 #if _WIN32
+
 std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size, unsigned int flags, float red, float green, float blue, float alpha, ...)
 {
     subhook::ScopedHookRemove scopedRemove(drawTextHook);
@@ -119,60 +120,35 @@ std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size
     unsigned int newFlags = flags;
     newFlags |= 0x40; // Add unformatted flag, since we already formatted it
 
-    if (flags != newFlags) // This is to make sure the text is "constant"
+    std::uintptr_t returnAddress = (std::uintptr_t)_ReturnAddress() - (std::uintptr_t)addresses::Base.ptr;
+    if (returnAddress == 0x986D8) // 0x986D8 is the instruction after the game renders the "Sub Rosa" main menu text
     {
-        if (std::strcmp(format, "Sub Rosa") == 0)
-        {
-            // The main menu is being drawn!
-  
-            // TODO: This probably shouldnt be handled here...
-            if (*addresses::AuthStatus.ptr == 0 && *addresses::SteamTicketRetrieved.ptr)
-            {
-                *addresses::AuthStatus.ptr = 3; // We don't need the vanilla game anymore
-                MasterServer::GetSingleton()->RequestClientInfo();
+        // The main menu is being drawn!
+        if (*addresses::AuthStatus == 2)
+            addresses::CSDrawTextFunc(fmt::format("Welcome, {}!", &addresses::AuthName[0]).c_str(), x, y + 65.0f, size * 1.75f, newFlags, 1.0f, 1.0f, 1.0f, 1.0f);
+        else
+            addresses::CSDrawTextFunc("Connecting...", x, y + 65.0f, size * 1.75f, newFlags, 1.0f, 1.0f, 1.0f, 1.0f);    
 
-                *addresses::SteamEnabled.ptr = 0; // I'm not sure if this affects anything, but it's here to hide the "Steam" text
-            }
-
-            if (MasterServer::GetSingleton()->IsConnected())
-            {
-                // TODO: these colors might be not that good
-                if (MasterServer::GetSingleton()->IsClientValid())
-                    addresses::CSDrawTextFunc(std::format("Welcome, {}!", MasterServer::GetSingleton()->GetClientName()).c_str(), x, y + 95, size * 1.5f, newFlags, 0.0f, 1.0f, 0.0f, 1.0f);
-                else if (!*addresses::SteamTicketRetrieved.ptr && *addresses::SteamEnabled.ptr)
-                    addresses::CSDrawTextFunc("Hold up...", x, y + 95, size * 1.5f, newFlags, 1.0f, 1.0f, 0.0f, 1.0f);
-                else if (!*addresses::SteamTicketRetrieved.ptr && !*addresses::SteamEnabled.ptr)
-                    addresses::CSDrawTextFunc("Uh-oh! Suitium could not retrieve your Steam ticket.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
-                else
-                {
-                    addresses::CSDrawTextFunc("Uh-oh! Looks like you don't own the game.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
-                    addresses::CSDrawTextFunc("Piracy is no party!", x, y + 120, size * 0.9f, newFlags, 1.0f, 0.35f, 0.0f, 1.0f);
-                }
-            }
-            else
-                addresses::CSDrawTextFunc("Uh-oh! Suitium could not connect to the master server.", x, y + 95, size * 1.5f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
-
-            addresses::CSDrawTextFunc(std::format("Suitium {}", SUITIUM_VERSION).c_str(), x, y + 14.5f, size * 0.85f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
-            return addresses::CSDrawTextFunc(std::format("Sub Rosa 0.{}{}", *addresses::GameVersionNumber.ptr, (char)(*addresses::GameVersionPatchNumber.ptr + 97)).c_str(), x, y, size * 1.25f, newFlags, red, green, blue, alpha);
-        }
-        else if (std::strcmp(newFormatStream.str().c_str(), std::format("ALPHA {}{}", *addresses::GameVersionNumber.ptr, (char)(*addresses::GameVersionPatchNumber.ptr + 97)).c_str()) == 0)
-        {
-            return 0; // Remove version text
-        }
-        else if (std::strcmp(format, "W1nters") == 0)
-        {
-            // The last credits menu section is being drawn!
-            addresses::CSDrawTextFunc("Suitium is made by", x, y + 64, size, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
-            addresses::CSDrawTextFunc("JPXS", x + 120, y + 64, size, newFlags, 1.0f, 0.75f, 0.0f, 1.0f);
-        }
-        else if (std::strcmp(format, "generating") == 0)
-        {
-            return addresses::CSDrawTextFunc("Generating...", x, y, size, newFlags, red, green, blue, alpha);
-        }
-        else if (std::strcmp(format, "connecting") == 0)
-        {
-            return addresses::CSDrawTextFunc("Connecting...", x, y, size, newFlags, red, green, blue, alpha);
-        }
+        addresses::CSDrawTextFunc(fmt::format("Suitium {}", SUITIUM_VERSION).c_str(), x, y + 14.5f, size * 0.85f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
+        return addresses::CSDrawTextFunc(fmt::format("Sub Rosa 0.{}{}", *addresses::GameVersionNumber, (char)(*addresses::GameVersionPatchNumber + 97)).c_str(), x, y, size * 1.25f, newFlags, red, green, blue, alpha);
+    }
+    else if (returnAddress == 0x9873D) // 0x9873D is the instruction after the game renders the version main menu text
+    {
+        return 0; // Remove version text
+    }
+    else if (returnAddress == 0xFCFD2) // 0xFCFD2 is the instruction after the game renders the last credits section
+    {
+        // The last credits menu section is being drawn!
+        addresses::CSDrawTextFunc("Suitium is made by", x, y + 64, size, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
+        addresses::CSDrawTextFunc("JPXS", x + 120, y + 64, size, newFlags, 1.0f, 0.75f, 0.0f, 1.0f);
+    }
+    else if (returnAddress == 0x9658E) // 0x9658E is the instruction after the game renders the "generating" text
+    {
+        return addresses::CSDrawTextFunc("Generating...", x, y, size, newFlags, red, green, blue, alpha);
+    }
+    else if (returnAddress == 0x966B4) // 0x966B4 is the instruction after the game renders the "connecting" text
+    {
+        return addresses::CSDrawTextFunc("Connecting...", x, y, size, newFlags, red, green, blue, alpha);
     }
 
     return addresses::CSDrawTextFunc(newFormatStream.str().c_str(), x, y, size, newFlags, red, green, blue, alpha);

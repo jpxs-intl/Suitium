@@ -18,7 +18,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved)
     case DLL_PROCESS_ATTACH:
         {
             std::uintptr_t baseAddress = (std::uintptr_t)GetModuleHandle(NULL);
-            if (!addresses::MapForWin32(baseAddress) || !hotfixes::MakeForWin32(baseAddress))
+            if (!addresses::Map(baseAddress) || !hotfixes::Make(baseAddress))
             {
                 char text[256];
                 std::snprintf(text, sizeof(char[256]), "Executable is not compatible with this Suitium version!\nAre you sure this is %d%c?", SUITIUM_GAME_VERSION_NUMBER, SUITIUM_GAME_VERSION_PATCH);

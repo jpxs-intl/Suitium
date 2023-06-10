@@ -4,18 +4,25 @@
 
 #include "Address.hpp"
 #include "structs/Common.hpp"
+#include "structs/Human.hpp"
+#include "structs/Item.hpp"
 #include "structs/ItemType.hpp"
+#include "structs/Vehicle.hpp"
 #include "structs/VehicleType.hpp"
 
 namespace addresses
 {
+    extern DataAddress<void> Base;
     extern DataAddress<bool> IsDedicated;
 
-    extern DataAddress<int> GameVersionNumber;
-    extern DataAddress<std::uint8_t> GameVersionPatchNumber;
+    extern DataAddress<const int> GameVersionNumber;
+    extern DataAddress<const std::uint8_t> GameVersionPatchNumber;
 
     extern DataAddress<structs::ItemType> ItemTypes;
     extern DataAddress<structs::VehicleType> VehicleTypes;
+    extern DataAddress<structs::Human> Humans;
+    extern DataAddress<structs::Item> Items;
+    extern DataAddress<structs::Vehicle> Vehicles;
 
     extern DataAddress<char> AuthName;
     extern DataAddress<int> AuthStatus;
@@ -30,8 +37,11 @@ namespace addresses
     using ConnectMasterServerFuncType = void ();
     extern FuncAddress<ConnectMasterServerFuncType> ConnectMasterServerFunc;
 
-    using MainMenuFuncType = void ();
-    extern FuncAddress<MainMenuFuncType> MainMenuFunc;
+    using CreateItemFuncType = int (int typeID, structs::CVector3 *position, structs::CVector3 *velocity, structs::COrientation *orientation);
+    extern FuncAddress<CreateItemFuncType> CreateItemFunc;
+
+    using CreateVehicleFuncType = int (int typeID, structs::CVector3 *position, structs::CVector3 *velocity, structs::COrientation *orientation, int colorID);
+    extern FuncAddress<CreateVehicleFuncType> CreateVehicleFunc;
 
 #if _WIN32
     using CSDrawTextFuncType = std::int64_t (const char *format, float x, float y, float size, unsigned int flags, float red, float green, float blue, float alpha, ...);
@@ -40,6 +50,14 @@ namespace addresses
 #endif
     extern FuncAddress<CSDrawTextFuncType> CSDrawTextFunc;
 
-    bool MapForWin32(std::uintptr_t baseAddress);
-    bool MapForLinux(std::uintptr_t baseAddress);
+    using MainMenuFuncType = void ();
+    extern FuncAddress<MainMenuFuncType> MainMenuFunc;
+
+    using PrintfFuncType = int (const char *format, ...);
+    extern FuncAddress<PrintfFuncType> PrintfFunc;
+
+    using SetupVehicleTypesFuncType = void ();
+    extern FuncAddress<SetupVehicleTypesFuncType> SetupVehicleTypesFunc;
+
+    bool Map(std::uintptr_t baseAddress);
 }
