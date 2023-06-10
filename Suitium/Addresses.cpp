@@ -17,6 +17,7 @@ DataAddress<const std::uint8_t> addresses::GameVersionPatchNumber;
 DataAddress<structs::ItemType> addresses::ItemTypes;
 DataAddress<structs::VehicleType> addresses::VehicleTypes;
 DataAddress<structs::Human> addresses::Humans;
+DataAddress<structs::Item> addresses::Items;
 DataAddress<structs::Vehicle> addresses::Vehicles;
 DataAddress<char> addresses::AuthName;
 DataAddress<int> addresses::AuthStatus;
@@ -26,6 +27,7 @@ DataAddress<int> addresses::SteamTicketLength;
 DataAddress<char> addresses::SteamTicketBuffer;
 DataAddress<void *> addresses::SDLWindowPtr;
 FuncAddress<addresses::ConnectMasterServerFuncType> addresses::ConnectMasterServerFunc;
+FuncAddress<addresses::CreateItemFuncType> addresses::CreateItemFunc;
 FuncAddress<addresses::CreateVehicleFuncType> addresses::CreateVehicleFunc;
 FuncAddress<addresses::CSDrawTextFuncType> addresses::CSDrawTextFunc;
 FuncAddress<addresses::MainMenuFuncType> addresses::MainMenuFunc;
@@ -48,6 +50,7 @@ label_client: {}
     addresses::ItemTypes.Register(baseAddress + DYNADDR(0x42A7E180, 0x0));
     addresses::VehicleTypes.Register(baseAddress + DYNADDR(0x52E9A680, 0x0));
     addresses::Humans.Register(baseAddress + DYNADDR(0x4329E308, 0x0));
+    addresses::Items.Register(baseAddress + DYNADDR(0x42BBB180, 0x0));
     addresses::Vehicles.Register(baseAddress + DYNADDR(0x1F2D9200, 0x0));
 
     addresses::AuthName.Register(baseAddress + DYNADDR(0x11E4594C, 0x0));
@@ -61,6 +64,7 @@ label_client: {}
     addresses::SDLWindowPtr.Register(baseAddress + DYNADDR(0x20FC47C8, 0x0));
 
     addresses::ConnectMasterServerFunc.Register(baseAddress + DYNADDR(0xA3F30, 0x0));
+    addresses::CreateItemFunc.Register(baseAddress + DYNADDR(0x54130, 0x0));
     addresses::CreateVehicleFunc.Register(baseAddress + DYNADDR(0x5BCA0, 0x0));
     addresses::CSDrawTextFunc.Register(baseAddress + DYNADDR(0x6D930, 0x0));
     addresses::MainMenuFunc.Register(baseAddress + DYNADDR(0x96440, 0x0));
@@ -79,9 +83,11 @@ label_dedicated: {}
     addresses::ItemTypes.Register(baseAddress + DYNADDR(0x501220C0, 0x0));
     addresses::VehicleTypes.Register(baseAddress + DYNADDR(0xAA152E0, 0x0));
     addresses::Humans.Register(baseAddress + DYNADDR(0x509419C8, 0x0));
+    addresses::Items.Register(baseAddress + DYNADDR(0x5025F0C0, 0x0));
     addresses::Vehicles.Register(baseAddress + DYNADDR(0x2E6A3C60, 0x0));
 
     addresses::ConnectMasterServerFunc.Register(0);
+    addresses::CreateItemFunc.Register(baseAddress + DYNADDR(0x3B080, 0x0));
     addresses::CreateVehicleFunc.Register(baseAddress + DYNADDR(0x414B0, 0x0));
     addresses::CSDrawTextFunc.Register(0);
     addresses::MainMenuFunc.Register(0);

@@ -5,6 +5,7 @@
 #include "Address.hpp"
 #include "structs/Common.hpp"
 #include "structs/Human.hpp"
+#include "structs/Item.hpp"
 #include "structs/ItemType.hpp"
 #include "structs/Vehicle.hpp"
 #include "structs/VehicleType.hpp"
@@ -20,6 +21,7 @@ namespace addresses
     extern DataAddress<structs::ItemType> ItemTypes;
     extern DataAddress<structs::VehicleType> VehicleTypes;
     extern DataAddress<structs::Human> Humans;
+    extern DataAddress<structs::Item> Items;
     extern DataAddress<structs::Vehicle> Vehicles;
 
     extern DataAddress<char> AuthName;
@@ -34,6 +36,9 @@ namespace addresses
 
     using ConnectMasterServerFuncType = void ();
     extern FuncAddress<ConnectMasterServerFuncType> ConnectMasterServerFunc;
+
+    using CreateItemFuncType = int (int typeID, structs::CVector3 *position, structs::CVector3 *velocity, structs::COrientation *orientation);
+    extern FuncAddress<CreateItemFuncType> CreateItemFunc;
 
     using CreateVehicleFuncType = int (int typeID, structs::CVector3 *position, structs::CVector3 *velocity, structs::COrientation *orientation, int colorID);
     extern FuncAddress<CreateVehicleFuncType> CreateVehicleFunc;

@@ -8,6 +8,7 @@
 
 #define IMPLEMENT_HOOKS 1
 #include "hooks/ConnectMasterServer.hpp"
+#include "hooks/CreateItem.hpp"
 #include "hooks/CreateVehicle.hpp"
 #include "hooks/CSDrawText.hpp"
 #include "hooks/MainMenu.hpp"
@@ -20,6 +21,7 @@ using HookEntry = std::pair<void **, std::pair<void *, subhook::Hook **>>;
 static std::vector<HookEntry> hookEntries = 
 {
     std::make_pair((void **)&addresses::ConnectMasterServerFunc.ptr, std::make_pair((void *)&ConnectMasterServerHookFunc, &connectMasterServerHook)),
+    std::make_pair((void **)&addresses::CreateItemFunc.ptr, std::make_pair((void *)&CreateItemHookFunc, &createItemHook)),
     std::make_pair((void **)&addresses::CreateVehicleFunc.ptr, std::make_pair((void *)&CreateVehicleHookFunc, &createVehicleHook)),
     std::make_pair((void **)&addresses::CSDrawTextFunc.ptr, std::make_pair((void *)&CSDrawTextHookFunc, &drawTextHook)),
     std::make_pair((void **)&addresses::MainMenuFunc.ptr, std::make_pair((void *)&MainMenuHookFunc, &mainMenuHook)),
