@@ -24,7 +24,7 @@ int PrintfHookFunc(const char *format, ...)
 
     if (std::strcmp(format, "connection successful\n") == 0)
     {
-        logger.Log("<rainbow>Connection successful.");
+        logger.Log("<green>Connection successful<reset>.");
     }
     if (std::strcmp(format, "connection failed\n") == 0)
     {
@@ -41,7 +41,7 @@ int PrintfHookFunc(const char *format, ...)
     {
         std::va_list va;
         va_start(va, format);
-        logger.Log("Socket status: {}", va_arg(va, int) ? "enabled." : "?");
+        logger.Log("Socket status: {}", va_arg(va, int) ? "<green>enabled<reset>." : "?");
         va_end(va);
     }
 
