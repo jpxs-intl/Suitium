@@ -17,8 +17,8 @@ add_library(
     Version.cpp
 
     # Libraries
-    ${CMAKE_SOURCE_DIR}/subhook/subhook.c
     ${CMAKE_SOURCE_DIR}/fmt/src/format.cc
+    ${CMAKE_SOURCE_DIR}/subhook/subhook.c
 )
 
 set_property (TARGET Suitium PROPERTY CXX_STANDARD 17)
@@ -28,5 +28,6 @@ if (WIN32)
     target_link_libraries(Suitium Ws2_32)
 endif ()
 
-target_include_directories(Suitium PRIVATE ${CMAKE_SOURCE_DIR}/subhook)
 target_include_directories(Suitium PRIVATE ${CMAKE_SOURCE_DIR}/fmt/include)
+target_include_directories(Suitium PRIVATE ${CMAKE_SOURCE_DIR}/glm)
+target_include_directories(Suitium PRIVATE ${CMAKE_SOURCE_DIR}/subhook)
