@@ -43,7 +43,7 @@ bool hotfixes::Make(std::uintptr_t baseAddress)
     }
 
     return true;
-#else
+#elif __linux__
     return false; // TODO:
 #endif
 }

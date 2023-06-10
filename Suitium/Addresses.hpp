@@ -34,8 +34,9 @@ namespace addresses
 
     extern DataAddress<void *> SDLWindowPtr;
 
-    using ConnectMasterServerFuncType = void ();
-    extern FuncAddress<ConnectMasterServerFuncType> ConnectMasterServerFunc;
+    using VoidFuncType = void ();
+
+    extern FuncAddress<VoidFuncType> ConnectMasterServerFunc;
 
     using CreateItemFuncType = int (int typeID, structs::CVector3 *position, structs::CVector3 *velocity, structs::COrientation *orientation);
     extern FuncAddress<CreateItemFuncType> CreateItemFunc;
@@ -49,15 +50,15 @@ namespace addresses
     using CSDrawTextFuncType = std::int64_t (const char *format, int, int, int, float, float, float, float, float, float, float, void *);
 #endif
     extern FuncAddress<CSDrawTextFuncType> CSDrawTextFunc;
+    
+    extern FuncAddress<VoidFuncType> LoadServerFunc;
 
-    using MainMenuFuncType = void ();
-    extern FuncAddress<MainMenuFuncType> MainMenuFunc;
+    extern FuncAddress<VoidFuncType> MainMenuFunc;
 
     using PrintfFuncType = int (const char *format, ...);
     extern FuncAddress<PrintfFuncType> PrintfFunc;
 
-    using SetupVehicleTypesFuncType = void ();
-    extern FuncAddress<SetupVehicleTypesFuncType> SetupVehicleTypesFunc;
+    extern FuncAddress<VoidFuncType> SetupVehicleTypesFunc;
 
     bool Map(std::uintptr_t baseAddress);
 }

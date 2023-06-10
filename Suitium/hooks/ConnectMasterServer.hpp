@@ -19,7 +19,7 @@ void ConnectMasterServerHookFunc()
 {
     subhook::ScopedHookRemove scopedRemove(connectMasterServerHook);
 
-    return addresses::ConnectMasterServerFunc(); // This might be used in the future
+    addresses::ConnectMasterServerFunc(); // This might be used in the future
 }
 
 #endif

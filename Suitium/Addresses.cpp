@@ -26,13 +26,14 @@ DataAddress<structs::CBoolean> addresses::SteamTicketRetrieved;
 DataAddress<int> addresses::SteamTicketLength;
 DataAddress<char> addresses::SteamTicketBuffer;
 DataAddress<void *> addresses::SDLWindowPtr;
-FuncAddress<addresses::ConnectMasterServerFuncType> addresses::ConnectMasterServerFunc;
+FuncAddress<addresses::VoidFuncType> addresses::ConnectMasterServerFunc;
 FuncAddress<addresses::CreateItemFuncType> addresses::CreateItemFunc;
 FuncAddress<addresses::CreateVehicleFuncType> addresses::CreateVehicleFunc;
 FuncAddress<addresses::CSDrawTextFuncType> addresses::CSDrawTextFunc;
-FuncAddress<addresses::MainMenuFuncType> addresses::MainMenuFunc;
+FuncAddress<addresses::VoidFuncType> addresses::LoadServerFunc;
+FuncAddress<addresses::VoidFuncType> addresses::MainMenuFunc;
 FuncAddress<addresses::PrintfFuncType> addresses::PrintfFunc;
-FuncAddress<addresses::SetupVehicleTypesFuncType> addresses::SetupVehicleTypesFunc;
+FuncAddress<addresses::VoidFuncType> addresses::SetupVehicleTypesFunc;
 
 static bool isDedicated = false;
 
@@ -67,6 +68,7 @@ label_client: {}
     addresses::CreateItemFunc.Register(baseAddress + DYNADDR(0x54130, 0x0));
     addresses::CreateVehicleFunc.Register(baseAddress + DYNADDR(0x5BCA0, 0x0));
     addresses::CSDrawTextFunc.Register(baseAddress + DYNADDR(0x6D930, 0x0));
+    addresses::LoadServerFunc.Register(baseAddress + DYNADDR(0x0, 0x0));
     addresses::MainMenuFunc.Register(baseAddress + DYNADDR(0x96440, 0x0));
     addresses::PrintfFunc.Register(0);
     addresses::SetupVehicleTypesFunc.Register(baseAddress + DYNADDR(0x145BB0, 0x0));
@@ -86,10 +88,11 @@ label_dedicated: {}
     addresses::Items.Register(baseAddress + DYNADDR(0x5025F0C0, 0x0));
     addresses::Vehicles.Register(baseAddress + DYNADDR(0x2E6A3C60, 0x0));
 
-    addresses::ConnectMasterServerFunc.Register(0);
+    addresses::ConnectMasterServerFunc.Register(baseAddress + DYNADDR(0x4FEB0, 0x0));
     addresses::CreateItemFunc.Register(baseAddress + DYNADDR(0x3B080, 0x0));
     addresses::CreateVehicleFunc.Register(baseAddress + DYNADDR(0x414B0, 0x0));
     addresses::CSDrawTextFunc.Register(0);
+    addresses::LoadServerFunc.Register(baseAddress + DYNADDR(0x8A390, 0x0));
     addresses::MainMenuFunc.Register(0);
     addresses::PrintfFunc.Register(baseAddress + DYNADDR(0xB36F0, 0x0));
     addresses::SetupVehicleTypesFunc.Register(baseAddress + DYNADDR(0xCBEB0, 0x0));

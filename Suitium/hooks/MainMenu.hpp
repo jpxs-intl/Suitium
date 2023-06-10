@@ -2,6 +2,7 @@
 
 #include <subhook.h>
 
+#include "../Addon.hpp"
 #include "../Addresses.hpp"
 #include "../structs/VehicleType.hpp"
 
@@ -53,6 +54,12 @@ void MainMenuHookFunc()
         sdlFreeSurface(iconBMP);
     }
 #endif
+
+    DiscoverAddons();
+    for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
+        (*it)->Load(); // This loads in the ConnectMasterServer hook for the dedicated
+    for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
+        (*it)->CheckDependencies();
 
     addresses::MainMenuFunc();
 }

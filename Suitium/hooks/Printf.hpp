@@ -9,8 +9,6 @@
 
 int PrintfHookFunc(const char *format, ...);
 
-api::Logger *GetSRLogger();
-
 // I need stuff!!!!
 #if _VSCODE
 #define IMPLEMENT_HOOKS 1
@@ -26,34 +24,28 @@ int PrintfHookFunc(const char *format, ...)
 
     if (std::strcmp(format, "connection successful\n") == 0)
     {
-        GetSRLogger()->Log("<green>Connection successful<reset>.");
+        api::GetSRLogger()->Log("<green>Connection successful<reset>.");
     }
     if (std::strcmp(format, "connection failed\n") == 0)
     {
-        GetSRLogger()->Log("<red>Connection failed.");
+        api::GetSRLogger()->Log("<red>Connection failed.");
     }
     else if (std::strcmp(format, "port:%d\n") == 0)
     {
         std::va_list va;
         va_start(va, format);
-        GetSRLogger()->Log("Using port: {}.", va_arg(va, int));
+        api::GetSRLogger()->Log("Using port: {}.", va_arg(va, int));
         va_end(va);
     }
     else if (std::strcmp(format, "socketenabled:%d\n") == 0)
     {
         std::va_list va;
         va_start(va, format);
-        GetSRLogger()->Log("Socket status: {}", va_arg(va, int) ? "<green>enabled<reset>." : "?");
+        api::GetSRLogger()->Log("Socket status: {}", va_arg(va, int) ? "<green>enabled<reset>." : "?");
         va_end(va);
     }
 
     return 0;
-}
-
-api::Logger *GetSRLogger()
-{
-    static api::Logger s = api::Logger("Sub Rosa", "<blue><b>");
-    return &s;
 }
 
 #endif
