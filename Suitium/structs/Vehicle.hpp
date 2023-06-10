@@ -6,6 +6,7 @@
 
 namespace structs
 {
+    // 20840 (0x5168)
     struct Vehicle
     {
         static constexpr std::size_t VanillaCount = 512;

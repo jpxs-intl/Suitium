@@ -29,6 +29,7 @@ FuncAddress<addresses::CreateVehicleFuncType> addresses::CreateVehicleFunc;
 FuncAddress<addresses::CSDrawTextFuncType> addresses::CSDrawTextFunc;
 FuncAddress<addresses::MainMenuFuncType> addresses::MainMenuFunc;
 FuncAddress<addresses::PrintfFuncType> addresses::PrintfFunc;
+FuncAddress<addresses::SetupVehicleTypesFuncType> addresses::SetupVehicleTypesFunc;
 
 static bool isDedicated = false;
 
@@ -61,8 +62,8 @@ label_client: {}
     addresses::CreateVehicleFunc.Register(baseAddress + DYNADDR(0x5BCA0, 0x0));
     addresses::CSDrawTextFunc.Register(baseAddress + DYNADDR(0x6D930, 0x0));
     addresses::MainMenuFunc.Register(baseAddress + DYNADDR(0x96440, 0x0));
-
     addresses::PrintfFunc.Register(0);
+    addresses::SetupVehicleTypesFunc.Register(baseAddress + DYNADDR(0x145BB0, 0x0));
 
     isDedicated = false;
     return true;
@@ -73,7 +74,17 @@ label_dedicated: {}
     if (*addresses::GameVersionNumber.ptr != SUITIUM_GAME_VERSION_NUMBER || *addresses::GameVersionPatchNumber.ptr != SUITIUM_GAME_VERSION_PATCH_DEDICATED - 97)
         goto label_error;
 
+    addresses::ItemTypes.Register(baseAddress + DYNADDR(0x501220C0, 0x0));
+    addresses::VehicleTypes.Register(baseAddress + DYNADDR(0xAA152E0, 0x0));
+    addresses::Humans.Register(baseAddress + DYNADDR(0x509419C8, 0x0));
+    addresses::Vehicles.Register(baseAddress + DYNADDR(0x2E6A3C60, 0x0));
+
+    addresses::ConnectMasterServerFunc.Register(0);
+    addresses::CreateVehicleFunc.Register(baseAddress + DYNADDR(0x414B0, 0x0));
+    addresses::CSDrawTextFunc.Register(0);
+    addresses::MainMenuFunc.Register(0);
     addresses::PrintfFunc.Register(baseAddress + DYNADDR(0xB36F0, 0x0));
+    addresses::SetupVehicleTypesFunc.Register(baseAddress + DYNADDR(0xCBEB0, 0x0));
 
     isDedicated = true;
     return true;

@@ -50,5 +50,8 @@ namespace addresses
     using PrintfFuncType = int (const char *format, ...);
     extern FuncAddress<PrintfFuncType> PrintfFunc;
 
+    using SetupVehicleTypesFuncType = void ();
+    extern FuncAddress<SetupVehicleTypesFuncType> SetupVehicleTypesFunc;
+
     bool Map(std::uintptr_t baseAddress);
 }

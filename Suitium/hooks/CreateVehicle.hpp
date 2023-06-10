@@ -1,3 +1,5 @@
+#pragma once
+
 #include <subhook.h>
 
 #include "../Addresses.hpp"

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <subhook.h>
 
 #include "../Addresses.hpp"
@@ -28,10 +30,13 @@ typedef void (*SDL_FreeSurface_t)(SDL_Surface_t *surface);
 typedef struct SDL_Window SDL_Window_t;
 typedef void (*SDL_SetWindowIcon_t)(SDL_Window_t *window, SDL_Surface_t *icon);
 
+#endif
+
 void MainMenuHookFunc()
 {
     subhook::ScopedHookRemove scopedRemove(mainMenuHook);
 
+#if _WIN32
     HMODULE sdlModule = GetModuleHandle("SDL2.dll");
     SDL_RWFromFile_t sdlRWFromFile = (SDL_RWFromFile_t)GetProcAddress(sdlModule, "SDL_RWFromFile");
     SDL_LoadBMP_RW_t sdlLoadBMP_RW = (SDL_LoadBMP_RW_t)GetProcAddress(sdlModule, "SDL_LoadBMP_RW");
@@ -47,24 +52,9 @@ void MainMenuHookFunc()
         sdlSetWindowIcon((SDL_Window_t *)*addresses::SDLWindowPtr, iconBMP);
         sdlFreeSurface(iconBMP);
     }
-
-    for (int vehicleTypeID = 0; vehicleTypeID < structs::VehicleType::VanillaCount; vehicleTypeID++)
-        addresses::VehicleTypes[vehicleTypeID].customData.health = 100; // lets just make it the default for now
-
-    addresses::MainMenuFunc();
-}
-#elif __linux__
-void MainMenuHookFunc()
-{
-    subhook::ScopedHookRemove scopedRemove(mainMenuHook);
-
-    // TODO: Icon?
-
-    for (int vehicleTypeID = 0; vehicleTypeID < structs::VehicleType::VanillaCount; vehicleTypeID++)
-        addresses::VehicleTypes[vehicleTypeID].customData.health = 100; // lets just make it the default for now
-
-    addresses::MainMenuFunc();
-}
 #endif
+
+    addresses::MainMenuFunc();
+}
 
 #endif

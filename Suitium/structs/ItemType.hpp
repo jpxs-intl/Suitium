@@ -6,6 +6,7 @@
 
 namespace structs
 {
+    //  5072 (0x13D0)
     struct ItemType
     {
         static constexpr std::size_t VanillaCount = 46;
