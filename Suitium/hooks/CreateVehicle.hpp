@@ -20,10 +20,21 @@ int CreateVehicleHookFunc(int typeID, structs::CVector3 *position, structs::CVec
 {
     subhook::ScopedHookRemove scopedRemove(createVehicleHook);
 
-    int vehicleID = addresses::CreateVehicleFunc(typeID, position, velocity, orientation, colorID);
+    structs::CVector3 actualPosition;
+    actualPosition = (position != nullptr) ? *position : glm::vec3();
+    structs::CVector3 actualVelocity;
+    actualVelocity = (velocity != nullptr) ? *velocity : glm::vec3();
+    structs::COrientation actualOrientation;
+    actualOrientation = (orientation != nullptr) ? *orientation : glm::mat3(1.0f);
+
+    int vehicleID = addresses::CreateVehicleFunc(typeID, &actualPosition, &actualVelocity, &actualOrientation, colorID);
     if (vehicleID < 0)
         return -1;
 
+    // Make sure these values are setup correctly
+    addresses::Vehicles[vehicleID].position = actualPosition;
+    addresses::Vehicles[vehicleID].velocity = actualVelocity;
+    addresses::Vehicles[vehicleID].orientation = actualOrientation;
     addresses::Vehicles[vehicleID].health = addresses::VehicleTypes[typeID].customData.health;
 
     return vehicleID;

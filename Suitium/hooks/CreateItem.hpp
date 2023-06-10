@@ -20,9 +20,21 @@ int CreateItemHookFunc(int typeID, structs::CVector3 *position, structs::CVector
 {
     subhook::ScopedHookRemove scopedRemove(createItemHook);
 
-    int itemID = addresses::CreateItemFunc(typeID, position, velocity, orientation);
+    structs::CVector3 actualPosition;
+    actualPosition = (position != nullptr) ? *position : glm::vec3();
+    structs::CVector3 actualVelocity;
+    actualVelocity = (velocity != nullptr) ? *velocity : glm::vec3();
+    structs::COrientation actualOrientation;
+    actualOrientation = (orientation != nullptr) ? *orientation : glm::mat3(1.0f);
+
+    int itemID = addresses::CreateItemFunc(typeID, &actualPosition, &actualVelocity, &actualOrientation);
     if (itemID < 0)
         return -1;
+
+    // Make sure these values are setup correctly
+    addresses::Items[itemID].position = actualPosition;
+    addresses::Items[itemID].velocity = actualVelocity;
+    addresses::Items[itemID].orientation = actualOrientation;
 
     return itemID;
 }
