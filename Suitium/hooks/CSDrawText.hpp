@@ -101,7 +101,7 @@ static void csFormat(const char *format, std::stringstream& newFormatStream, std
 }
 
 #if _WIN32
-#include <windows.h>
+
 std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size, unsigned int flags, float red, float green, float blue, float alpha, ...)
 {
     subhook::ScopedHookRemove scopedRemove(drawTextHook);
