@@ -10,6 +10,7 @@
 #include "structs/VehicleType.hpp"
 #include "Version.hpp"
 
+DataAddress<void> addresses::Base;
 DataAddress<bool> addresses::IsDedicated;
 DataAddress<const int> addresses::GameVersionNumber;
 DataAddress<const std::uint8_t> addresses::GameVersionPatchNumber;
@@ -35,6 +36,7 @@ static bool isDedicated = false;
 
 bool addresses::Map(std::uintptr_t baseAddress)
 {
+    addresses::Base.Register(baseAddress);
     addresses::IsDedicated.Register((std::uintptr_t)&isDedicated);
 
 label_client: {}

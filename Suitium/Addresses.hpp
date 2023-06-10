@@ -11,6 +11,7 @@
 
 namespace addresses
 {
+    extern DataAddress<void> Base;
     extern DataAddress<bool> IsDedicated;
 
     extern DataAddress<const int> GameVersionNumber;
