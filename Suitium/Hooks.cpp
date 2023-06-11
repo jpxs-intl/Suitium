@@ -9,7 +9,7 @@
 #define IMPLEMENT_HOOKS 1
 #include "hooks/CSDrawText.hpp"
 #include "hooks/ClientMain.hpp"
-#include "hooks/DrawMainMenu.hpp"
+#include "hooks/DrawMenu.hpp"
 #include "hooks/ConnectMasterServer.hpp"
 #include "hooks/CreateItem.hpp"
 #include "hooks/CreateVehicle.hpp"
@@ -37,7 +37,7 @@ void InstallHooks()
         {(void **)&addresses::ClientMainFunc.ptr, (void *)&ClientMainHookFunc, &clientMainHook},
         {(void **)&addresses::LoadServerFunc.ptr, (void *)&LoadServerHookFunc, &loadServerHook},
         {(void **)&addresses::ResetGameFunc.ptr, (void *)&ResetGameHookFunc, &resetGameHook},
-        {(void **)&addresses::DrawMainMenuFunc.ptr, (void *)&DrawMainMenuHookFunc, &drawMainMenuHook},
+        {(void **)&addresses::DrawMenuFunc.ptr, (void *)&DrawMenuHookFunc, &drawMenuHook},
         {(void **)&addresses::PrintfFunc.ptr, (void *)&PrintfHookFunc, &printfHook},
         {(void **)&addresses::SetupVehicleTypesFunc.ptr, (void *)&SetupVehicleTypesHookFunc, &setupVehicleTypesHook},
     };

@@ -34,6 +34,10 @@ namespace addresses
 
     extern DataAddress<void *> SDLWindowPtr;
 
+    extern DataAddress<structs::CBoolean> IsInGame;
+    extern DataAddress<structs::CBoolean> GamePaused;
+    extern DataAddress<int> MenuTypeID;
+
     extern DataAddress<char> ServerName;
 
     using VoidFuncType = void ();
@@ -57,8 +61,8 @@ namespace addresses
 
     extern FuncAddress<VoidFuncType> LoadServerFunc;
 
-    using DrawMainMenuFuncType = int (int);
-    extern FuncAddress<DrawMainMenuFuncType> DrawMainMenuFunc;
+    using DrawMenuFuncType = int (int);
+    extern FuncAddress<DrawMenuFuncType> DrawMenuFunc;
 
     using PrintfFuncType = int (const char *format, ...);
     extern FuncAddress<PrintfFuncType> PrintfFunc;
