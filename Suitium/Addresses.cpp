@@ -4,6 +4,7 @@
 
 #include "Address.hpp"
 #include "structs/Common.hpp"
+#include "structs/CSKeyboard.hpp"
 #include "structs/Human.hpp"
 #include "structs/ItemType.hpp"
 #include "structs/Vehicle.hpp"
@@ -26,7 +27,7 @@ DataAddress<structs::CBoolean> addresses::SteamTicketRetrieved;
 DataAddress<int> addresses::SteamTicketLength;
 DataAddress<char> addresses::SteamTicketBuffer;
 DataAddress<void *> addresses::SDLWindowPtr;
-DataAddress<char> addresses::ServerName;
+DataAddress<structs::CSKeyboard> addresses::CSKeyboard;
 DataAddress<structs::CBoolean> addresses::IsInGame;
 DataAddress<structs::CBoolean> addresses::GamePaused;
 DataAddress<int> addresses::MenuTypeID;
@@ -34,6 +35,8 @@ DataAddress<float> addresses::NextMenuButtonPositionX;
 DataAddress<float> addresses::NextMenuButtonPositionY;
 DataAddress<float> addresses::NextMenuButtonSizeX;
 DataAddress<float> addresses::NextMenuButtonSizeY;
+DataAddress<SDL_Scancode> addresses::NextMenuButtonKey;
+DataAddress<char> addresses::ServerName;
 FuncAddress<addresses::VoidFuncType> addresses::ClientMainFunc;
 FuncAddress<addresses::VoidFuncType> addresses::ConnectMasterServerFunc;
 FuncAddress<addresses::CreateItemFuncType> addresses::CreateItemFunc;
@@ -76,6 +79,8 @@ label_client: {}
 
     addresses::SDLWindowPtr.Register(baseAddress + DYNADDR(0x20FC47C8, 0x6A7C5F88));
 
+    addresses::CSKeyboard.Register(baseAddress + DYNADDR(0x43F7C964, 0x0));
+
     addresses::IsInGame.Register(baseAddress + DYNADDR(0x43EBFAA0, 0x0));
     addresses::GamePaused.Register(baseAddress + DYNADDR(0x43EBFAA8, 0x0));
     addresses::MenuTypeID.Register(baseAddress + DYNADDR(0x43EBFAA4, 0x0));
@@ -84,6 +89,7 @@ label_client: {}
     addresses::NextMenuButtonPositionY.Register(baseAddress + DYNADDR(0x10F610DC, 0x0));
     addresses::NextMenuButtonSizeX.Register(baseAddress + DYNADDR(0x10F610E0, 0x0));
     addresses::NextMenuButtonSizeY.Register(baseAddress + DYNADDR(0x10F610E4, 0x0));
+    addresses::NextMenuButtonKey.Register(baseAddress + DYNADDR(0x10F610F4, 0x0));
 
     addresses::ServerName.Register(baseAddress + DYNADDR(0x6D04ADD4, 0x0));
 
@@ -124,6 +130,8 @@ label_dedicated: {}
 
     addresses::SDLWindowPtr.Register(0);
 
+    addresses::CSKeyboard.Register(0);
+
     addresses::IsInGame.Register(0);
     addresses::GamePaused.Register(0);
     addresses::MenuTypeID.Register(0);
@@ -132,6 +140,7 @@ label_dedicated: {}
     addresses::NextMenuButtonPositionY.Register(0);
     addresses::NextMenuButtonSizeX.Register(0);
     addresses::NextMenuButtonSizeY.Register(0);
+    addresses::NextMenuButtonKey.Register(0);
 
     addresses::ServerName.Register(baseAddress + DYNADDR(0x23D75B74, 0x0));
 

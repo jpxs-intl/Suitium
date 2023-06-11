@@ -4,6 +4,7 @@
 
 #include "Address.hpp"
 #include "structs/Common.hpp"
+#include "structs/CSKeyboard.hpp"
 #include "structs/Human.hpp"
 #include "structs/Item.hpp"
 #include "structs/ItemType.hpp"
@@ -34,6 +35,8 @@ namespace addresses
 
     extern DataAddress<void *> SDLWindowPtr;
 
+    extern DataAddress<structs::CSKeyboard> CSKeyboard;
+
     extern DataAddress<structs::CBoolean> IsInGame;
     extern DataAddress<structs::CBoolean> GamePaused;
     extern DataAddress<int> MenuTypeID;
@@ -42,6 +45,7 @@ namespace addresses
     extern DataAddress<float> NextMenuButtonPositionY;
     extern DataAddress<float> NextMenuButtonSizeX;
     extern DataAddress<float> NextMenuButtonSizeY;
+    extern DataAddress<SDL_Scancode> NextMenuButtonKey;
 
     extern DataAddress<char> ServerName;
 
