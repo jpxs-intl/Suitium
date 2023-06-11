@@ -34,6 +34,8 @@ namespace addresses
 
     extern DataAddress<void *> SDLWindowPtr;
 
+    extern DataAddress<char> ServerName;
+
     using VoidFuncType = void ();
 
     extern FuncAddress<VoidFuncType> ConnectMasterServerFunc;
@@ -57,6 +59,8 @@ namespace addresses
 
     using PrintfFuncType = int (const char *format, ...);
     extern FuncAddress<PrintfFuncType> PrintfFunc;
+
+    extern FuncAddress<VoidFuncType> ResetGameFunc;
 
     extern FuncAddress<VoidFuncType> SetupVehicleTypesFunc;
 

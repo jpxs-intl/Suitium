@@ -14,6 +14,7 @@
 #include "hooks/LoadServer.hpp"
 #include "hooks/MainMenu.hpp"
 #include "hooks/Printf.hpp"
+#include "hooks/ResetGame.hpp"
 #include "hooks/SetupVehicleTypes.hpp"
 
 // FuncAddress, hook function and hook object
@@ -28,6 +29,7 @@ static std::vector<HookEntry> hookEntries =
     std::make_pair((void **)&addresses::LoadServerFunc.ptr, std::make_pair((void *)&LoadServerHookFunc, &loadServerHook)),
     std::make_pair((void **)&addresses::MainMenuFunc.ptr, std::make_pair((void *)&MainMenuHookFunc, &mainMenuHook)),
     std::make_pair((void **)&addresses::PrintfFunc.ptr, std::make_pair((void *)&PrintfHookFunc, &printfHook)),
+    std::make_pair((void **)&addresses::ResetGameFunc.ptr, std::make_pair((void *)&ResetGameHookFunc, &resetGameHook)),
     std::make_pair((void **)&addresses::SetupVehicleTypesFunc.ptr, std::make_pair((void *)&SetupVehicleTypesHookFunc, &setupVehicleTypesHook))
 };
 
