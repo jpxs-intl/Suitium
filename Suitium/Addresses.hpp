@@ -52,10 +52,13 @@ namespace addresses
     using CSDrawTextFuncType = std::int64_t (const char *format, int, int, int, float, float, float, float, float, float, float, void *);
 #endif
     extern FuncAddress<CSDrawTextFuncType> CSDrawTextFunc;
-    
+
     extern FuncAddress<VoidFuncType> LoadServerFunc;
 
-    extern FuncAddress<VoidFuncType> MainMenuFunc;
+    extern FuncAddress<VoidFuncType> ClientMain;
+
+    using MainMenuType = int (int);
+    extern FuncAddress<MainMenuType> MainMenu;
 
     using PrintfFuncType = int (const char *format, ...);
     extern FuncAddress<PrintfFuncType> PrintfFunc;

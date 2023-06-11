@@ -44,6 +44,6 @@ bool hotfixes::Make(std::uintptr_t baseAddress)
 
     return true;
 #elif __linux__
-    return false; // TODO:
+    return true; // TODO: true for testing
 #endif
 }

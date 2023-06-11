@@ -7,42 +7,47 @@
 #include "Addresses.hpp"
 
 #define IMPLEMENT_HOOKS 1
+#include "hooks/CSDrawText.hpp"
+#include "hooks/ClientMain.hpp"
+#include "hooks/MainMenu.hpp"
 #include "hooks/ConnectMasterServer.hpp"
 #include "hooks/CreateItem.hpp"
 #include "hooks/CreateVehicle.hpp"
-#include "hooks/CSDrawText.hpp"
 #include "hooks/LoadServer.hpp"
-#include "hooks/MainMenu.hpp"
 #include "hooks/Printf.hpp"
 #include "hooks/ResetGame.hpp"
 #include "hooks/SetupVehicleTypes.hpp"
 
 // FuncAddress, hook function and hook object
-using HookEntry = std::pair<void **, std::pair<void *, subhook::Hook **>>;
-
-static std::vector<HookEntry> hookEntries = 
-{
-    std::make_pair((void **)&addresses::ConnectMasterServerFunc.ptr, std::make_pair((void *)&ConnectMasterServerHookFunc, &connectMasterServerHook)),
-    std::make_pair((void **)&addresses::CreateItemFunc.ptr, std::make_pair((void *)&CreateItemHookFunc, &createItemHook)),
-    std::make_pair((void **)&addresses::CreateVehicleFunc.ptr, std::make_pair((void *)&CreateVehicleHookFunc, &createVehicleHook)),
-    std::make_pair((void **)&addresses::CSDrawTextFunc.ptr, std::make_pair((void *)&CSDrawTextHookFunc, &drawTextHook)),
-    std::make_pair((void **)&addresses::LoadServerFunc.ptr, std::make_pair((void *)&LoadServerHookFunc, &loadServerHook)),
-    std::make_pair((void **)&addresses::MainMenuFunc.ptr, std::make_pair((void *)&MainMenuHookFunc, &mainMenuHook)),
-    std::make_pair((void **)&addresses::PrintfFunc.ptr, std::make_pair((void *)&PrintfHookFunc, &printfHook)),
-    std::make_pair((void **)&addresses::ResetGameFunc.ptr, std::make_pair((void *)&ResetGameHookFunc, &resetGameHook)),
-    std::make_pair((void **)&addresses::SetupVehicleTypesFunc.ptr, std::make_pair((void *)&SetupVehicleTypesHookFunc, &setupVehicleTypesHook))
+struct HookEntry {
+  void** sourceFunction;
+  void* hookedFunction;
+  subhook::Hook** hook;
 };
 
 void InstallHooks()
 {
-    for (auto it = hookEntries.begin(); it != hookEntries.end(); ++it)
-    {
-        if (!*(*it).first) // Some versions might not contain one or two hooks
-            continue;
+  static std::vector<HookEntry> hookEntries =
+      {
+          {(void **)&addresses::ConnectMasterServerFunc.ptr, (void *)&ConnectMasterServerHookFunc, &connectMasterServerHook},
+          {(void **)&addresses::CreateItemFunc.ptr, (void *)&CreateItemHookFunc, &createItemHook},
+          {(void **)&addresses::CreateVehicleFunc.ptr, (void *)&CreateVehicleHookFunc, &createVehicleHook},
+          {(void **)&addresses::CSDrawTextFunc.ptr, (void *)&CSDrawTextHookFunc, &drawTextHook},
+          {(void **)&addresses::ClientMainFunc.ptr, (void *)&ClientMainFunc, &clientMainHook},
+          {(void **)&addresses::LoadServerFunc.ptr, (void *)&LoadServerHookFunc, &loadServerHook},
+          {(void **)&addresses::ResetGameFunc.ptr, (void *)&ResetGameHookFunc, &resetGameHook},
+          {(void **)&addresses::MainMenuFunc.ptr, (void *)&MainMenuFunc, &mainMenuHook},
+          {(void **)&addresses::PrintfFunc.ptr, (void *)&PrintfHookFunc, &printfHook},
+          {(void **)&addresses::SetupVehicleTypesFunc.ptr, (void *)&SetupVehicleTypesHookFunc, &setupVehicleTypesHook},
+      };
 
-        subhook::Hook *hook = new subhook::Hook(*(*it).first, (*it).second.first, subhook::HookFlag64BitOffset);
+    for (HookEntry entry : hookEntries) {
+        if (!*entry.sourceFunction) // Some versions might not contain one or two hooks
+          continue ;
+
+        subhook::Hook *hook = new subhook::Hook(*entry.sourceFunction, entry.hookedFunction, subhook::HookFlag64BitOffset);
         hook->Install();
 
-        *(*it).second.second = hook;
+        *entry.hook = hook;
     }
 }

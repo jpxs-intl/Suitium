@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <type_traits>
+#include <utility>
 
 #if _WIN32
 #define DYNADDR(windows, linux) windows
