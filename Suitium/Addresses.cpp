@@ -30,6 +30,10 @@ DataAddress<char> addresses::ServerName;
 DataAddress<structs::CBoolean> addresses::IsInGame;
 DataAddress<structs::CBoolean> addresses::GamePaused;
 DataAddress<int> addresses::MenuTypeID;
+DataAddress<float> addresses::NextMenuButtonPositionX;
+DataAddress<float> addresses::NextMenuButtonPositionY;
+DataAddress<float> addresses::NextMenuButtonSizeX;
+DataAddress<float> addresses::NextMenuButtonSizeY;
 FuncAddress<addresses::VoidFuncType> addresses::ClientMainFunc;
 FuncAddress<addresses::VoidFuncType> addresses::ConnectMasterServerFunc;
 FuncAddress<addresses::CreateItemFuncType> addresses::CreateItemFunc;
@@ -37,6 +41,7 @@ FuncAddress<addresses::CreateVehicleFuncType> addresses::CreateVehicleFunc;
 FuncAddress<addresses::CSDrawTextFuncType> addresses::CSDrawTextFunc;
 FuncAddress<addresses::VoidFuncType> addresses::LoadServerFunc;
 FuncAddress<addresses::DrawMenuFuncType> addresses::DrawMenuFunc;
+FuncAddress<addresses::DrawMenuButtonFuncType> addresses::DrawMenuButtonFunc;
 FuncAddress<addresses::PrintfFuncType> addresses::PrintfFunc;
 FuncAddress<addresses::VoidFuncType> addresses::ResetGameFunc;
 FuncAddress<addresses::VoidFuncType> addresses::SetupVehicleTypesFunc;
@@ -74,6 +79,11 @@ label_client: {}
     addresses::IsInGame.Register(baseAddress + DYNADDR(0x43EBFAA0, 0x0));
     addresses::GamePaused.Register(baseAddress + DYNADDR(0x43EBFAA8, 0x0));
     addresses::MenuTypeID.Register(baseAddress + DYNADDR(0x43EBFAA4, 0x0));
+    
+    addresses::NextMenuButtonPositionX.Register(baseAddress + DYNADDR(0x10F610D8, 0x0));
+    addresses::NextMenuButtonPositionY.Register(baseAddress + DYNADDR(0x10F610DC, 0x0));
+    addresses::NextMenuButtonSizeX.Register(baseAddress + DYNADDR(0x10F610E0, 0x0));
+    addresses::NextMenuButtonSizeY.Register(baseAddress + DYNADDR(0x10F610E4, 0x0));
 
     addresses::ServerName.Register(baseAddress + DYNADDR(0x6D04ADD4, 0x0));
 
@@ -84,6 +94,7 @@ label_client: {}
     addresses::CSDrawTextFunc.Register(baseAddress + DYNADDR(0x6D930, 0x2C62C));
     addresses::LoadServerFunc.Register(0);
     addresses::DrawMenuFunc.Register(baseAddress + DYNADDR(0x72450, 0x30821));
+    addresses::DrawMenuButtonFunc.Register(baseAddress + DYNADDR(0x6F1F0, 0x2602F));
     addresses::PrintfFunc.Register(0);
     addresses::ResetGameFunc.Register(baseAddress + DYNADDR(0x127910, 0x0));
     addresses::SetupVehicleTypesFunc.Register(baseAddress + DYNADDR(0x145BB0, 0x116BD5));
@@ -117,6 +128,11 @@ label_dedicated: {}
     addresses::GamePaused.Register(0);
     addresses::MenuTypeID.Register(0);
 
+    addresses::NextMenuButtonPositionX.Register(0);
+    addresses::NextMenuButtonPositionY.Register(0);
+    addresses::NextMenuButtonSizeX.Register(0);
+    addresses::NextMenuButtonSizeY.Register(0);
+
     addresses::ServerName.Register(baseAddress + DYNADDR(0x23D75B74, 0x0));
 
     addresses::ClientMainFunc.Register(0);
@@ -126,6 +142,7 @@ label_dedicated: {}
     addresses::CSDrawTextFunc.Register(0);
     addresses::LoadServerFunc.Register(baseAddress + DYNADDR(0x8A390, 0x0));
     addresses::DrawMenuFunc.Register(0);
+    addresses::DrawMenuButtonFunc.Register(0);
     addresses::PrintfFunc.Register(baseAddress + DYNADDR(0xB36F0, 0x0));
     addresses::ResetGameFunc.Register(baseAddress + DYNADDR(0xB4790, 0x0));
     addresses::SetupVehicleTypesFunc.Register(baseAddress + DYNADDR(0xCBEB0, 0x0));

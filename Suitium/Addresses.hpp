@@ -38,6 +38,11 @@ namespace addresses
     extern DataAddress<structs::CBoolean> GamePaused;
     extern DataAddress<int> MenuTypeID;
 
+    extern DataAddress<float> NextMenuButtonPositionX;
+    extern DataAddress<float> NextMenuButtonPositionY;
+    extern DataAddress<float> NextMenuButtonSizeX;
+    extern DataAddress<float> NextMenuButtonSizeY;
+
     extern DataAddress<char> ServerName;
 
     using VoidFuncType = void ();
@@ -61,8 +66,11 @@ namespace addresses
 
     extern FuncAddress<VoidFuncType> LoadServerFunc;
 
-    using DrawMenuFuncType = int (int);
+    using DrawMenuFuncType = int (int unk);
     extern FuncAddress<DrawMenuFuncType> DrawMenuFunc;
+
+    using DrawMenuButtonFuncType = int (const char *text);
+    extern FuncAddress<DrawMenuButtonFuncType> DrawMenuButtonFunc;
 
     using PrintfFuncType = int (const char *format, ...);
     extern FuncAddress<PrintfFuncType> PrintfFunc;
