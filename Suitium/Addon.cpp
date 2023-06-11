@@ -86,6 +86,9 @@ void Addon::Load()
             goto label_error;
         }
 
+        this->_name = addonsJSON.contains("name") ? addonsJSON["name"].get<std::string>() : this->_id;
+        this->_logDecoration = addonsJSON.contains("log-decoration") ? addonsJSON["log-decoration"].get<std::string>() : "";
+
         auto jsonRequires = addonsJSON["requires"];
         if (jsonRequires.is_array())
         {
@@ -105,8 +108,6 @@ void Addon::Load()
                     this->_conflicts.push_back((*it).get<std::string>());
             }
         }
-
-        this->_logDecoration = addonsJSON.contains("log-decoration") ? addonsJSON["log-decoration"].get<std::string>() : "";
     }
 
     if (FindAddon(this->_id))
@@ -137,6 +138,13 @@ const std::string &Addon::ID() const
         throw std::logic_error("Addon is not loaded");
     return this->_id;
 }
+
+const std::string &Addon::Name() const
+{
+    if (!this->IsLoaded())
+        throw std::logic_error("Addon is not loaded");
+    return this->_name;
+}
 const std::string &Addon::LogDecoration() const
 {
     if (!this->IsLoaded())
@@ -147,6 +155,8 @@ const std::string &Addon::LogDecoration() const
 void Addon::LoadAsSR()
 {
     this->_id = "sub_rosa";
+
+    this->_name = "Sub Rosa";
     this->_logDecoration = "<blue><b>";
 
     this->_isLoaded = true;

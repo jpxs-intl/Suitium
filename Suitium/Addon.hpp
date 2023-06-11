@@ -23,6 +23,8 @@ private:
     bool _isLoaded;
 
     std::string _id;
+    
+    std::string _name;
     std::string _logDecoration;
 
     std::vector<std::string> _requires;
@@ -30,6 +32,8 @@ private:
 
 public:
     const std::string &ID() const;
+
+    const std::string &Name() const;
     const std::string &LogDecoration() const;
 
 private:
