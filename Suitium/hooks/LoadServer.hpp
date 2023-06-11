@@ -29,10 +29,10 @@ void LoadServerHookFunc()
     if (*addresses::IsDedicated)
     {
         DiscoverAddons();
-        for (auto& addon : GetAddons())
-            addon->Load(); // This loads in the ClientMain hook for the client
-        for (auto& addon : GetAddons())
-            addon->CheckDependencies();
+        for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
+            (*it)->Load(); // This loads in the ClientMain hook for the client
+        for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
+            (*it)->CheckDependencies();
     }
 
     addresses::LoadServerFunc();

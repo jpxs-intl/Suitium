@@ -72,10 +72,10 @@ void ClientMainHookFunc()
 #endif
 
     DiscoverAddons();
-    for (auto& addon : GetAddons())
-        addon->Load(); // This loads in the ConnectMasterServer hook for the dedicated
-    for (auto& addon : GetAddons())
-        addon->CheckDependencies();
+    for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
+        (*it)->Load(); // This loads in the ConnectMasterServer hook for the dedicated
+    for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
+        (*it)->CheckDependencies();
 
     addresses::ClientMainFunc();
 }
