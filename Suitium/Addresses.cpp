@@ -75,7 +75,7 @@ label_client: {}
     addresses::LoadServerFunc.Register(0);
     addresses::MainMenuFunc.Register(baseAddress + DYNADDR(0x96440, 0x0));
     addresses::PrintfFunc.Register(0);
-    addresses::ResetGameFunc.Register(baseAddress + DYNADDR(0x0, 0x0));
+    addresses::ResetGameFunc.Register(baseAddress + DYNADDR(0x127910, 0x0));
     addresses::SetupVehicleTypesFunc.Register(baseAddress + DYNADDR(0x145BB0, 0x0));
 
     isDedicated = false;
