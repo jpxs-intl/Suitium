@@ -15,5 +15,5 @@ int MainMenuFunc(int p1) {
   subhook::ScopedHookRemove scopedRemove(mainMenuHook);
   addresses::CSDrawTextFunc(fmt::format("Sub Rosa 0.{}{}", *addresses::GameVersionNumber, (char)(*addresses::GameVersionPatchNumber + 97)).c_str(), 5, 0, 0, 50, 50, 32.f, 1.f, 1.f, 1.f, 1.f, (void*)0);
 
-  return addresses::MainMenu(p1);
-};
+  return addresses::MainMenuFunc(p1);
+}

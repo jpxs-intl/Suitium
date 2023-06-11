@@ -174,4 +174,15 @@ namespace api
         SetConsoleTextAttribute(stdOutput, originalAttributes);
 #endif
     }
+
+    Logger *GetSRLogger()
+    {
+        static Logger s = Logger("Sub Rosa", "<blue><b>");
+        return &s;
+    }
+    Logger *GetSuitiumLogger()
+    {
+        static Logger s = Logger("Suitium", "<red><b>");
+        return &s;
+    }
 }

@@ -30,4 +30,7 @@ namespace api
     private:
         static void InternalLog(const std::string &content);
     };
+
+    Logger *GetSRLogger();
+    Logger *GetSuitiumLogger();
 }

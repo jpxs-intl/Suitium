@@ -13,7 +13,9 @@
 #include "hooks/ConnectMasterServer.hpp"
 #include "hooks/CreateItem.hpp"
 #include "hooks/CreateVehicle.hpp"
+#include "hooks/LoadServer.hpp"
 #include "hooks/Printf.hpp"
+#include "hooks/ResetGame.hpp"
 #include "hooks/SetupVehicleTypes.hpp"
 
 // FuncAddress, hook function and hook object
@@ -31,8 +33,10 @@ void InstallHooks()
           {(void **)&addresses::CreateItemFunc.ptr, (void *)&CreateItemHookFunc, &createItemHook},
           {(void **)&addresses::CreateVehicleFunc.ptr, (void *)&CreateVehicleHookFunc, &createVehicleHook},
           {(void **)&addresses::CSDrawTextFunc.ptr, (void *)&CSDrawTextHookFunc, &drawTextHook},
-          {(void **)&addresses::ClientMain.ptr, (void *)&ClientMainFunc, &clientMainHook},
-          {(void **)&addresses::MainMenu.ptr, (void *)&MainMenuFunc, &mainMenuHook},
+          {(void **)&addresses::ClientMainFunc.ptr, (void *)&ClientMainFunc, &clientMainHook},
+          {(void **)&addresses::LoadServerFunc.ptr, (void *)&LoadServerHookFunc, &loadServerHook},
+          {(void **)&addresses::ResetGameFunc.ptr, (void *)&ResetGameHookFunc, &resetGameHook},
+          {(void **)&addresses::MainMenuFunc.ptr, (void *)&MainMenuFunc, &mainMenuHook},
           {(void **)&addresses::PrintfFunc.ptr, (void *)&PrintfHookFunc, &printfHook},
           {(void **)&addresses::SetupVehicleTypesFunc.ptr, (void *)&SetupVehicleTypesHookFunc, &setupVehicleTypesHook},
       };

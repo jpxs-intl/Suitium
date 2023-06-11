@@ -30,13 +30,14 @@ FuncAddress<addresses::ConnectMasterServerFuncType> addresses::ConnectMasterServ
 FuncAddress<addresses::CreateItemFuncType> addresses::CreateItemFunc;
 FuncAddress<addresses::CreateVehicleFuncType> addresses::CreateVehicleFunc;
 FuncAddress<addresses::CSDrawTextFuncType> addresses::CSDrawTextFunc;
-FuncAddress<addresses::ClientMainType> addresses::ClientMain;
-FuncAddress<addresses::MainMenuType> addresses::MainMenu;
+FuncAddress<addresses::VoidFuncType> addresses::LoadServerFunc;
+FuncAddress<addresses::MainMenuType> addresses::MainMenuFunc;
+FuncAddress<addresses::VoidFuncType> addresses::ClientMain;
 FuncAddress<addresses::PrintfFuncType> addresses::PrintfFunc;
 FuncAddress<addresses::SetupVehicleTypesFuncType> addresses::SetupVehicleTypesFunc;
 
 static bool isDedicated = false;
-#include <iostream>
+
 bool addresses::Map(std::uintptr_t baseAddress)
 {
     addresses::Base.Register(baseAddress);
@@ -65,13 +66,17 @@ label_client: {}
 
     addresses::SDLWindowPtr.Register(baseAddress + DYNADDR(0x20FC47C8, 0x6a7c5f88));
 
+    addresses::ServerName.Register(baseAddress + DYNADDR(0x6D04ADD4, 0x0));
+
     addresses::ConnectMasterServerFunc.Register(baseAddress + DYNADDR(0xA3F30, 0x71447));
     addresses::CreateItemFunc.Register(baseAddress + DYNADDR(0x54130, 0xc5f2b));
     addresses::CreateVehicleFunc.Register(baseAddress + DYNADDR(0x5BCA0, 0xc92b0));
     addresses::CSDrawTextFunc.Register(baseAddress + DYNADDR(0x6D930, 0x2c62c));
+    addresses::LoadServerFunc.Register(0);
     addresses::ClientMain.Register(baseAddress + DYNADDR(0x96440, 0x15745c));
     addresses::MainMenu.Register(baseAddress + DYNADDR(0x72450, 0x30821));
     addresses::PrintfFunc.Register(0);
+    addresses::ResetGameFunc.Register(baseAddress + DYNADDR(0x127910, 0x0));
     addresses::SetupVehicleTypesFunc.Register(baseAddress + DYNADDR(0x145BB0, 0x116bd5));
 
     isDedicated = false;
@@ -89,12 +94,27 @@ label_dedicated: {}
     addresses::Items.Register(baseAddress + DYNADDR(0x5025F0C0, 0x0));
     addresses::Vehicles.Register(baseAddress + DYNADDR(0x2E6A3C60, 0x0));
 
-    addresses::ConnectMasterServerFunc.Register(0);
+    addresses::AuthName.Register(0);
+    addresses::AuthStatus.Register(0);
+
+    addresses::SteamEnabled.Register(0);
+    addresses::SteamTicketRetrieved.Register(0);
+    addresses::SteamTicketLength.Register(0);
+    addresses::SteamTicketBuffer.Register(0);
+
+    addresses::SDLWindowPtr.Register(0);
+
+    addresses::ServerName.Register(baseAddress + DYNADDR(0x23D75B74, 0x0));
+
+    addresses::ConnectMasterServerFunc.Register(baseAddress + DYNADDR(0x4FEB0, 0x0));
     addresses::CreateItemFunc.Register(baseAddress + DYNADDR(0x3B080, 0x0));
     addresses::CreateVehicleFunc.Register(baseAddress + DYNADDR(0x414B0, 0x0));
     addresses::CSDrawTextFunc.Register(0);
+    addresses::LoadServerFunc.Register(baseAddress + DYNADDR(0x8A390, 0x0));
+    addresses::MainMenuFunc.Register(0);
     addresses::ClientMain.Register(0);
     addresses::PrintfFunc.Register(baseAddress + DYNADDR(0xB36F0, 0x0));
+    addresses::ResetGameFunc.Register(baseAddress + DYNADDR(0xB4790, 0x0));
     addresses::SetupVehicleTypesFunc.Register(baseAddress + DYNADDR(0xCBEB0, 0x0));
 
     isDedicated = true;
