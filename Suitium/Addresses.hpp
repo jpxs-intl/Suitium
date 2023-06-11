@@ -50,8 +50,11 @@ namespace addresses
 #endif
     extern FuncAddress<CSDrawTextFuncType> CSDrawTextFunc;
 
-    using MainMenuFuncType = void ();
-    extern FuncAddress<MainMenuFuncType> MainMenuFunc;
+    using ClientMainType = void ();
+    extern FuncAddress<ClientMainType> ClientMain;
+
+    using MainMenuType = int (int);
+    extern FuncAddress<MainMenuType> MainMenu;
 
     using PrintfFuncType = int (const char *format, ...);
     extern FuncAddress<PrintfFuncType> PrintfFunc;
