@@ -6,27 +6,7 @@
 
 namespace structs
 {
-    // 223 (0xDF)
-    struct CSKeyboard
-    {
-        bool letters[26];
-        bool numbers[10];
-        bool kReturn;
-        CPad pad2[1];
-        bool backspace;
-        bool tab;
-        bool space;
-        bool minus;
-        bool equals;
-        CPad pad3[6];
-        bool quote;
-        CPad pad4[4];
-        bool fnKeys[12];
-        CPad pad5[154];
-        bool leftControl;
-        bool leftShift;
-        bool leftAlt;
-    };
+    typedef bool CSKeyboard[115]; // Use SDL_Scancode for index
 }
 
 enum SDL_Scancode
