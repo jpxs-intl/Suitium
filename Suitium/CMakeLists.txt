@@ -21,7 +21,7 @@ add_library(
     # Libraries
     ${CMAKE_SOURCE_DIR}/fmt/src/format.cc
     ${CMAKE_SOURCE_DIR}/subhook/subhook.c
-        Linux.cpp)
+)
 
 set_property (TARGET Suitium PROPERTY CXX_STANDARD 17)
 
