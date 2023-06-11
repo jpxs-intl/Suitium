@@ -27,6 +27,7 @@ std::int64_t CSDrawTextHookFunc(const char *format, int, int, int, float, float,
 
 static subhook::Hook *drawTextHook;
 
+#if _WIN32
 static void csFormat(const char *format, std::stringstream& newFormatStream, std::va_list vaList) 
 {
     std::size_t formatSize = std::strlen(format);
@@ -100,8 +101,6 @@ static void csFormat(const char *format, std::stringstream& newFormatStream, std
     }
 }
 
-#if _WIN32
-
 std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size, unsigned int flags, float red, float green, float blue, float alpha, ...)
 {
     subhook::ScopedHookRemove scopedRemove(drawTextHook);
@@ -123,14 +122,7 @@ std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size
     std::uintptr_t returnAddress = (std::uintptr_t)_ReturnAddress() - (std::uintptr_t)addresses::Base.ptr;
     if (returnAddress == 0x986D8) // 0x986D8 is the instruction after the game renders the "Sub Rosa" main menu text
     {
-        // The main menu is being drawn!
-        if (*addresses::AuthStatus == 2)
-            addresses::CSDrawTextFunc(fmt::format("Welcome, {}!", &addresses::AuthName[0]).c_str(), x, y + 65.0f, size * 1.75f, newFlags, 1.0f, 1.0f, 1.0f, 1.0f);
-        else
-            addresses::CSDrawTextFunc("Connecting...", x, y + 65.0f, size * 1.75f, newFlags, 1.0f, 1.0f, 1.0f, 1.0f);    
-
-        addresses::CSDrawTextFunc(fmt::format("Suitium {}", SUITIUM_VERSION).c_str(), x, y + 14.5f, size * 0.85f, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
-        return addresses::CSDrawTextFunc(fmt::format("Sub Rosa 0.{}{}", *addresses::GameVersionNumber, (char)(*addresses::GameVersionPatchNumber + 97)).c_str(), x, y, size * 1.25f, newFlags, red, green, blue, alpha);
+        return 0; // Remove "Sub Rosa" text
     }
     else if (returnAddress == 0x9873D) // 0x9873D is the instruction after the game renders the version main menu text
     {
@@ -154,7 +146,6 @@ std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size
     return addresses::CSDrawTextFunc(newFormatStream.str().c_str(), x, y, size, newFlags, red, green, blue, alpha);
 }
 #elif __linux__
-#include <iostream>
 std::int64_t CSDrawTextHookFunc(const char *format, int params, int a, int b, float x, float y, float scale, float red, float green, float blue, float alpha, void * c)
 {
     subhook::ScopedHookRemove scopedRemove(drawTextHook);

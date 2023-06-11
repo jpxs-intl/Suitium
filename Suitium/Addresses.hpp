@@ -38,6 +38,8 @@ namespace addresses
 
     using VoidFuncType = void ();
 
+    extern FuncAddress<VoidFuncType> ClientMainFunc;
+
     extern FuncAddress<VoidFuncType> ConnectMasterServerFunc;
 
     using CreateItemFuncType = int (int typeID, structs::CVector3 *position, structs::CVector3 *velocity, structs::COrientation *orientation);
@@ -55,10 +57,8 @@ namespace addresses
 
     extern FuncAddress<VoidFuncType> LoadServerFunc;
 
-    extern FuncAddress<VoidFuncType> ClientMain;
-
-    using MainMenuType = int (int);
-    extern FuncAddress<MainMenuType> MainMenu;
+    using DrawMainMenuFuncType = int (int);
+    extern FuncAddress<DrawMainMenuFuncType> DrawMainMenuFunc;
 
     using PrintfFuncType = int (const char *format, ...);
     extern FuncAddress<PrintfFuncType> PrintfFunc;

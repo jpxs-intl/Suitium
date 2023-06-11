@@ -1,5 +1,6 @@
 #pragma once
 
+#include <fmt/format.h>
 #include <subhook.h>
 
 #include "../Addon.hpp"
@@ -28,10 +29,10 @@ void LoadServerHookFunc()
     if (*addresses::IsDedicated)
     {
         DiscoverAddons();
-        for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
-            (*it)->Load(); // This loads in the MainMenu hook for the client
-        for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
-            (*it)->CheckDependencies();
+        for (auto& addon : GetAddons())
+            addon->Load(); // This loads in the ClientMain hook for the client
+        for (auto& addon : GetAddons())
+            addon->CheckDependencies();
     }
 
     addresses::LoadServerFunc();

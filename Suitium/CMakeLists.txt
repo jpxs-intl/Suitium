@@ -9,6 +9,7 @@ add_library(
 
     # API source files
     api/Logging.cpp
+    api/Text.cpp
 
     # Other source files
     Addon.cpp

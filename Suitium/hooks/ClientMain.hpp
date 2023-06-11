@@ -6,7 +6,7 @@
 #include "../Addresses.hpp"
 #include "../structs/VehicleType.hpp"
 
-void ClientMainFunc();
+void ClientMainHookFunc();
 
 // I need stuff!!!!
 #if _VSCODE
@@ -18,16 +18,11 @@ void ClientMainFunc();
 static subhook::Hook *clientMainHook;
 
 #if _WIN32
-
 #include <windows.h>
-
-#else
-
+#elif __linux__
 #include <dlfcn.h>
-
 #endif
 
-#include <iostream>
 typedef struct SDL_RWops SDL_RWops_t;
 typedef SDL_RWops_t *(*SDL_RWFromFile_t)(const char *filePath, const char *mode);
 
@@ -38,7 +33,7 @@ typedef void (*SDL_FreeSurface_t)(SDL_Surface_t *surface);
 typedef struct SDL_Window SDL_Window_t;
 typedef void (*SDL_SetWindowIcon_t)(SDL_Window_t *window, SDL_Surface_t *icon);
 
-void ClientMainFunc()
+void ClientMainHookFunc()
 {
     subhook::ScopedHookRemove scopedRemove(clientMainHook);
 
@@ -82,7 +77,7 @@ void ClientMainFunc()
     for (auto& addon : GetAddons())
         addon->CheckDependencies();
 
-    addresses::ClientMain();
+    addresses::ClientMainFunc();
 }
 
 #endif
