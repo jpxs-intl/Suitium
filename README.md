@@ -3,10 +3,22 @@
 This project contains multiple modules... \
 Please check "Suitium" and "SuitiumLauncher" folders.
 
-## Compiling & Testing
+## Compiling & Testing (For Windows)
 
-On Windows (PowerShell), run the following command (Assuming Sub Rosa is installed through Steam):
+You will need VS2022 (Full or Build Tools) and CMake.
+
+In PowerShell, run the following command ONCE to setup the environment:
 
 ```bat
-./Tools/cmake_msvc.bat ; ./Tools/test_win32.bat "C:\Program Files (x86)\Steam\steamapps\common\Sub Rosa\subrosa.exe" "PATH TO SUITIUM DLL HERE"
+./Tools/setup_win32.bat
 ```
+
+Then run the following command to compile and test Suitium:
+
+```bat
+./Tools/cmake_win32.bat ; ./Tools/test_win32.bat "C:\Program Files (x86)\Steam\steamapps\common\Sub Rosa\subrosa.exe" "PATH TO SUITIUM DLL HERE"
+```
+
+Replace "PATH TO SUITIUM DLL HERE" with the path to the .dll compiled by CMake.
+
+Happy modding!
