@@ -25,6 +25,7 @@ private:
     std::string _id;
     
     std::string _name;
+    std::string _description;
     std::string _logDecoration;
 
     std::vector<std::string> _requires;
@@ -34,6 +35,7 @@ public:
     const std::string &ID() const;
 
     const std::string &Name() const;
+    const std::string &Description() const;
     const std::string &LogDecoration() const;
 
 private:

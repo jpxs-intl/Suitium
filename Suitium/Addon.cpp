@@ -87,6 +87,7 @@ void Addon::Load()
         }
 
         this->_name = addonsJSON.contains("name") ? addonsJSON["name"].get<std::string>() : this->_id;
+        this->_description = addonsJSON.contains("description") ? addonsJSON["description"].get<std::string>() : "NO DESCRIPTION PROVIDED";
         this->_logDecoration = addonsJSON.contains("log-decoration") ? addonsJSON["log-decoration"].get<std::string>() : "";
 
         auto jsonRequires = addonsJSON["requires"];
@@ -145,6 +146,12 @@ const std::string &Addon::Name() const
         throw std::logic_error("Addon is not loaded");
     return this->_name;
 }
+const std::string &Addon::Description() const
+{
+    if (!this->IsLoaded())
+        throw std::logic_error("Addon is not loaded");
+    return this->_description;
+}
 const std::string &Addon::LogDecoration() const
 {
     if (!this->IsLoaded())
@@ -157,6 +164,7 @@ void Addon::LoadAsSR()
     this->_id = "sub_rosa";
 
     this->_name = "Sub Rosa";
+    this->_description = "The base Sub Rosa game.";
     this->_logDecoration = "<blue><b>";
 
     this->_isLoaded = true;

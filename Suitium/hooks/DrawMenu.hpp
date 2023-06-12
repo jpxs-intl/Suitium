@@ -44,13 +44,18 @@ int DrawMenuHookFunc(int unk)
         int customMenuTypeID = *addresses::MenuTypeID - 100;
         if (customMenuTypeID == 0)
         {
+            static int selectedAddonID = -1;
+
             *addresses::NextMenuButtonPositionX = 4.0f;
             *addresses::NextMenuButtonPositionY = 4.0f;
             *addresses::NextMenuButtonSizeX = 160.0f;
             *addresses::NextMenuButtonSizeY = 20.0f;
             *addresses::NextMenuButtonKey = SDL_SCANCODE_ESCAPE;
             if (addresses::DrawMenuButtonFunc("Back"))
+            {
                 *addresses::MenuTypeID = 0;
+                selectedAddonID = -1;
+            }
             
             {
                 std::size_t addonCount = 0;
@@ -61,7 +66,7 @@ int DrawMenuHookFunc(int unk)
                     *addresses::NextMenuButtonSizeX = 192.0f;
                     *addresses::NextMenuButtonSizeY = 48.0f;
                     *addresses::NextMenuButtonKey = (SDL_Scancode)-1;
-                    addresses::DrawMenuButtonFunc("");
+                    addresses::DrawMenuButtonSelectableFunc("", &selectedAddonID, (int)addonCount);
 
                     addonCount++;
                 }
@@ -94,6 +99,12 @@ int DrawMenuHookFunc(int unk)
 
                     addonCount++;
                 }
+            }
+
+            if (selectedAddonID >= 0)
+            {
+                api::DrawText(fmt::format("{} ({})", GetAddons()[selectedAddonID]->Name(), GetAddons()[selectedAddonID]->ID()), 256.0f, 128.0f, 22.0f, glm::vec4(1.0f), api::TextAlignment::Right);
+                api::DrawText(GetAddons()[selectedAddonID]->Description(), 256.0f, 128.0f + 24.0f, 22.0f, glm::vec4(1.0f), api::TextAlignment::Right);
             }
 
             return returnValue;

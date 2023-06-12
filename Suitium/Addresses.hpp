@@ -76,6 +76,9 @@ namespace addresses
     using DrawMenuButtonFuncType = int (const char *text);
     extern FuncAddress<DrawMenuButtonFuncType> DrawMenuButtonFunc;
 
+    using DrawMenuButtonSelectableFuncType = int (const char *text, int *selected, int selectedCmp);
+    extern FuncAddress<DrawMenuButtonSelectableFuncType> DrawMenuButtonSelectableFunc;
+
     using PrintfFuncType = int (const char *format, ...);
     extern FuncAddress<PrintfFuncType> PrintfFunc;
 
