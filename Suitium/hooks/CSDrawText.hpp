@@ -1,15 +1,6 @@
 #pragma once
 
-#include <bitset>
-#include <cstdarg>
 #include <cstdint>
-#include <fmt/format.h>
-#include <iomanip>
-#include <sstream>
-#include <subhook.h>
-
-#include "../Addresses.hpp"
-#include "../Version.hpp"
 
 // https://github.com/noche-x/client/blob/main/src/game.hpp
 #if _WIN32
@@ -24,6 +15,16 @@ std::int64_t CSDrawTextHookFunc(const char *format, int, int, int, float, float,
 #endif
 
 #if IMPLEMENT_HOOKS
+
+#include <bitset>
+#include <cstdarg>
+#include <fmt/format.h>
+#include <iomanip>
+#include <sstream>
+#include <subhook.h>
+
+#include "../Addresses.hpp"
+#include "../Version.hpp"
 
 static subhook::Hook *drawTextHook;
 

@@ -1,10 +1,5 @@
 #pragma once
 
-#include <subhook.h>
-
-#include "../Addresses.hpp"
-#include "../structs/Common.hpp"
-
 int CreateItemHookFunc(int typeID, structs::CVector3 *position, structs::CVector3 *velocity, structs::COrientation *orientation);
 
 // I need stuff!!!!
@@ -13,6 +8,11 @@ int CreateItemHookFunc(int typeID, structs::CVector3 *position, structs::CVector
 #endif
 
 #if IMPLEMENT_HOOKS
+
+#include <subhook.h>
+
+#include "../Addresses.hpp"
+#include "../structs/Common.hpp"
 
 static subhook::Hook *createItemHook;
 

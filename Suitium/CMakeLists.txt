@@ -17,6 +17,7 @@ add_library(
     Addresses.cpp
     Hooks.cpp
     Hotfixes.cpp
+    LuaManager.cpp
     Version.cpp
 
     # Libraries
@@ -35,5 +36,7 @@ endif ()
 target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/fmt/include")
 target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/glm")
 target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/json/include")
-target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/moonjit")
+target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/moonjit/src")
+target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/shared")
+target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/sol2/include")
 target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/subhook")

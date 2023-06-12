@@ -1,11 +1,5 @@
 #pragma once
 
-#include <subhook.h>
-
-#include "../Addon.hpp"
-#include "../Addresses.hpp"
-#include "../structs/VehicleType.hpp"
-
 void ClientMainHookFunc();
 
 // I need stuff!!!!
@@ -14,6 +8,13 @@ void ClientMainHookFunc();
 #endif
 
 #if IMPLEMENT_HOOKS
+
+#include <subhook.h>
+
+#include "../Addon.hpp"
+#include "../Addresses.hpp"
+#include "../LuaManager.hpp"
+#include "../structs/VehicleType.hpp"
 
 static subhook::Hook *clientMainHook;
 
@@ -76,6 +77,8 @@ void ClientMainHookFunc()
         (*it)->Load(); // This loads in the ConnectMasterServer hook for the dedicated
     for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
         (*it)->CheckDependencies();
+
+    GetMainLuaManager()->Initialize();
 
     addresses::ClientMainFunc();
 }

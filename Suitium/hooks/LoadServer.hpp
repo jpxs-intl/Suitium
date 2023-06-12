@@ -1,16 +1,5 @@
 #pragma once
 
-#include <fmt/format.h>
-#include <subhook.h>
-
-#include "../Addon.hpp"
-#include "../Addresses.hpp"
-#include "../Version.hpp"
-
-#if _WIN32
-#include <Windows.h>
-#endif
-
 void LoadServerHookFunc();
 
 // I need stuff!!!!
@@ -19,6 +8,18 @@ void LoadServerHookFunc();
 #endif
 
 #if IMPLEMENT_HOOKS
+
+#include <fmt/format.h>
+#include <subhook.h>
+
+#include "../Addon.hpp"
+#include "../Addresses.hpp"
+#include "../LuaManager.hpp"
+#include "../Version.hpp"
+
+#if _WIN32
+#include <Windows.h>
+#endif
 
 static subhook::Hook *loadServerHook;
 
@@ -33,6 +34,8 @@ void LoadServerHookFunc()
         (*it)->Load(); // This loads in the ClientMain hook for the client
     for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
         (*it)->CheckDependencies();
+
+    GetMainLuaManager()->Initialize();
 
 #if _WIN32
     if (*addresses::IsDedicated)

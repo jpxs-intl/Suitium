@@ -1,8 +1,11 @@
 #pragma once
 
 #include <memory>
+#include <sol/sol.hpp>
 #include <string>
 #include <vector>
+
+#include "LuaManager.hpp"
 
 class Addon
 {
@@ -31,6 +34,8 @@ private:
     std::vector<std::string> _requires;
     std::vector<std::string> _conflicts;
 
+    std::string _lua;
+
 public:
     const std::string &ID() const;
 
@@ -43,6 +48,12 @@ private:
 
 public:
     bool CheckDependencies();
+
+private:
+    std::unique_ptr<sol::thread> _addonThread;
+
+public:
+    void RunLua(LuaManager *manager);
 };
 
 void DiscoverAddons();

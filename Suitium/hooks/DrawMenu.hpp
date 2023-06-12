@@ -1,5 +1,14 @@
 #pragma once
 
+int DrawMenuHookFunc(int unk);
+
+// I need stuff!!!!
+#if _VSCODE
+#define IMPLEMENT_HOOKS 1
+#endif
+
+#if IMPLEMENT_HOOKS
+
 #include <fmt/format.h>
 #include <glm/glm.hpp>
 #include <subhook.h>
@@ -9,15 +18,6 @@
 #include "../api/Text.hpp"
 #include "../structs/CSKeyboard.hpp"
 #include "../Version.hpp"
-
-int DrawMenuHookFunc(int unk);
-
-// I need stuff!!!!
-#if _VSCODE
-#define IMPLEMENT_HOOKS 1
-#endif
-
-#if IMPLEMENT_HOOKS
 
 static subhook::Hook *drawMenuHook;
 

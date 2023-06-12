@@ -109,6 +109,8 @@ void Addon::Load()
                     this->_conflicts.push_back((*it).get<std::string>());
             }
         }
+
+        this->_lua = addonsJSON.contains("lua") ? addonsJSON["lua"].get<std::string>() : "";
     }
 
     if (FindAddon(this->_id))
@@ -131,6 +133,8 @@ void Addon::Unload()
     
     this->_requires.clear();
     this->_conflicts.clear();
+
+    this->_addonThread.reset();
 }
 
 const std::string &Addon::ID() const
@@ -197,6 +201,19 @@ bool Addon::CheckDependencies()
     }
 
     return true;
+}
+
+void Addon::RunLua(LuaManager *manager)
+{
+    if (!this->IsLoaded())
+        throw std::logic_error("Addon is not loaded");
+    if (this->_asSR)
+        return;
+    
+    if (this->_lua.empty())
+        return;
+
+    this->_addonThread = std::make_unique<sol::thread>(manager->L()->lua_state());
 }
 
 void DiscoverAddons()

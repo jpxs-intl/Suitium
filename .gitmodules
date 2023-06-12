@@ -13,3 +13,6 @@
 [submodule "json"]
 	path = json
 	url = https://github.com/lalocli/json.git
+[submodule "sol2"]
+	path = sol2
+	url = https://github.com/lalocli/sol2.git

@@ -1,10 +1,5 @@
 #pragma once
 
-#include <subhook.h>
-
-#include "../Addresses.hpp"
-#include "../api/Logging.hpp"
-
 void ResetGameHookFunc();
 
 // I need stuff!!!!
@@ -13,6 +8,11 @@ void ResetGameHookFunc();
 #endif
 
 #if IMPLEMENT_HOOKS
+
+#include <subhook.h>
+
+#include "../Addresses.hpp"
+#include "../api/Logging.hpp"
 
 static subhook::Hook *resetGameHook;
 

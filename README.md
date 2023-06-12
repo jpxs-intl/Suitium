@@ -13,6 +13,7 @@ In PowerShell, run the following command ONCE to setup the environment:
 ./Tools/setup_win32.bat
 ```
 
+If moonjit was compiled successfully, copy lua51.dll compiled by CMake to your game folder.
 Then run the following command to compile and test Suitium:
 
 ```bat

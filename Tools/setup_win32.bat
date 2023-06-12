@@ -13,3 +13,7 @@ pushd moonjit\src
 call msvcbuild
 popd
 popd
+
+echo /////////////
+echo If moonjit was compiled successfully, copy lua51.dll to your game folder
+echo \\\\\\\\\\\\\
