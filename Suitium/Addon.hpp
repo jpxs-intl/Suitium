@@ -34,8 +34,6 @@ private:
     std::vector<std::string> _requires;
     std::vector<std::string> _conflicts;
 
-    std::string _lua;
-
 public:
     const std::string &ID() const;
 
