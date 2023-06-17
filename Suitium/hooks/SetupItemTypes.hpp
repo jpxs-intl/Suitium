@@ -43,7 +43,7 @@ void SetupItemTypesHookFunc()
                 stream << (char )std::tolower(c);
         }
 
-        // There are two cash types more whatever reason, let's add a postfix for both
+        // There are two cash types for whatever reason, let's add a postfix for both
         if (itemTypeCount == 17)
             stream << '1';
         if (itemTypeCount == 18)
