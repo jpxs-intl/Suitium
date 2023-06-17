@@ -1,5 +1,9 @@
 #pragma once
 
+#include <subhook.h>
+
+extern subhook::Hook *clientMainHook;
+
 void ClientMainHookFunc();
 
 // I need stuff!!!!
@@ -9,14 +13,12 @@ void ClientMainHookFunc();
 
 #if IMPLEMENT_HOOKS
 
-#include <subhook.h>
-
 #include "../Addon.hpp"
 #include "../Addresses.hpp"
 #include "../LuaManager.hpp"
 #include "../structs/VehicleType.hpp"
 
-static subhook::Hook *clientMainHook;
+subhook::Hook *clientMainHook;
 
 #if _WIN32
 #include <windows.h>

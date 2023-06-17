@@ -1,5 +1,9 @@
 #pragma once
 
+#include <subhook.h>
+
+extern subhook::Hook *createItemHook;
+
 int CreateItemHookFunc(int typeID, structs::CVector3 *position, structs::CVector3 *velocity, structs::COrientation *orientation);
 
 // I need stuff!!!!
@@ -9,23 +13,24 @@ int CreateItemHookFunc(int typeID, structs::CVector3 *position, structs::CVector
 
 #if IMPLEMENT_HOOKS
 
-#include <subhook.h>
-
 #include "../Addresses.hpp"
 #include "../structs/Common.hpp"
+#include "../LuaManager.hpp"
 
-static subhook::Hook *createItemHook;
+subhook::Hook *createItemHook;
 
 int CreateItemHookFunc(int typeID, structs::CVector3 *position, structs::CVector3 *velocity, structs::COrientation *orientation)
 {
     subhook::ScopedHookRemove scopedRemove(createItemHook);
 
     structs::CVector3 actualPosition;
-    actualPosition = (position != nullptr) ? *position : glm::vec3();
+    actualPosition = (position != nullptr) ? *position : glm::vec3(0.0f);
     structs::CVector3 actualVelocity;
-    actualVelocity = (velocity != nullptr) ? *velocity : glm::vec3();
+    actualVelocity = (velocity != nullptr) ? *velocity : glm::vec3(0.0f);
     structs::COrientation actualOrientation;
     actualOrientation = (orientation != nullptr) ? *orientation : glm::mat3(1.0f);
+
+    GetMainLuaManager()->CallHooks("CreateItem", "pre", &actualPosition, &actualOrientation, &actualVelocity);
 
     int itemID = addresses::CreateItemFunc(typeID, &actualPosition, &actualVelocity, &actualOrientation);
     if (itemID < 0)
@@ -35,6 +40,8 @@ int CreateItemHookFunc(int typeID, structs::CVector3 *position, structs::CVector
     addresses::Items[itemID].position = actualPosition;
     addresses::Items[itemID].velocity = actualVelocity;
     addresses::Items[itemID].orientation = actualOrientation;
+
+    GetMainLuaManager()->CallHooks("CreateItem", "post", addresses::Items[itemID]);
 
     return itemID;
 }

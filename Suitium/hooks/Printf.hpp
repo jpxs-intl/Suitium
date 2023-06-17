@@ -1,5 +1,9 @@
 #pragma once
 
+#include <subhook.h>
+
+extern subhook::Hook *printfHook;
+
 int PrintfHookFunc(const char *format, ...);
 
 // I need stuff!!!!
@@ -11,12 +15,11 @@ int PrintfHookFunc(const char *format, ...);
 
 #include <cstdarg>
 #include <cstring>
-#include <subhook.h>
 
 #include "../Addresses.hpp"
 #include "../api/Logging.hpp"
 
-static subhook::Hook *printfHook;
+subhook::Hook *printfHook;
 
 int PrintfHookFunc(const char *format, ...)
 {

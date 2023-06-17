@@ -5,9 +5,13 @@
 #include <sstream>
 #include <string>
 #include <stdexcept>
+#include <subhook.h>
 
 #include "Addon.hpp"
+#include "Addresses.hpp"
 #include "api/Logging.hpp"
+#include "hooks/CreateItem.hpp"
+#include "structs/Item.hpp"
 
 // https://github.com/moonjit/moonjit/blob/master/doc/c_api.md#luajit_setmodel-idx-luajit_mode_wrapcfuncflag
 static int wrapExceptions(lua_State* L, lua_CFunction f) 
@@ -70,34 +74,6 @@ void LuaManager::Initialize()
 		this->GetCurrentAddon()->GetLogger()->LogText(std::string("<yellow>") + text);
 	};
 
-	this->_L->new_usertype<Addon>(
-		"Addon",
-		
-		"isLoaded", sol::property(&Addon::IsLoaded),
-
-		"id", sol::property(&Addon::ID),
-
-		"name", sol::property(&Addon::GetName),
-		"description", sol::property(&Addon::GetDescription),
-		"logDecoration", sol::property(&Addon::GetLogDecoration),
-		
-		"Current", sol::property([&]()
-		{
-			return this->GetCurrentAddon();
-		}),
-		"GetAll", [&](sol::this_state &state)
-		{
-			sol::table table = sol::table::create(state.L);
-			std::size_t sz = 1;
-			for (const std::unique_ptr<Addon> &addon : GetAddons())
-			{
-				table[sz] = addon.get();
-				sz++;
-			}
-			return table;
-		}
-	);
-
 	this->_L->new_usertype<LuaHook>(
 		"Hook",
 
@@ -124,10 +100,138 @@ void LuaManager::Initialize()
 
 		"Remove", &LuaHook::Remove
 	);
+
+	this->_L->new_usertype<Addon>(
+		"Addon",
+		sol::no_constructor,
+
+		"isLoaded", sol::property(&Addon::IsLoaded),
+
+		"id", sol::property(&Addon::ID),
+
+		"name", sol::property(&Addon::GetName),
+		"description", sol::property(&Addon::GetDescription),
+		"logDecoration", sol::property(&Addon::GetLogDecoration),
+
+		"Current", sol::property([&]()
+		{
+			return this->GetCurrentAddon();
+		}),
+		"GetAll", [&](sol::this_state &state)
+		{
+			sol::table table = sol::table::create(state.L);
+			std::size_t sz = 1;
+			for (const std::unique_ptr<Addon> &addon : GetAddons())
+			{
+				table[sz] = addon.get();
+				sz++;
+			}
+			return table;
+		}
+	);
+	
+	this->DefineGameTypes();
 }
 void LuaManager::Deinitialize()
 {
     this->_L.reset();
+}
+void LuaManager::DefineGameTypes()
+{
+	this->_L->new_usertype<structs::CBoolean>(
+		"Boolean",
+		sol::no_constructor,
+		
+		"value", &structs::CBoolean::b1,
+
+		"__tostring", &structs::CBoolean::operator std::string
+	);
+
+	this->_L->new_usertype<structs::CVector3>(
+		"Vector3",
+
+		"x", &structs::CVector3::x,
+		"y", &structs::CVector3::y,
+		"z", &structs::CVector3::z,
+
+		sol::call_constructor, [](float n)
+		{
+			return (structs::CVector3)glm::vec3(n);
+		},
+		sol::call_constructor, [](float x, float y, float z)
+		{
+			return (structs::CVector3)glm::vec3(x, y, z);
+		},
+
+		"Dot", &structs::CVector3::Dot,
+		"Cross", &structs::CVector3::Cross,
+
+		"Set", &structs::CVector3::Set,
+
+		"__tostring", &structs::CVector3::operator std::string,
+
+		"Zero", sol::property([]()
+		{
+			return (structs::CVector3)glm::vec3(0.0f);
+		}),
+		"One", sol::property([]()
+		{
+			return (structs::CVector3)glm::vec3(1.0f);
+		})
+	);
+
+	this->_L->new_usertype<structs::COrientation>(
+		"Orientation",
+
+		"right", &structs::COrientation::right,
+		"up",    &structs::COrientation::up,
+		"back",  &structs::COrientation::back,
+
+		sol::call_constructor, []()
+		{
+			return (structs::COrientation)glm::mat3(1.0f);
+		},
+
+		"Set", &structs::COrientation::Set,
+
+		"__tostring", &structs::COrientation::operator std::string,
+
+		"Identity", sol::property([]()
+		{
+			return (structs::COrientation)glm::mat3(1.0f);
+		})
+	);
+
+	this->_L->new_usertype<structs::Item>(
+		"Item",
+		sol::no_constructor,
+
+		"active", &structs::Item::isActive,
+
+		"position", &structs::Item::position,
+		"velocity", &structs::Item::velocity,
+		"orientation", &structs::Item::orientation,
+
+		"Create", sol::overload(
+			[](int typeID, structs::CVector3 &position, structs::COrientation &orientation)
+			{
+				structs::CVector3 velocity = glm::vec3(0.0f);
+
+				subhook::ScopedHookRemove scopedRemove(createItemHook);
+				int itemID = addresses::CreateItemFunc(typeID, &position, &velocity, &orientation);
+				if (itemID < 0)
+					throw std::runtime_error("Could not create item");
+				return addresses::Items[itemID];
+			},
+			[](int typeID, structs::CVector3 &position, structs::COrientation &orientation, structs::CVector3 &velocity)
+			{
+				subhook::ScopedHookRemove scopedRemove(createItemHook);
+				int itemID = addresses::CreateItemFunc(typeID, &position, &velocity, &orientation);
+				if (itemID < 0)
+					throw std::runtime_error("Could not create item");
+				return addresses::Items[itemID];
+			})
+	);
 }
 
 Addon *LuaManager::GetCurrentAddon()

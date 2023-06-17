@@ -1,6 +1,9 @@
 #pragma once
 
 #include <cstdint>
+#include <subhook.h>
+
+extern subhook::Hook *drawTextHook;
 
 // https://github.com/noche-x/client/blob/main/src/game.hpp
 #if _WIN32
@@ -21,12 +24,11 @@ std::int64_t CSDrawTextHookFunc(const char *format, int, int, int, float, float,
 #include <fmt/format.h>
 #include <iomanip>
 #include <sstream>
-#include <subhook.h>
 
 #include "../Addresses.hpp"
 #include "../Version.hpp"
 
-static subhook::Hook *drawTextHook;
+subhook::Hook *drawTextHook;
 
 #if _WIN32
 static void csFormat(const char *format, std::stringstream& newFormatStream, std::va_list vaList) 

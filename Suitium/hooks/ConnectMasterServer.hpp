@@ -1,5 +1,9 @@
 #pragma once
 
+#include <subhook.h>
+
+extern subhook::Hook *connectMasterServerHook;
+
 void ConnectMasterServerHookFunc();
 
 // I need stuff!!!!
@@ -9,11 +13,9 @@ void ConnectMasterServerHookFunc();
 
 #if IMPLEMENT_HOOKS
 
-#include <subhook.h>
-
 #include "../Addresses.hpp"
 
-static subhook::Hook *connectMasterServerHook;
+subhook::Hook *connectMasterServerHook;
 
 void ConnectMasterServerHookFunc()
 {

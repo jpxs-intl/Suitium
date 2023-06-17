@@ -1,5 +1,9 @@
 #pragma once
 
+#include <subhook.h>
+
+extern subhook::Hook *createVehicleHook;
+
 int CreateVehicleHookFunc(int typeID, structs::CVector3 *position, structs::CVector3 *velocity, structs::COrientation *orientation, int colorID);
 
 // I need stuff!!!!
@@ -9,12 +13,10 @@ int CreateVehicleHookFunc(int typeID, structs::CVector3 *position, structs::CVec
 
 #if IMPLEMENT_HOOKS
 
-#include <subhook.h>
-
 #include "../Addresses.hpp"
 #include "../structs/Common.hpp"
 
-static subhook::Hook *createVehicleHook;
+subhook::Hook *createVehicleHook;
 
 int CreateVehicleHookFunc(int typeID, structs::CVector3 *position, structs::CVector3 *velocity, structs::COrientation *orientation, int colorID)
 {

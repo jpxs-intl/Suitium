@@ -1,5 +1,9 @@
 #pragma once
 
+#include <subhook.h>
+
+extern subhook::Hook *loadServerHook;
+
 void LoadServerHookFunc();
 
 // I need stuff!!!!
@@ -10,7 +14,6 @@ void LoadServerHookFunc();
 #if IMPLEMENT_HOOKS
 
 #include <fmt/format.h>
-#include <subhook.h>
 
 #include "../Addon.hpp"
 #include "../Addresses.hpp"
@@ -21,7 +24,7 @@ void LoadServerHookFunc();
 #include <Windows.h>
 #endif
 
-static subhook::Hook *loadServerHook;
+subhook::Hook *loadServerHook;
 
 void LoadServerHookFunc()
 {

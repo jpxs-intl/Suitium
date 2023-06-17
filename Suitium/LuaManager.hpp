@@ -35,8 +35,9 @@ public:
 
     void Initialize();
     void Deinitialize();
-
 private:
+    void DefineGameTypes();
+
     std::unique_ptr<sol::state> _L;
 public:
     sol::state *L() const;

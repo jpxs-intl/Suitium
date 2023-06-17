@@ -1,5 +1,9 @@
 #pragma once
 
+#include <subhook.h>
+
+extern subhook::Hook *drawMenuHook;
+
 int DrawMenuHookFunc(int unk);
 
 // I need stuff!!!!
@@ -11,7 +15,6 @@ int DrawMenuHookFunc(int unk);
 
 #include <fmt/format.h>
 #include <glm/glm.hpp>
-#include <subhook.h>
 
 #include "../Addon.hpp"
 #include "../Addresses.hpp"
@@ -19,7 +22,7 @@ int DrawMenuHookFunc(int unk);
 #include "../structs/CSKeyboard.hpp"
 #include "../Version.hpp"
 
-static subhook::Hook *drawMenuHook;
+subhook::Hook *drawMenuHook;
 
 int DrawMenuHookFunc(int unk)
 {

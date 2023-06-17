@@ -1,5 +1,9 @@
 #pragma once
 
+#include <subhook.h>
+
+extern subhook::Hook *setupVehicleTypesHook;
+
 void SetupVehicleTypesHookFunc();
 
 // I need stuff!!!!
@@ -9,12 +13,10 @@ void SetupVehicleTypesHookFunc();
 
 #if IMPLEMENT_HOOKS
 
-#include <subhook.h>
-
 #include "../Addresses.hpp"
 #include "../structs/VehicleType.hpp"
 
-static subhook::Hook *setupVehicleTypesHook;
+subhook::Hook *setupVehicleTypesHook;
 
 void SetupVehicleTypesHookFunc()
 {

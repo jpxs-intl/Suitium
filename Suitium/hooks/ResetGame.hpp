@@ -1,5 +1,9 @@
 #pragma once
 
+#include <subhook.h>
+
+extern subhook::Hook *resetGameHook;
+
 void ResetGameHookFunc();
 
 // I need stuff!!!!
@@ -9,13 +13,11 @@ void ResetGameHookFunc();
 
 #if IMPLEMENT_HOOKS
 
-#include <subhook.h>
-
 #include "../Addresses.hpp"
 #include "../api/Logging.hpp"
 #include "../LuaManager.hpp"
 
-static subhook::Hook *resetGameHook;
+subhook::Hook *resetGameHook;
 
 void ResetGameHookFunc()
 {

@@ -1,6 +1,8 @@
 #pragma once
 
+#include <fmt/format.h>
 #include <glm/glm.hpp>
+#include <string>
 
 namespace structs
 {
@@ -11,7 +13,17 @@ namespace structs
 
     struct CBoolean
     {
-        int i;
+        union
+        {
+            int i;
+            struct
+            {
+                bool b1;
+                bool b2;
+                bool b3;
+                bool b4;
+            }; // i love little endian
+        };
         
         operator bool() const
         {
@@ -22,39 +34,112 @@ namespace structs
             this->i = (int)right;
             return *this;
         }
+
+        operator std::string() const
+        {
+            return this->b1 ? "true" : "false";
+        }
     };
 
     struct CVector3
     {
-        float a[3];
+        union
+        {
+            glm::vec3 v;
+            struct
+            {
+                float x;
+                float y;
+                float z;
+            };
+        };
+
+        CVector3()
+        {
+            this->v = glm::vec3(0.0f);
+        }
+        CVector3(const CVector3 &right)
+        {
+            this->v = right.v;
+        }
+        CVector3(const glm::vec3 &vec)
+        {
+            this->v = vec;
+        }
 
         operator glm::vec3() const
         {
-            return glm::vec3(this->a[0], this->a[1], this->a[2]);
+            return this->v;
         }
         CVector3 &operator=(const glm::vec3 &right)
         {
-            this->a[0] = right.x;
-            this->a[1] = right.y;
-            this->a[2] = right.z;
+            this->v = right;
             return *this;
+        }
+
+        float Dot(const CVector3 &right) const
+        {
+            return glm::dot(this->v, right.v);
+        }
+        CVector3 Cross(const CVector3 &right) const
+        {
+            return glm::cross(this->v, right.v);
+        }
+
+        void Set(const CVector3 &right)
+        {
+            *this = right;
+        }
+
+        operator std::string() const
+        {
+            return fmt::format("{}, {}, {}", this->x, this->y, this->z);
         }
     };
 
     struct COrientation
     {
-        CVector3 a[3];
+        union
+        {
+            glm::mat3 v;
+            struct
+            {
+                CVector3 right;
+                CVector3 up;
+                CVector3 back;
+            };
+        };
+
+        COrientation()
+        {
+            this->v = glm::mat3(1.0f);
+        }
+        COrientation(const COrientation &right)
+        {
+            this->v = right;
+        }
+        COrientation(const glm::mat3 &mat)
+        {
+            this->v = mat;
+        }
 
         operator glm::mat3() const
         {
-            return glm::mat3((glm::vec3)this->a[0], (glm::vec3)this->a[1], (glm::vec3)this->a[2]);
+            return this->v;
         }
         COrientation &operator=(const glm::mat3 &right)
         {
-            this->a[0] = right[0];
-            this->a[1] = right[1];
-            this->a[2] = right[2];
-            return *this;
+            this->v = right;
+        }
+
+        void Set(const COrientation &right)
+        {
+            *this = right;
+        }
+
+        operator std::string() const
+        {
+            return fmt::format("{},\n{},\n{}", (std::string)this->right, (std::string)this->up, (std::string)this->back);
         }
     };
 }
