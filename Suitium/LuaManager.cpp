@@ -2,6 +2,8 @@
 
 #include <memory>
 #include <sol/sol.hpp>
+#include <sstream>
+#include <string>
 #include <stdexcept>
 
 #include "Addon.hpp"
@@ -49,20 +51,79 @@ void LuaManager::Initialize()
 
 	(*this->_L)["print"] = [&](sol::this_state &state, sol::variadic_args &args)
 	{
-		Addon *addon = this->GetCurrentAddon();
+		std::stringstream stream;
 		for (std::string str : args)
-		{
-			addon->GetLogger()->Log("{}\t", str);
-		}
+			stream << str << '\t';
+
+		std::string text = stream.str();
+		text.pop_back(); // Pop last tab
+		this->GetCurrentAddon()->GetLogger()->LogText(text);
 	};
 	(*this->_L)["warn"] = [&](sol::this_state &state, sol::variadic_args &args)
 	{
-		Addon *addon = this->GetCurrentAddon();
+		std::stringstream stream;
 		for (std::string str : args)
-		{
-			addon->GetLogger()->Log("<yellow>{}\t", str);
-		}
+			stream << str << '\t';
+
+		std::string text = stream.str();
+		text.pop_back(); // Pop last tab
+		this->GetCurrentAddon()->GetLogger()->LogText(std::string("<yellow>") + text);
 	};
+
+	this->_L->new_usertype<Addon>(
+		"Addon",
+		
+		"isLoaded", sol::property(&Addon::IsLoaded),
+
+		"id", sol::property(&Addon::ID),
+
+		"name", sol::property(&Addon::GetName),
+		"description", sol::property(&Addon::GetDescription),
+		"logDecoration", sol::property(&Addon::GetLogDecoration),
+		
+		"Current", sol::property([&]()
+		{
+			return this->GetCurrentAddon();
+		}),
+		"GetAll", [&](sol::this_state &state)
+		{
+			sol::table table = sol::table::create(state.L);
+			std::size_t sz = 1;
+			for (const std::unique_ptr<Addon> &addon : GetAddons())
+			{
+				table[sz] = addon.get();
+				sz++;
+			}
+			return table;
+		}
+	);
+
+	this->_L->new_usertype<LuaHook>(
+		"Hook",
+
+		sol::call_constructor, [&](std::string &hookName, sol::function &hookFunction, sol::variadic_args flags)
+		{
+			std::shared_ptr<LuaHook> hook = std::make_shared<LuaHook>();
+
+			hook->active = true;
+			hook->addon = this->GetCurrentAddon();
+			hook->name = hookName;
+			hook->function = (sol::protected_function)hookFunction;
+			if (flags.size() > 0)
+			{
+				for (std::string flag : flags)
+					hook->flags.push_back(flag);
+			}
+			else
+				hook->flags = std::vector<std::string>{ "pre" };
+
+			this->_hooks.push_back(hook);
+
+			return hook;
+		},
+
+		"Remove", &LuaHook::Remove
+	);
 }
 void LuaManager::Deinitialize()
 {
@@ -82,6 +143,22 @@ void LuaManager::SetCurrentAddon(Addon *addon)
 	lua_State *L = this->_L->lua_state();
 	lua_pushlightuserdata(L, addon);
 	lua_rawseti(L, LUA_REGISTRYINDEX, LUAMANAGER_LUAADDONINDEX);
+}
+
+const std::vector<std::shared_ptr<LuaHook>> &LuaManager::GetHooks() const
+{
+	return this->_hooks;
+}
+void LuaManager::CheckHooks()
+{
+	for (auto it = this->_hooks.begin(); it != this->_hooks.end(); ++it)
+	{
+		if (!(*it)->active)
+		{
+			this->_hooks.erase(it);
+			break;
+		}
+	}
 }
 
 sol::state *LuaManager::L() const

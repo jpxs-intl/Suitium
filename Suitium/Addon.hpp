@@ -30,15 +30,15 @@ private:
 
     std::string _id;
 public:
-    const std::string& ID() const;
+    const std::string &ID() const;
 
     std::string _name;
     std::string _description;
     std::string _logDecoration;
 public:
-    const std::string& Name() const;
-    const std::string& Description() const;
-    const std::string& LogDecoration() const;
+    const std::string &GetName() const;
+    const std::string &GetDescription() const;
+    const std::string &GetLogDecoration() const;
 
 private:
     std::vector<std::string> _requires;

@@ -13,6 +13,7 @@ void ResetGameHookFunc();
 
 #include "../Addresses.hpp"
 #include "../api/Logging.hpp"
+#include "../LuaManager.hpp"
 
 static subhook::Hook *resetGameHook;
 
@@ -20,9 +21,12 @@ void ResetGameHookFunc()
 {
     subhook::ScopedHookRemove scopedRemove(resetGameHook);
 
-    api::GetSRLogger()->Log("Resetting game...");
+    GetMainLuaManager()->CallHooks("ResetGame", "pre");
 
+    api::GetSRLogger()->Log("Resetting game...");
     addresses::ResetGameFunc();
+
+    GetMainLuaManager()->CallHooks("ResetGame", "post");
 }
 
 #endif

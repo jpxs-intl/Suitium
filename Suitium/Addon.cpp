@@ -117,9 +117,9 @@ void Addon::Load()
     }
 
     this->_isLoaded = true;
-    api::GetSuitiumLogger()->Log("Loaded addon \"{}{}<reset>\"!", this->LogDecoration(), this->ID());
+    api::GetSuitiumLogger()->Log("Loaded addon \"{}{}<reset>\"!", this->GetLogDecoration(), this->ID());
 
-    this->_logger = std::make_unique<api::Logger>(this->Name(), this->LogDecoration());
+    this->_logger = std::make_unique<api::Logger>(this->GetName(), this->GetLogDecoration());
 
     return;
 
@@ -161,19 +161,19 @@ const std::string &Addon::ID() const
     return this->_id;
 }
 
-const std::string &Addon::Name() const
+const std::string &Addon::GetName() const
 {
     if (!this->IsLoaded())
         throw std::logic_error("Addon is not loaded");
     return this->_name;
 }
-const std::string &Addon::Description() const
+const std::string &Addon::GetDescription() const
 {
     if (!this->IsLoaded())
         throw std::logic_error("Addon is not loaded");
     return this->_description;
 }
-const std::string &Addon::LogDecoration() const
+const std::string &Addon::GetLogDecoration() const
 {
     if (!this->IsLoaded())
         throw std::logic_error("Addon is not loaded");

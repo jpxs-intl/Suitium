@@ -81,7 +81,7 @@ int DrawMenuHookFunc(int unk)
                 for (auto it = GetAddons().begin(); it != GetAddons().end(); it++)
                 {
                     const std::size_t maxNumberOfDisplayChars = 15; // must be bigger than 3
-                    std::string name = (*it)->Name();
+                    std::string name = (*it)->GetName();
                     if (name.size() > maxNumberOfDisplayChars)
                     {
                         name.erase(name.begin() + (maxNumberOfDisplayChars - 3), name.end());
@@ -103,8 +103,8 @@ int DrawMenuHookFunc(int unk)
 
             if (selectedAddonID >= 0)
             {
-                api::DrawText(fmt::format("{} ({})", GetAddons()[selectedAddonID]->Name(), GetAddons()[selectedAddonID]->ID()), 256.0f, 128.0f, 22.0f, glm::vec4(1.0f), api::TextAlignment::Right);
-                api::DrawText(GetAddons()[selectedAddonID]->Description(), 256.0f, 128.0f + 24.0f, 22.0f, glm::vec4(1.0f), api::TextAlignment::Right);
+                api::DrawText(fmt::format("{} ({})", GetAddons()[selectedAddonID]->GetName(), GetAddons()[selectedAddonID]->ID()), 256.0f, 128.0f, 22.0f, glm::vec4(1.0f), api::TextAlignment::Right);
+                api::DrawText(GetAddons()[selectedAddonID]->GetDescription(), 256.0f, 128.0f + 24.0f, 22.0f, glm::vec4(1.0f), api::TextAlignment::Right);
             }
 
             return returnValue;
