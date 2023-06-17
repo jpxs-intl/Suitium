@@ -208,6 +208,68 @@ bool Addon::PrepareLua(LuaManager *manager)
 
     this->_addonThread = std::make_unique<sol::thread>(manager->L()->lua_state());
 
+    {
+        std::string path = "/server/init.lua";
+        std::string fullPath = this->_folderPath + path;
+        std::ifstream stream(fullPath);
+        if (stream.good())
+        {
+            std::stringstream contentStream;
+            contentStream << stream.rdbuf();
+            std::string content = contentStream.str();
+
+            sol::load_result loadResult = this->_addonThread->state().load(content);
+            if (loadResult.valid())
+            {
+                auto protectedFunc = loadResult.get<sol::protected_function>();
+                sol::protected_function_result callResult = protectedFunc();
+                if (!callResult.valid())
+                {
+                    api::GetSuitiumLogger()->Log("<red>\"{}\" addon was unloaded because an error occured while trying to run lua file \"{}\":\n{}", this->ID(), path, callResult.get<std::string>());
+                    this->Unload();
+                    return false;
+                }
+            }
+            else
+            {
+                api::GetSuitiumLogger()->Log("<red>\"{}\" addon was unloaded because an error occured while trying to load lua file \"{}\":\n{}", this->ID(), path, loadResult.get<std::string>());
+                this->Unload();
+                return false;
+            }
+        }
+    }
+
+    {
+        std::string path = "/client/init.lua";
+        std::string fullPath = this->_folderPath + path;
+        std::ifstream stream(fullPath);
+        if (stream.good())
+        {
+            std::stringstream contentStream;
+            contentStream << stream.rdbuf();
+            std::string content = contentStream.str();
+
+            sol::load_result loadResult = this->_addonThread->state().load(content);
+            if (loadResult.valid())
+            {
+                auto protectedFunc = loadResult.get<sol::protected_function>();
+                sol::protected_function_result callResult = protectedFunc();
+                if (!callResult.valid())
+                {
+                    api::GetSuitiumLogger()->Log("<red>\"{}\" addon was unloaded because an error occured while trying to run lua file \"{}\": {}", this->ID(), path, callResult.get<std::string>());
+                    this->Unload();
+                    return false;
+                }
+            }
+            else
+            {
+                api::GetSuitiumLogger()->Log("<red>\"{}\" addon was unloaded because an error occured while trying to load lua file \"{}\": {}", this->ID(), path, loadResult.get<std::string>());
+                this->Unload();
+                return false;
+            }
+        }
+    }
+
     return true;
 }
 

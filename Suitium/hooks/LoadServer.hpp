@@ -35,9 +35,14 @@ void LoadServerHookFunc()
     for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
         (*it)->Load(); // This loads in the ClientMain hook for the client
     for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
-        (*it)->CheckDependencies();
-    for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
-        (*it)->PrepareLua(GetMainLuaManager());
+    {
+        if (!(*it)->IsLoaded())
+            continue;
+        if ((*it)->CheckDependencies())
+            (*it)->PrepareLua(GetMainLuaManager());
+    }
+
+    // TODO: We need to deinitialize Lua, for now it just crashes the server after closing the terminal
 
 #if _WIN32
     if (*addresses::IsDedicated)
