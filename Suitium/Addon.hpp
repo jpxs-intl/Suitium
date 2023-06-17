@@ -23,35 +23,32 @@ public:
     void Load();
     void Unload();
 private:
+    void LoadAsSR();
+
     bool _isLoaded;
 
     std::string _id;
-    
+public:
+    const std::string& ID() const;
+
     std::string _name;
     std::string _description;
     std::string _logDecoration;
-
-    std::vector<std::string> _requires;
-    std::vector<std::string> _conflicts;
-
 public:
-    const std::string &ID() const;
-
-    const std::string &Name() const;
-    const std::string &Description() const;
-    const std::string &LogDecoration() const;
+    const std::string& Name() const;
+    const std::string& Description() const;
+    const std::string& LogDecoration() const;
 
 private:
-    void LoadAsSR();
-
+    std::vector<std::string> _requires;
+    std::vector<std::string> _conflicts;
 public:
     bool CheckDependencies();
 
 private:
     std::unique_ptr<sol::thread> _addonThread;
-
 public:
-    void RunLua(LuaManager *manager);
+    bool PrepareLua(LuaManager *manager);
 };
 
 void DiscoverAddons();

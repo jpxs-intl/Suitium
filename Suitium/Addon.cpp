@@ -118,7 +118,6 @@ void Addon::Load()
 
     this->_isLoaded = true;
     api::GetSuitiumLogger()->Log("Loaded addon \"{}{}<reset>\"!", this->LogDecoration(), this->ID());
-
     return;
 
 label_error: {}
@@ -132,6 +131,17 @@ void Addon::Unload()
     this->_conflicts.clear();
 
     this->_addonThread.reset();
+}
+
+void Addon::LoadAsSR()
+{
+    this->_id = "sub_rosa";
+
+    this->_name = "Sub Rosa";
+    this->_description = "The base Sub Rosa game.";
+    this->_logDecoration = "<blue><b>";
+
+    this->_isLoaded = true;
 }
 
 const std::string &Addon::ID() const
@@ -158,17 +168,6 @@ const std::string &Addon::LogDecoration() const
     if (!this->IsLoaded())
         throw std::logic_error("Addon is not loaded");
     return this->_logDecoration;
-}
-
-void Addon::LoadAsSR()
-{
-    this->_id = "sub_rosa";
-
-    this->_name = "Sub Rosa";
-    this->_description = "The base Sub Rosa game.";
-    this->_logDecoration = "<blue><b>";
-
-    this->_isLoaded = true;
 }
 
 bool Addon::CheckDependencies()
@@ -200,14 +199,16 @@ bool Addon::CheckDependencies()
     return true;
 }
 
-void Addon::RunLua(LuaManager *manager)
+bool Addon::PrepareLua(LuaManager *manager)
 {
     if (!this->IsLoaded())
         throw std::logic_error("Addon is not loaded");
     if (this->_asSR)
-        return;
+        return true;
 
     this->_addonThread = std::make_unique<sol::thread>(manager->L()->lua_state());
+
+    return true;
 }
 
 void DiscoverAddons()
@@ -227,6 +228,11 @@ void DiscoverAddons()
             if (entry.path().filename() == "sub_rosa")
             {
                 api::GetSuitiumLogger()->Log("<yellow>Addon folder found using reserved name \"sub_rosa\", ignored.");
+                continue;
+            }
+            if (!std::ifstream(entry.path().string() + "/addon.json").good())
+            {
+                api::GetSuitiumLogger()->Log("<yellow>Addon folder did not contain addon.json file, ignored.");
                 continue;
             }
             addons.push_back(std::make_unique<Addon>(entry.path().string()));

@@ -29,13 +29,15 @@ void LoadServerHookFunc()
 
     addresses::LoadServerFunc();
 
+    GetMainLuaManager()->Initialize();
+
     DiscoverAddons();
     for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
         (*it)->Load(); // This loads in the ClientMain hook for the client
     for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
         (*it)->CheckDependencies();
-
-    GetMainLuaManager()->Initialize();
+    for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
+        (*it)->PrepareLua(GetMainLuaManager());
 
 #if _WIN32
     if (*addresses::IsDedicated)

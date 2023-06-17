@@ -72,13 +72,15 @@ void ClientMainHookFunc()
     }
 #endif
 
+    GetMainLuaManager()->Initialize();
+
     DiscoverAddons();
     for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
         (*it)->Load(); // This loads in the ConnectMasterServer hook for the dedicated
     for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
         (*it)->CheckDependencies();
-
-    GetMainLuaManager()->Initialize();
+    for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
+        (*it)->PrepareLua(GetMainLuaManager());
 
     addresses::ClientMainFunc();
 }
