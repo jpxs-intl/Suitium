@@ -16,6 +16,7 @@
 #include "hooks/LoadServer.hpp"
 #include "hooks/Printf.hpp"
 #include "hooks/ResetGame.hpp"
+#include "hooks/SetupItemTypes.hpp"
 #include "hooks/SetupVehicleTypes.hpp"
 
 // FuncAddress, hook function and hook object
@@ -39,7 +40,8 @@ void InstallHooks()
         {(void **)&addresses::ResetGameFunc.ptr, (void *)&ResetGameHookFunc, &resetGameHook},
         {(void **)&addresses::DrawMenuFunc.ptr, (void *)&DrawMenuHookFunc, &drawMenuHook},
         {(void **)&addresses::PrintfFunc.ptr, (void *)&PrintfHookFunc, &printfHook},
-        {(void **)&addresses::SetupVehicleTypesFunc.ptr, (void *)&SetupVehicleTypesHookFunc, &setupVehicleTypesHook},
+        {(void **)&addresses::SetupItemTypesFunc.ptr, (void *)&SetupItemTypesHookFunc, &setupItemTypesHook},
+        {(void **)&addresses::SetupVehicleTypesFunc.ptr, (void *)&SetupVehicleTypesHookFunc, &setupVehicleTypesHook}
     };
 
     for (HookEntry entry : hookEntries) 

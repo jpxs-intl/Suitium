@@ -11,27 +11,67 @@ namespace structs
         char p;
     };
 
+    struct CInteger
+    {
+        int i;
+
+        CInteger()
+        {
+        }
+        CInteger(const CInteger &right)
+        {
+            this->i = right.i;
+        }
+        CInteger(int integer)
+        {
+            this->i = integer;
+        }
+
+        operator int() const
+        {
+            return this->i;
+        }
+        CInteger &operator=(int right)
+        {
+            this->i = right;
+            return *this;
+        }
+
+        operator std::string() const
+        {
+            return std::to_string(this->i);
+        }
+    };
+
     struct CBoolean
     {
-        union
+        struct
         {
-            int i;
-            struct
-            {
-                bool b1;
-                bool b2;
-                bool b3;
-                bool b4;
-            }; // i love little endian
-        };
+            bool b1;
+            bool b2;
+            bool b3;
+            bool b4;
+        }; // i love little endian
+
+        CBoolean()
+        {
+        }
+        CBoolean(const CBoolean &right)
+        {
+            this->b1 = right.b1;
+        }
+        CBoolean(bool boolean)
+        {
+            this->b1 = boolean;
+        }
         
         operator bool() const
         {
-            return (bool)this->i;
+            return this->b1;
         }
         CBoolean &operator=(bool right)
         {
-            this->i = (int)right;
+            this->b1 = right;
             return *this;
         }
 

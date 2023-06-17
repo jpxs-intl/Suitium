@@ -48,6 +48,7 @@ FuncAddress<addresses::DrawMenuButtonFuncType> addresses::DrawMenuButtonFunc;
 FuncAddress<addresses::DrawMenuButtonSelectableFuncType> addresses::DrawMenuButtonSelectableFunc;
 FuncAddress<addresses::PrintfFuncType> addresses::PrintfFunc;
 FuncAddress<addresses::VoidFuncType> addresses::ResetGameFunc;
+FuncAddress<addresses::VoidFuncType> addresses::SetupItemTypesFunc;
 FuncAddress<addresses::VoidFuncType> addresses::SetupVehicleTypesFunc;
 
 static bool isDedicated = false;
@@ -105,6 +106,7 @@ label_client: {}
     addresses::DrawMenuButtonSelectableFunc.Register(baseAddress + DYNADDR(0x6F5A0, 0x0));
     addresses::PrintfFunc.Register(0);
     addresses::ResetGameFunc.Register(baseAddress + DYNADDR(0x127910, 0x0));
+    addresses::SetupItemTypesFunc.Register(baseAddress + DYNADDR(0x1402C0, 0x0));
     addresses::SetupVehicleTypesFunc.Register(baseAddress + DYNADDR(0x145BB0, 0x116BD5));
 
     isDedicated = false;
@@ -157,6 +159,7 @@ label_dedicated: {}
     addresses::DrawMenuButtonSelectableFunc.Register(0);
     addresses::PrintfFunc.Register(baseAddress + DYNADDR(0xB36F0, 0x0));
     addresses::ResetGameFunc.Register(baseAddress + DYNADDR(0xB4790, 0x0));
+    addresses::SetupItemTypesFunc.Register(baseAddress + DYNADDR(0xC7A70, 0x0));
     addresses::SetupVehicleTypesFunc.Register(baseAddress + DYNADDR(0xCBEB0, 0x0));
 
     isDedicated = true;

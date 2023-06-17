@@ -84,6 +84,7 @@ namespace addresses
 
     extern FuncAddress<VoidFuncType> ResetGameFunc;
 
+    extern FuncAddress<VoidFuncType> SetupItemTypesFunc;
     extern FuncAddress<VoidFuncType> SetupVehicleTypesFunc;
 
     bool Map(std::uintptr_t baseAddress);

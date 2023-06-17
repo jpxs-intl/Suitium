@@ -23,6 +23,7 @@ int CreateItemHookFunc(int typeID, structs::CVector3 *position, structs::CVector
 {
     subhook::ScopedHookRemove scopedRemove(createItemHook);
 
+    structs::CInteger actualTypeID = typeID;
     structs::CVector3 actualPosition;
     actualPosition = (position != nullptr) ? *position : glm::vec3(0.0f);
     structs::CVector3 actualVelocity;
@@ -30,9 +31,9 @@ int CreateItemHookFunc(int typeID, structs::CVector3 *position, structs::CVector
     structs::COrientation actualOrientation;
     actualOrientation = (orientation != nullptr) ? *orientation : glm::mat3(1.0f);
 
-    GetMainLuaManager()->CallHooks("CreateItem", "pre", &actualPosition, &actualOrientation, &actualVelocity);
+    GetMainLuaManager()->CallHooks("CreateItem", "pre", &actualTypeID, &actualPosition, &actualOrientation, &actualVelocity);
 
-    int itemID = addresses::CreateItemFunc(typeID, &actualPosition, &actualVelocity, &actualOrientation);
+    int itemID = addresses::CreateItemFunc(actualTypeID.i, &actualPosition, &actualVelocity, &actualOrientation);
     if (itemID < 0)
         return -1;
 

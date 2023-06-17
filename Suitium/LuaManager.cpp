@@ -134,10 +134,21 @@ void LuaManager::Initialize()
 }
 void LuaManager::Deinitialize()
 {
+	this->_hooks.clear();
+
     this->_L.reset();
 }
 void LuaManager::DefineGameTypes()
 {
+	this->_L->new_usertype<structs::CInteger>(
+		"Integer",
+		sol::no_constructor,
+
+		"value", &structs::CInteger::i,
+
+		"__tostring", &structs::CInteger::operator std::string
+	);
+
 	this->_L->new_usertype<structs::CBoolean>(
 		"Boolean",
 		sol::no_constructor,
