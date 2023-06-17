@@ -82,7 +82,7 @@ void ClientMainHookFunc()
         if (!(*it)->IsLoaded())
             continue;
         if ((*it)->CheckDependencies())
-            (*it)->PrepareLua(GetMainLuaManager());
+            (*it)->PrepareLua(GetMainLuaManager(), false);
     }
 
     addresses::ClientMainFunc();

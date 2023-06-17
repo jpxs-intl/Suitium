@@ -118,6 +118,9 @@ void Addon::Load()
 
     this->_isLoaded = true;
     api::GetSuitiumLogger()->Log("Loaded addon \"{}{}<reset>\"!", this->LogDecoration(), this->ID());
+
+    this->_logger = std::make_unique<api::Logger>(this->Name(), this->LogDecoration());
+
     return;
 
 label_error: {}
@@ -130,6 +133,8 @@ void Addon::Unload()
     this->_requires.clear();
     this->_conflicts.clear();
 
+    this->_logger.reset();
+
     this->_addonThread.reset();
 }
 
@@ -140,6 +145,11 @@ void Addon::LoadAsSR()
     this->_name = "Sub Rosa";
     this->_description = "The base Sub Rosa game.";
     this->_logDecoration = "<blue><b>";
+
+    this->_requires.clear();
+    this->_conflicts.clear();
+
+    this->_logger.reset();
 
     this->_isLoaded = true;
 }
@@ -199,7 +209,16 @@ bool Addon::CheckDependencies()
     return true;
 }
 
-bool Addon::PrepareLua(LuaManager *manager)
+api::Logger *Addon::GetLogger() const
+{
+    if (!this->IsLoaded())
+        throw std::logic_error("Addon is not loaded");
+    if (this->_asSR)
+        return api::GetSRLogger();
+    return this->_logger.get();
+}
+
+bool Addon::PrepareLua(LuaManager *manager, bool ignoreClient)
 {
     if (!this->IsLoaded())
         throw std::logic_error("Addon is not loaded");
@@ -207,6 +226,7 @@ bool Addon::PrepareLua(LuaManager *manager)
         return true;
 
     this->_addonThread = std::make_unique<sol::thread>(manager->L()->lua_state());
+    manager->SetCurrentAddon(this);
 
     {
         std::string path = "/server/init.lua";
@@ -238,6 +258,10 @@ bool Addon::PrepareLua(LuaManager *manager)
             }
         }
     }
+
+
+    if (ignoreClient)
+        return true;
 
     {
         std::string path = "/client/init.lua";

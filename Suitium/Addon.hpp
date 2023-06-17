@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "api/Logging.hpp"
 #include "LuaManager.hpp"
 
 class Addon
@@ -46,9 +47,14 @@ public:
     bool CheckDependencies();
 
 private:
+    std::unique_ptr<api::Logger> _logger;
+public:
+    api::Logger *GetLogger() const;
+
+private:
     std::unique_ptr<sol::thread> _addonThread;
 public:
-    bool PrepareLua(LuaManager *manager);
+    bool PrepareLua(LuaManager *manager, bool ignoreClient);
 };
 
 void DiscoverAddons();

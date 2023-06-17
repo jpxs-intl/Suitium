@@ -39,7 +39,7 @@ void LoadServerHookFunc()
         if (!(*it)->IsLoaded())
             continue;
         if ((*it)->CheckDependencies())
-            (*it)->PrepareLua(GetMainLuaManager());
+            (*it)->PrepareLua(GetMainLuaManager(), true);
     }
 
     // TODO: We need to deinitialize Lua, for now it just crashes the server after closing the terminal

@@ -4,6 +4,9 @@
 #include <sol/sol.hpp>
 #include <stdexcept>
 
+#include "Addon.hpp"
+#include "api/Logging.hpp"
+
 // https://github.com/moonjit/moonjit/blob/master/doc/c_api.md#luajit_setmodel-idx-luajit_mode_wrapcfuncflag
 static int wrapExceptions(lua_State* L, lua_CFunction f) 
 {
@@ -43,10 +46,42 @@ void LuaManager::Initialize()
 	this->_L->open_libraries(sol::lib::math);
 	this->_L->open_libraries(sol::lib::table);
 	this->_L->open_libraries(sol::lib::bit32);
+
+	(*this->_L)["print"] = [&](sol::this_state &state, sol::variadic_args &args)
+	{
+		Addon *addon = this->GetCurrentAddon();
+		for (std::string str : args)
+		{
+			addon->GetLogger()->Log("{}\t", str);
+		}
+	};
+	(*this->_L)["warn"] = [&](sol::this_state &state, sol::variadic_args &args)
+	{
+		Addon *addon = this->GetCurrentAddon();
+		for (std::string str : args)
+		{
+			addon->GetLogger()->Log("<yellow>{}\t", str);
+		}
+	};
 }
 void LuaManager::Deinitialize()
 {
     this->_L.reset();
+}
+
+Addon *LuaManager::GetCurrentAddon()
+{
+	lua_State *L = this->_L->lua_state();
+	lua_rawgeti(L, LUA_REGISTRYINDEX, LUAMANAGER_LUAADDONINDEX);
+	void *ptr = lua_touserdata(L, -1);
+	lua_pop(L, 1);
+	return (Addon *)ptr;
+}
+void LuaManager::SetCurrentAddon(Addon *addon)
+{
+	lua_State *L = this->_L->lua_state();
+	lua_pushlightuserdata(L, addon);
+	lua_rawseti(L, LUA_REGISTRYINDEX, LUAMANAGER_LUAADDONINDEX);
 }
 
 sol::state *LuaManager::L() const
