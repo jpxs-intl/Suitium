@@ -247,6 +247,7 @@ void LuaManager::DefineGameTypes()
 		sol::no_constructor,
 
 		"isActive", &structs::Item::isActive,
+		"type", sol::property(&structs::Item::GetType),
 
 		"position", &structs::Item::position,
 		"velocity", &structs::Item::velocity,
@@ -303,6 +304,7 @@ void LuaManager::DefineGameTypes()
 		sol::no_constructor,
 
 		"isActive", &structs::Vehicle::isActive,
+		"type", sol::property(&structs::Vehicle::GetType),
 
 		"position", &structs::Vehicle::position,
 		"velocity", &structs::Vehicle::velocity,

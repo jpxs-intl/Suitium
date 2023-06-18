@@ -11,6 +11,13 @@ add_library(
     api/Logging.cpp
     api/Text.cpp
 
+    # Struct source files
+    structs/Human.cpp
+    structs/Item.cpp
+    structs/ItemType.cpp
+    structs/Vehicle.cpp
+    structs/VehicleType.cpp
+
     # Other source files
     Addon.cpp
     Address.cpp

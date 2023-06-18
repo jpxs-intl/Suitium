@@ -51,22 +51,10 @@ namespace structs
         CVector3 gunHoldPosition;
         CPad pad11[48];
 
-        std::string GetName() const
-        {
-            return std::string(this->name);
-        }
-        void SetName(const std::string &right)
-        {
-            right.copy(this->name, sizeof(this->name));
-        }
+        std::string GetName() const;
+        void SetName(const std::string &right);
 
-        int GetIndex() const
-        {
-            return this->customData.index;
-        }
-        std::string GetTypeID() const
-        {
-            return *this->customData.typeIDPtr;
-        }
+        int GetIndex() const;
+        std::string GetTypeID() const;
     };
 }

@@ -3,6 +3,7 @@
 #include <cstddef>
 
 #include "Common.hpp"
+#include "VehicleType.hpp"
 
 namespace structs
 {
@@ -44,5 +45,7 @@ namespace structs
         CPad pad10[304];
         int numberOfSeats;
         CPad pad11[136];
+
+        VehicleType *GetType() const;
     };
 }

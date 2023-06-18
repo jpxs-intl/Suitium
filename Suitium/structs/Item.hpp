@@ -3,6 +3,7 @@
 #include <cstddef>
 
 #include "Common.hpp"
+#include "ItemType.hpp"
 
 namespace structs
 {
@@ -16,7 +17,7 @@ namespace structs
         CBoolean isPhysicsSettled;
         int physicsSettledTimer;
         CBoolean isStatic;
-        int type;
+        int typeID;
         CPad pad1[4];
         int despawnTimer;
         int grenadePrimerID;
@@ -57,5 +58,7 @@ namespace structs
         CPad pad11[740];
         int computerTeamID;
         CPad pad12[1316];
+
+        ItemType *GetType() const;
     };
 }
