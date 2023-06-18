@@ -59,9 +59,12 @@ public:
             if (hook->active && hook->name == hookName && std::find(hook->flags.begin(), hook->flags.end(), hookFlag) != hook->flags.end())
             {
                 this->SetCurrentAddon(hook->addon);
-                hook->function(std::forward<Args>(args)...);
+                sol::protected_function_result result = hook->function(std::forward<Args>(args)...);
                 if (std::find(hook->flags.begin(), hook->flags.end(), "once") != hook->flags.end())
                     hook->Remove();
+
+                if (!result.valid())
+                    hook->addon->GetLogger()->Log("<red>{}", result.get<std::string>());
             }
         }
 

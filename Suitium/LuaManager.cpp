@@ -6,12 +6,18 @@
 #include <string>
 #include <stdexcept>
 #include <subhook.h>
+#include <utility>
 
 #include "Addon.hpp"
 #include "Addresses.hpp"
 #include "api/Logging.hpp"
 #include "hooks/CreateItem.hpp"
+#include "hooks/CreateVehicle.hpp"
 #include "structs/Item.hpp"
+#include "structs/ItemType.hpp"
+#include "structs/Vehicle.hpp"
+#include "structs/VehicleType.hpp"
+#include "TypeManager.hpp"
 
 // https://github.com/moonjit/moonjit/blob/master/doc/c_api.md#luajit_setmodel-idx-luajit_mode_wrapcfuncflag
 static int wrapExceptions(lua_State* L, lua_CFunction f) 
@@ -113,10 +119,6 @@ void LuaManager::Initialize()
 		"description", sol::property(&Addon::GetDescription),
 		"logDecoration", sol::property(&Addon::GetLogDecoration),
 
-		"Current", sol::property([&]()
-		{
-			return this->GetCurrentAddon();
-		}),
 		"GetAll", [&](sol::this_state &state)
 		{
 			sol::table table = sol::table::create(state.L);
@@ -127,7 +129,11 @@ void LuaManager::Initialize()
 				sz++;
 			}
 			return table;
-		}
+		},
+		"Current", sol::property([&]()
+		{
+			return this->GetCurrentAddon();
+		})
 	);
 	
 	this->DefineGameTypes();
@@ -213,34 +219,113 @@ void LuaManager::DefineGameTypes()
 		})
 	);
 
+	this->_L->new_usertype<structs::ItemType>(
+		"ItemType",
+		sol::no_constructor,
+
+		"name", sol::property(&structs::ItemType::GetName, &structs::ItemType::SetName),
+
+		"index", sol::property(&structs::ItemType::GetIndex),
+		"typeID", sol::property(&structs::ItemType::GetTypeID),
+
+		"GetAll", [](sol::this_state &state)
+		{
+			sol::table table = sol::table::create(state.L);
+			for (std::size_t itemTypeCount = 0; itemTypeCount < structs::ItemType::VanillaCount; itemTypeCount++)
+				table[itemTypeCount + 1] = &addresses::ItemTypes[itemTypeCount];
+			return table;
+		},
+		"GetByID", [](const std::string &typeID)
+		{
+			std::pair<std::string, std::string> decomposed = DecomposeTypeID(typeID);
+			return &addresses::ItemTypes[GetItemTypeManager()->GetID(decomposed.first, decomposed.second)];
+		}
+	);
+
 	this->_L->new_usertype<structs::Item>(
 		"Item",
 		sol::no_constructor,
 
-		"active", &structs::Item::isActive,
+		"isActive", &structs::Item::isActive,
 
 		"position", &structs::Item::position,
 		"velocity", &structs::Item::velocity,
 		"orientation", &structs::Item::orientation,
 
 		"Create", sol::overload(
-			[](int typeID, structs::CVector3 &position, structs::COrientation &orientation)
+			[](structs::ItemType &typeID, structs::CVector3 &position, structs::COrientation &orientation)
 			{
 				structs::CVector3 velocity = glm::vec3(0.0f);
 
 				subhook::ScopedHookRemove scopedRemove(createItemHook);
-				int itemID = addresses::CreateItemFunc(typeID, &position, &velocity, &orientation);
+				int itemID = addresses::CreateItemFunc(typeID.customData.index, &position, &velocity, &orientation);
 				if (itemID < 0)
 					throw std::runtime_error("Could not create item");
-				return addresses::Items[itemID];
+				return &addresses::Items[itemID];
 			},
-			[](int typeID, structs::CVector3 &position, structs::COrientation &orientation, structs::CVector3 &velocity)
+			[](structs::ItemType &typeID, structs::CVector3 &position, structs::COrientation &orientation, structs::CVector3 &velocity)
 			{
 				subhook::ScopedHookRemove scopedRemove(createItemHook);
-				int itemID = addresses::CreateItemFunc(typeID, &position, &velocity, &orientation);
+				int itemID = addresses::CreateItemFunc(typeID.customData.index, &position, &velocity, &orientation);
 				if (itemID < 0)
 					throw std::runtime_error("Could not create item");
-				return addresses::Items[itemID];
+				return &addresses::Items[itemID];
+			})
+	);
+
+	this->_L->new_usertype<structs::VehicleType>(
+		"VehicleType",
+		sol::no_constructor,
+
+		"name", sol::property(&structs::VehicleType::GetName, &structs::VehicleType::SetName),
+		"price", &structs::VehicleType::price,
+		"mass", &structs::VehicleType::mass,
+
+		"index", sol::property(&structs::VehicleType::GetIndex),
+		"typeID", sol::property(&structs::VehicleType::GetTypeID),
+
+		"GetAll", [](sol::this_state &state)
+		{
+			sol::table table = sol::table::create(state.L);
+			for (std::size_t vehicleTypeCount = 0; vehicleTypeCount < structs::VehicleType::VanillaCount; vehicleTypeCount++)
+				table[vehicleTypeCount + 1] = &addresses::VehicleTypes[vehicleTypeCount];
+			return table;
+		},
+		"GetByID", [](const std::string &typeID)
+		{
+			std::pair<std::string, std::string> decomposed = DecomposeTypeID(typeID);
+			return &addresses::VehicleTypes[GetVehicleTypeManager()->GetID(decomposed.first, decomposed.second)];
+		}
+	);
+
+	this->_L->new_usertype<structs::Vehicle>(
+		"Vehicle",
+		sol::no_constructor,
+
+		"isActive", &structs::Vehicle::isActive,
+
+		"position", &structs::Vehicle::position,
+		"velocity", &structs::Vehicle::velocity,
+		"orientation", &structs::Vehicle::orientation,
+
+		"Create", sol::overload(
+			[](structs::VehicleType &typeID, int colorID, structs::CVector3 &position, structs::COrientation &orientation)
+			{
+				structs::CVector3 velocity = glm::vec3(0.0f);
+
+				subhook::ScopedHookRemove scopedRemove(createVehicleHook);
+				int vehicleID = addresses::CreateVehicleFunc(typeID.customData.index, &position, &velocity, &orientation, colorID);
+				if (vehicleID < 0)
+					throw std::runtime_error("Could not create vehicle");
+				return &addresses::Vehicles[vehicleID];
+			},
+			[](structs::VehicleType &typeID, int colorID, structs::CVector3 &position, structs::COrientation &orientation, structs::CVector3 &velocity)
+			{
+				subhook::ScopedHookRemove scopedRemove(createVehicleHook);
+				int vehicleID = addresses::CreateVehicleFunc(typeID.customData.index, &position, &velocity, &orientation, colorID);
+				if (vehicleID < 0)
+					throw std::runtime_error("Could not create vehicle");
+				return &addresses::Vehicles[vehicleID];
 			})
 	);
 }

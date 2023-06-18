@@ -15,6 +15,7 @@ int CreateVehicleHookFunc(int typeID, structs::CVector3 *position, structs::CVec
 
 #include "../Addresses.hpp"
 #include "../structs/Common.hpp"
+#include "../LuaManager.hpp"
 
 subhook::Hook *createVehicleHook;
 
@@ -22,12 +23,16 @@ int CreateVehicleHookFunc(int typeID, structs::CVector3 *position, structs::CVec
 {
     subhook::ScopedHookRemove scopedRemove(createVehicleHook);
 
+    structs::CInteger actualTypeID = typeID;
+    structs::CInteger actualColorID = colorID;
     structs::CVector3 actualPosition;
     actualPosition = (position != nullptr) ? *position : glm::vec3();
     structs::CVector3 actualVelocity;
     actualVelocity = (velocity != nullptr) ? *velocity : glm::vec3();
     structs::COrientation actualOrientation;
     actualOrientation = (orientation != nullptr) ? *orientation : glm::mat3(1.0f);
+
+    GetMainLuaManager()->CallHooks("CreateVehicle", "pre", addresses::VehicleTypes[actualTypeID.i], &actualColorID, &actualPosition, &actualOrientation, &actualVelocity);
 
     int vehicleID = addresses::CreateVehicleFunc(typeID, &actualPosition, &actualVelocity, &actualOrientation, colorID);
     if (vehicleID < 0)
@@ -38,6 +43,8 @@ int CreateVehicleHookFunc(int typeID, structs::CVector3 *position, structs::CVec
     addresses::Vehicles[vehicleID].velocity = actualVelocity;
     addresses::Vehicles[vehicleID].orientation = actualOrientation;
     addresses::Vehicles[vehicleID].health = addresses::VehicleTypes[typeID].customData.health;
+
+    GetMainLuaManager()->CallHooks("CreateVehicle", "post", addresses::Vehicles[vehicleID]);
 
     return vehicleID;
 }

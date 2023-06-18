@@ -16,6 +16,7 @@ void ClientMainHookFunc();
 #include "../Addon.hpp"
 #include "../Addresses.hpp"
 #include "../LuaManager.hpp"
+#include "../structs/ItemType.hpp"
 #include "../structs/VehicleType.hpp"
 
 subhook::Hook *clientMainHook;
@@ -85,6 +86,18 @@ void ClientMainHookFunc()
             continue;
         if ((*it)->CheckDependencies())
             (*it)->PrepareLua(GetMainLuaManager(), false);
+    }
+
+    // We gotta setup the structs!
+    for (std::size_t itemTypeCount = 0; itemTypeCount < structs::ItemType::VanillaCount; itemTypeCount++)
+    {
+        addresses::ItemTypes[itemTypeCount].customData.index = itemTypeCount;
+        addresses::ItemTypes[itemTypeCount].customData.typeIDPtr = new std::string();
+    }
+    for (std::size_t vehicleTypeCount = 0; vehicleTypeCount < structs::VehicleType::VanillaCount; vehicleTypeCount++)
+    {
+        addresses::VehicleTypes[vehicleTypeCount].customData.index = vehicleTypeCount;
+        addresses::VehicleTypes[vehicleTypeCount].customData.typeIDPtr = new std::string();
     }
 
     addresses::ClientMainFunc();

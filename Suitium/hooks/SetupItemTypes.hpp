@@ -15,7 +15,7 @@ void SetupItemTypesHookFunc();
 #if IMPLEMENT_HOOKS
 
 #include "../Addresses.hpp"
-//#include "../api/Logging.hpp"
+#include "../LuaManager.hpp"
 #include "../structs/ItemType.hpp"
 #include "../TypeManager.hpp"
 
@@ -25,8 +25,14 @@ void SetupItemTypesHookFunc()
 {
     subhook::ScopedHookRemove scopedRemove(setupItemTypesHook);
 
+    GetMainLuaManager()->CallHooks("SetupItemTypes", "pre");
+
     addresses::SetupItemTypesFunc();
 
+    for (std::size_t itemTypeCount = 0; itemTypeCount < structs::ItemType::VanillaCount; itemTypeCount++)
+        addresses::ItemTypes[itemTypeCount].customData.index = itemTypeCount;
+    
+    GetItemTypeManager()->Clear();
     for (std::size_t itemTypeCount = 0; itemTypeCount < structs::ItemType::VanillaCount; itemTypeCount++)
     {
         std::stringstream stream;
@@ -43,15 +49,17 @@ void SetupItemTypesHookFunc()
                 stream << (char )std::tolower(c);
         }
 
-        // There are two cash types for whatever reason, let's add a postfix for both
+        // There are two different cash types for round mode and world mode
         if (itemTypeCount == 17)
             stream << '1';
         if (itemTypeCount == 18)
             stream << '2';
 
         GetItemTypeManager()->NewID("sub_rosa", stream.str());
-        //api::GetSuitiumLogger()->Log("{} ({}) registered as \"sub_rosa:{}\"", addresses::ItemTypes[itemTypeCount].name, itemTypeCount, stream.str());
+        *addresses::ItemTypes[itemTypeCount].customData.typeIDPtr = std::string("sub_rosa:") + stream.str();
     }
+
+    GetMainLuaManager()->CallHooks("SetupItemTypes", "post");
 }
 
 #endif

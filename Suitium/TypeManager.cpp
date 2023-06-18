@@ -36,6 +36,12 @@ std::size_t TypeManager::NewID(const std::string &addonID, const std::string &en
 	return this->_currentID - 1;
 }
 
+void TypeManager::Clear()
+{
+	this->_registry.clear();
+	this->_currentID = 0;
+}
+
 bool IsTypeIDValid(const std::string &typeID)
 {
 	static const std::array<std::pair<char, int>, 5> matches = {
@@ -81,6 +87,11 @@ std::pair<std::string, std::string> DecomposeTypeID(const std::string &typeID)
 }
 
 TypeManager *GetItemTypeManager()
+{
+	static TypeManager s;
+	return &s;
+}
+TypeManager *GetVehicleTypeManager()
 {
 	static TypeManager s;
 	return &s;

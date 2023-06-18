@@ -18,6 +18,8 @@ void LoadServerHookFunc();
 #include "../Addon.hpp"
 #include "../Addresses.hpp"
 #include "../LuaManager.hpp"
+#include "../structs/ItemType.hpp"
+#include "../structs/VehicleType.hpp"
 #include "../Version.hpp"
 
 #if _WIN32
@@ -43,6 +45,18 @@ void LoadServerHookFunc()
             continue;
         if ((*it)->CheckDependencies())
             (*it)->PrepareLua(GetMainLuaManager(), true);
+    }
+
+    // We gotta setup the structs!
+    for (std::size_t itemTypeCount = 0; itemTypeCount < structs::ItemType::VanillaCount; itemTypeCount++)
+    {
+        addresses::ItemTypes[itemTypeCount].customData.index = itemTypeCount;
+        addresses::ItemTypes[itemTypeCount].customData.typeIDPtr = new std::string();
+    }
+    for (std::size_t vehicleTypeCount = 0; vehicleTypeCount < structs::VehicleType::VanillaCount; vehicleTypeCount++)
+    {
+        addresses::VehicleTypes[vehicleTypeCount].customData.index = vehicleTypeCount;
+        addresses::VehicleTypes[vehicleTypeCount].customData.typeIDPtr = new std::string();
     }
 
     // TODO: We need to deinitialize Lua, for now it just crashes the server after closing the terminal

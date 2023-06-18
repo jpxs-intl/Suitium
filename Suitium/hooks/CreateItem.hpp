@@ -31,7 +31,7 @@ int CreateItemHookFunc(int typeID, structs::CVector3 *position, structs::CVector
     structs::COrientation actualOrientation;
     actualOrientation = (orientation != nullptr) ? *orientation : glm::mat3(1.0f);
 
-    GetMainLuaManager()->CallHooks("CreateItem", "pre", &actualTypeID, &actualPosition, &actualOrientation, &actualVelocity);
+    GetMainLuaManager()->CallHooks("CreateItem", "pre", addresses::ItemTypes[actualTypeID.i], &actualPosition, &actualOrientation, &actualVelocity);
 
     int itemID = addresses::CreateItemFunc(actualTypeID.i, &actualPosition, &actualVelocity, &actualOrientation);
     if (itemID < 0)

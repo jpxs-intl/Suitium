@@ -18,9 +18,12 @@ public:
 	bool HasID(const std::string &addonID, const std::string &entryName) const;
 	std::size_t GetID(const std::string &addonID, const std::string &entryName) const;
 	std::size_t NewID(const std::string &addonID, const std::string &entryName);
+
+	void Clear();
 };
 
 bool IsTypeIDValid(const std::string &typeID);
 std::pair<std::string, std::string> DecomposeTypeID(const std::string &typeID);
 
 TypeManager *GetItemTypeManager();
+TypeManager *GetVehicleTypeManager();
