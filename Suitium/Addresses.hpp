@@ -68,8 +68,6 @@ namespace addresses
 #endif
     extern FuncAddress<CSDrawTextFuncType> CSDrawTextFunc;
 
-    extern FuncAddress<VoidFuncType> LoadServerFunc;
-
     using DrawMenuFuncType = int (int unk);
     extern FuncAddress<DrawMenuFuncType> DrawMenuFunc;
 
@@ -83,6 +81,8 @@ namespace addresses
     extern FuncAddress<PrintfFuncType> PrintfFunc;
 
     extern FuncAddress<VoidFuncType> ResetGameFunc;
+
+    extern FuncAddress<VoidFuncType> ServerMainFunc;
 
     extern FuncAddress<VoidFuncType> SetupItemTypesFunc;
     extern FuncAddress<VoidFuncType> SetupVehicleTypesFunc;

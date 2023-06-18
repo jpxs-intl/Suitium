@@ -1,10 +1,11 @@
 #pragma once
 
 #include <subhook.h>
+#include <thread>
 
-extern subhook::Hook *loadServerHook;
+extern subhook::Hook *serverMainHook;
 
-void LoadServerHookFunc();
+void ServerMainHookFunc();
 
 // I need stuff!!!!
 #if _VSCODE
@@ -14,6 +15,7 @@ void LoadServerHookFunc();
 #if IMPLEMENT_HOOKS
 
 #include <fmt/format.h>
+#include <iostream>
 
 #include "../Addon.hpp"
 #include "../Addresses.hpp"
@@ -26,13 +28,14 @@ void LoadServerHookFunc();
 #include <Windows.h>
 #endif
 
-subhook::Hook *loadServerHook;
+static bool inputRunning;
+static std::thread inputThread;
 
-void LoadServerHookFunc()
+subhook::Hook *serverMainHook;
+
+void ServerMainHookFunc()
 {
-    subhook::ScopedHookRemove scopedRemove(loadServerHook);
-
-    addresses::LoadServerFunc();
+    subhook::ScopedHookRemove scopedRemove(serverMainHook);
 
     GetMainLuaManager()->Initialize();
 
@@ -61,10 +64,42 @@ void LoadServerHookFunc()
 
     // TODO: We need to deinitialize Lua, for now it just crashes the server after closing the terminal
 
+    inputRunning = true;
+    inputThread = std::thread(
+        [&]()
+        {
+            while (inputRunning)
+            {
+                std::string input;
+                std::cin >> input;
+            }
+        }
+    );
+
 #if _WIN32
     if (*addresses::IsDedicated)
         SetConsoleTitle(fmt::format("Sub Rosa 0.{}{} (Dedicated): {}", SUITIUM_GAME_VERSION_NUMBER, SUITIUM_GAME_VERSION_PATCH_DEDICATED, addresses::ServerName.ptr).c_str());
+
+    SetConsoleCtrlHandler(
+        [](DWORD controlType)
+        {
+            inputRunning = false;
+            inputThread.join();
+
+            for (auto it = GetAddons().begin(); it != GetAddons().end(); ++it)
+                (*it)->Unload();
+
+            GetMainLuaManager()->Deinitialize();
+
+            std::exit(0);
+
+            return TRUE;
+        },
+        TRUE
+    );
 #endif
+
+    addresses::ServerMainFunc();
 }
 
 #endif
