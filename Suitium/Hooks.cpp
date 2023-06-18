@@ -7,6 +7,7 @@
 #include "Addresses.hpp"
 
 #define IMPLEMENT_HOOKS 1
+#include "hooks/CSDrawAtlasEntry.hpp"
 #include "hooks/CSDrawText.hpp"
 #include "hooks/ClientMain.hpp"
 #include "hooks/DrawMenu.hpp"
@@ -34,7 +35,8 @@ void InstallHooks()
         {(void **)&addresses::ConnectMasterServerFunc.ptr, (void *)&ConnectMasterServerHookFunc, &connectMasterServerHook},
         {(void **)&addresses::CreateItemFunc.ptr, (void *)&CreateItemHookFunc, &createItemHook},
         {(void **)&addresses::CreateVehicleFunc.ptr, (void *)&CreateVehicleHookFunc, &createVehicleHook},
-        {(void **)&addresses::CSDrawTextFunc.ptr, (void *)&CSDrawTextHookFunc, &drawTextHook},
+        {(void **)&addresses::CSDrawAtlasEntryFunc.ptr, (void *)&CSDrawAtlasEntryHookFunc, &csDrawAtlasEntryHook},
+        {(void **)&addresses::CSDrawTextFunc.ptr, (void *)&CSDrawTextHookFunc, &csDrawTextHook},
         {(void **)&addresses::ClientMainFunc.ptr, (void *)&ClientMainHookFunc, &clientMainHook},
         {(void **)&addresses::ResetGameFunc.ptr, (void *)&ResetGameHookFunc, &resetGameHook},
         {(void **)&addresses::DrawMenuFunc.ptr, (void *)&DrawMenuHookFunc, &drawMenuHook},

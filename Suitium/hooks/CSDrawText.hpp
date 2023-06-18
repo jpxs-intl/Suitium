@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <subhook.h>
 
-extern subhook::Hook *drawTextHook;
+extern subhook::Hook *csDrawTextHook;
 
 // https://github.com/noche-x/client/blob/main/src/game.hpp
 #if _WIN32
@@ -28,7 +28,7 @@ std::int64_t CSDrawTextHookFunc(const char *format, int, int, int, float, float,
 #include "../Addresses.hpp"
 #include "../Version.hpp"
 
-subhook::Hook *drawTextHook;
+subhook::Hook *csDrawTextHook;
 
 #if _WIN32
 static void csFormat(const char *format, std::stringstream& newFormatStream, std::va_list vaList) 
@@ -106,7 +106,7 @@ static void csFormat(const char *format, std::stringstream& newFormatStream, std
 
 std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size, unsigned int flags, float red, float green, float blue, float alpha, ...)
 {
-    subhook::ScopedHookRemove scopedRemove(drawTextHook);
+    subhook::ScopedHookRemove scopedRemove(csDrawTextHook);
 
     std::stringstream newFormatStream;
     if((flags & 0x40) == 0) // This flag makes the text unformatted

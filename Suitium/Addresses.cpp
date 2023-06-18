@@ -41,6 +41,7 @@ FuncAddress<addresses::VoidFuncType> addresses::ClientMainFunc;
 FuncAddress<addresses::VoidFuncType> addresses::ConnectMasterServerFunc;
 FuncAddress<addresses::CreateItemFuncType> addresses::CreateItemFunc;
 FuncAddress<addresses::CreateVehicleFuncType> addresses::CreateVehicleFunc;
+FuncAddress<addresses::CSDrawAtlasEntryFuncType> addresses::CSDrawAtlasEntryFunc;
 FuncAddress<addresses::CSDrawTextFuncType> addresses::CSDrawTextFunc;
 FuncAddress<addresses::DrawMenuFuncType> addresses::DrawMenuFunc;
 FuncAddress<addresses::DrawMenuButtonFuncType> addresses::DrawMenuButtonFunc;
@@ -99,6 +100,7 @@ label_client: {}
     addresses::ConnectMasterServerFunc.Register(baseAddress + DYNADDR(0xA3F30, 0x71447));
     addresses::CreateItemFunc.Register(baseAddress + DYNADDR(0x54130, 0xC5F2B));
     addresses::CreateVehicleFunc.Register(baseAddress + DYNADDR(0x5BCA0, 0xC92B0));
+    addresses::CSDrawAtlasEntryFunc.Register(baseAddress + DYNADDR(0x6D300, 0x0));
     addresses::CSDrawTextFunc.Register(baseAddress + DYNADDR(0x6D930, 0x2C62C));
     addresses::DrawMenuFunc.Register(baseAddress + DYNADDR(0x72450, 0x30821));
     addresses::DrawMenuButtonFunc.Register(baseAddress + DYNADDR(0x6F1F0, 0x2602F));
@@ -152,6 +154,7 @@ label_dedicated: {}
     addresses::ConnectMasterServerFunc.Register(baseAddress + DYNADDR(0x4FEB0, 0x0));
     addresses::CreateItemFunc.Register(baseAddress + DYNADDR(0x3B080, 0x0));
     addresses::CreateVehicleFunc.Register(baseAddress + DYNADDR(0x414B0, 0x0));
+    addresses::CSDrawAtlasEntryFunc.Register(0);
     addresses::CSDrawTextFunc.Register(0);
     addresses::DrawMenuFunc.Register(0);
     addresses::DrawMenuButtonFunc.Register(0);
