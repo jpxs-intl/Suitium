@@ -61,7 +61,7 @@ namespace addresses
     using CreateVehicleFuncType = int (int typeID, structs::CVector3 *position, structs::CVector3 *velocity, structs::COrientation *orientation, int colorID);
     extern FuncAddress<CreateVehicleFuncType> CreateVehicleFunc;
 
-    using CSDrawAtlasEntryFuncType = void (int atlasID, int atlasEntryID, float x, float y, float width, float height, char unk1, int unk2, int unk3, int unk4, int unk5);
+    using CSDrawAtlasEntryFuncType = void (int atlasID, int atlasEntryID, float x, float y, float width, float height, char unk1, float r, float g, float b, float a);
     extern FuncAddress<CSDrawAtlasEntryFuncType> CSDrawAtlasEntryFunc;
 
 #if _WIN32

@@ -4,7 +4,7 @@
 
 extern subhook::Hook *csDrawAtlasEntryHook;
 
-void CSDrawAtlasEntryHookFunc(int atlasID, int atlasEntryID, float x, float y, float width, float height, char unk1, int unk2, int unk3, int unk4, int unk5);
+void CSDrawAtlasEntryHookFunc(int atlasID, int atlasEntryID, float x, float y, float width, float height, char unk1, float r, float g, float b, float a);
 
 // I need stuff!!!!
 #if _VSCODE
@@ -17,11 +17,11 @@ void CSDrawAtlasEntryHookFunc(int atlasID, int atlasEntryID, float x, float y, f
 
 subhook::Hook *csDrawAtlasEntryHook;
 
-void CSDrawAtlasEntryHookFunc(int atlasID, int atlasEntryID, float x, float y, float width, float height, char unk1, int unk2, int unk3, int unk4, int unk5)
+void CSDrawAtlasEntryHookFunc(int atlasID, int atlasEntryID, float x, float y, float width, float height, char unk1, float r, float g, float b, float a)
 {
     subhook::ScopedHookRemove scopedRemove(csDrawAtlasEntryHook);
 
-    addresses::CSDrawAtlasEntryFunc(atlasID, atlasEntryID, x, y, width, height, unk1, unk2, unk3, unk4, unk5);
+    addresses::CSDrawAtlasEntryFunc(atlasID, atlasEntryID, x, y, width, height, unk1, r, g, b, a);
 }
 
 #endif
