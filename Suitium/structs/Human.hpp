@@ -20,7 +20,7 @@ namespace structs
         CPad pad2[224];
 #if __linux__
     } __attribute__((packed));
-#else
+#elif _WIN32
     };
 #pragma pack(pop)
 #endif
@@ -36,7 +36,7 @@ namespace structs
         CPad pad1[28];
 #if __linux__
     } __attribute__((packed));
-#else
+#elif _WIN32
     };
 #pragma pack(pop)
 #endif
@@ -131,7 +131,7 @@ namespace structs
         CPad pad24[72];
 #if __linux__
     } __attribute__((packed));
-#else
+#elif _WIN32
     };
 #pragma pack(pop)
 #endif

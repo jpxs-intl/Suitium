@@ -14,7 +14,7 @@ namespace structs
         char p;
 #if __linux__
     } __attribute__((packed));
-#else
+#elif _WIN32
     };
 #pragma pack(pop)
 #endif
@@ -54,7 +54,7 @@ namespace structs
         }
 #if __linux__
     } __attribute__((packed));
-#else
+#elif _WIN32
     };
 #pragma pack(pop)
 #endif
@@ -100,7 +100,7 @@ namespace structs
         }
 #if __linux__
     } __attribute__((packed));
-#else
+#elif _WIN32
     };
 #pragma pack(pop)
 #endif
@@ -164,7 +164,7 @@ namespace structs
         }
 #if __linux__
     } __attribute__((packed));
-#else
+#elif _WIN32
     };
 #pragma pack(pop)
 #endif
@@ -218,7 +218,7 @@ namespace structs
         }
 #if __linux__
     } __attribute__((packed));
-#else
+#elif _WIN32
     };
 #pragma pack(pop)
 #endif

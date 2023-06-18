@@ -8,7 +8,7 @@ IF NOT EXIST "Output\" (
 
 pushd Output
 mkdir moonjit
-xcopy ..\moonjit .\moonjit /E
+xcopy ..\Modules\moonjit .\moonjit /E
 pushd moonjit\src
 call msvcbuild
 popd

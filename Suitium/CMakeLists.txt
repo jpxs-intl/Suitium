@@ -29,8 +29,9 @@ add_library(
     Version.cpp
 
     # Libraries
-    ${CMAKE_SOURCE_DIR}/fmt/src/format.cc
-    ${CMAKE_SOURCE_DIR}/subhook/subhook.c
+    ${CMAKE_SOURCE_DIR}/Modules/fmt/src/format.cc
+    ${CMAKE_SOURCE_DIR}/Modules/glad/glad.c
+    ${CMAKE_SOURCE_DIR}/Modules/subhook/subhook.c
 )
 
 set_property (TARGET Suitium PROPERTY CXX_STANDARD 17)
@@ -41,10 +42,12 @@ if (WIN32)
     target_link_libraries(Suitium "${CMAKE_SOURCE_DIR}/Output/moonjit/src/lua51.lib" "${CMAKE_SOURCE_DIR}/Output/moonjit/src/luajit.lib")
 endif ()
 
-target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/fmt/include")
-target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/glm")
-target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/json/include")
-target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/moonjit/src")
-target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/shared")
-target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/sol2/include")
-target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/subhook")
+target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/Shared")
+
+target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/Modules/fmt/include")
+target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/Modules/glad/include")
+target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/Modules/glm")
+target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/Modules/json/include")
+target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/Modules/moonjit/src")
+target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/Modules/sol2/include")
+target_include_directories(Suitium PRIVATE "${CMAKE_SOURCE_DIR}/Modules/subhook")

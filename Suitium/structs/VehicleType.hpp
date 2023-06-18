@@ -39,7 +39,7 @@ namespace structs
         std::string GetTypeID() const;
 #if __linux__
     } __attribute__((packed));
-#else
+#elif _WIN32
     };
 #pragma pack(pop)
 #endif
