@@ -5,6 +5,7 @@
 #include "Address.hpp"
 #include "structs/Common.hpp"
 #include "structs/CSKeyboard.hpp"
+#include "structs/CSTexture.hpp"
 #include "structs/Human.hpp"
 #include "structs/Item.hpp"
 #include "structs/ItemType.hpp"
@@ -36,6 +37,7 @@ namespace addresses
     extern DataAddress<void *> SDLWindowPtr;
 
     extern DataAddress<structs::CSKeyboard> CSKeyboard;
+    extern DataAddress<structs::CSTexture> CSTextures;
 
     extern DataAddress<structs::CBoolean> IsInGame;
     extern DataAddress<structs::CBoolean> GamePaused;

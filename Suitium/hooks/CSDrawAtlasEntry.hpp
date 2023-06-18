@@ -17,11 +17,11 @@ void CSDrawAtlasEntryHookFunc(int atlasID, int atlasEntryID, float x, float y, f
 
 subhook::Hook *csDrawAtlasEntryHook;
 
-void CSDrawAtlasEntryHookFunc(int atlasID, int atlasEntryID, float x, float y, float width, float height, char unk1, float r, float g, float b, float a)
+void CSDrawAtlasEntryHookFunc(int textureID, int atlasEntryID, float x, float y, float width, float height, char unk1, float r, float g, float b, float a)
 {
     subhook::ScopedHookRemove scopedRemove(csDrawAtlasEntryHook);
 
-    addresses::CSDrawAtlasEntryFunc(atlasID, atlasEntryID, x, y, width, height, unk1, r, g, b, a);
+    addresses::CSDrawAtlasEntryFunc(textureID, atlasEntryID, x, y, width, height, unk1, r, g, b, a);
 }
 
 #endif

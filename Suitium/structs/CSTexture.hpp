@@ -1,6 +1,11 @@
 #pragma once
 
 #include <cstddef>
+#include <glad/glad.hpp>
+
+#ifndef GLuint
+typedef unsigned int GLuint;
+#endif
 
 #include "Common.hpp"
 
@@ -13,9 +18,9 @@ namespace structs
     {
         int width;
         int height;
-        CPad pad1[28];
-        std::uint32_t glTexture;
-        CPad pad2[49126];
+        CPad pad1[24];
+        GLuint glTexture;
+        CPad pad2[49130];
 #if __linux__
     } __attribute__((packed));
 #elif _WIN32

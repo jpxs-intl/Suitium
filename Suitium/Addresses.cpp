@@ -5,6 +5,7 @@
 #include "Address.hpp"
 #include "structs/Common.hpp"
 #include "structs/CSKeyboard.hpp"
+#include "structs/CSTexture.hpp"
 #include "structs/Human.hpp"
 #include "structs/ItemType.hpp"
 #include "structs/Vehicle.hpp"
@@ -28,6 +29,7 @@ DataAddress<int> addresses::SteamTicketLength;
 DataAddress<char> addresses::SteamTicketBuffer;
 DataAddress<void *> addresses::SDLWindowPtr;
 DataAddress<structs::CSKeyboard> addresses::CSKeyboard;
+DataAddress<structs::CSTexture> addresses::CSTextures;
 DataAddress<structs::CBoolean> addresses::IsInGame;
 DataAddress<structs::CBoolean> addresses::GamePaused;
 DataAddress<int> addresses::MenuTypeID;
@@ -83,6 +85,7 @@ label_client: {}
     addresses::SDLWindowPtr.Register(baseAddress + DYNADDR(0x20FC47C8, 0x6A7C5F88));
 
     addresses::CSKeyboard.Register(baseAddress + DYNADDR(0x43F7C964, 0x0));
+    addresses::CSTextures.Register(baseAddress + DYNADDR(0x67971DA0, 0x0));
 
     addresses::IsInGame.Register(baseAddress + DYNADDR(0x43EBFAA0, 0x0));
     addresses::GamePaused.Register(baseAddress + DYNADDR(0x43EBFAA8, 0x0));
@@ -137,6 +140,7 @@ label_dedicated: {}
     addresses::SDLWindowPtr.Register(0);
 
     addresses::CSKeyboard.Register(0);
+    addresses::CSTextures.Register(0);
 
     addresses::IsInGame.Register(0);
     addresses::GamePaused.Register(0);
