@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glad/glad.h>
 #include <subhook.h>
 
 extern subhook::Hook *clientMainHook;
@@ -43,6 +44,9 @@ void ClientMainHookFunc()
 
 #if _WIN32
     HMODULE sdlModule = GetModuleHandle("SDL2.dll");
+
+    gladLoadGLLoader((GLADloadproc)GetProcAddress(sdlModule, "SDL_GL_GetProcAddress"));
+
     SDL_RWFromFile_t sdlRWFromFile = (SDL_RWFromFile_t)GetProcAddress(sdlModule, "SDL_RWFromFile");
     SDL_LoadBMP_RW_t sdlLoadBMP_RW = (SDL_LoadBMP_RW_t)GetProcAddress(sdlModule, "SDL_LoadBMP_RW");
     SDL_FreeSurface_t sdlFreeSurface = (SDL_FreeSurface_t)GetProcAddress(sdlModule, "SDL_FreeSurface");
@@ -59,6 +63,8 @@ void ClientMainHookFunc()
     }
 #else
     void* sdlModule = dlopen("libSDL2-2.0.so.0", RTLD_LAZY | RTLD_NOLOAD);
+
+    gladLoadGLLoader((GLADloadproc)dlsym(sdlModule, "SDL_GL_GetProcAddress"));
 
     SDL_RWFromFile_t sdlRWFromFile = (SDL_RWFromFile_t)dlsym(sdlModule, "SDL_RWFromFile");
     SDL_LoadBMP_RW_t sdlLoadBMP_RW = (SDL_LoadBMP_RW_t)dlsym(sdlModule, "SDL_LoadBMP_RW");
