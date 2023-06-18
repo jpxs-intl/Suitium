@@ -7,6 +7,9 @@
 
 namespace structs
 {
+#if _WIN32
+#pragma pack(push, 1)
+#endif
     //  5072 (0x13D0)
     struct ItemType
     {
@@ -47,7 +50,7 @@ namespace structs
         CPad pad9[12];
         CBoolean linkableMap[46];
         CustomData customData;
-        CPad pad10[4544 - sizeof(CustomData) - 4]; // For some reason it crashes if I don't add some extra space
+        CPad pad10[4544 - sizeof(CustomData)];
         CVector3 gunHoldPosition;
         CPad pad11[48];
 
@@ -56,5 +59,10 @@ namespace structs
 
         int GetIndex() const;
         std::string GetTypeID() const;
+#if __linux__
+    } __attribute__((packed));
+#else
     };
+#pragma pack(pop)
+#endif
 }

@@ -6,6 +6,9 @@
 
 namespace structs
 {
+#if _WIN32
+#pragma pack(push, 1)
+#endif
     struct Bone
     {
         int rigidBodyID;
@@ -15,16 +18,32 @@ namespace structs
         CPad pad1[12];
         COrientation orientation;
         CPad pad2[224];
+#if __linux__
+    } __attribute__((packed));
+#else
     };
+#pragma pack(pop)
+#endif
 
+#if _WIN32
+#pragma pack(push, 1)
+#endif
     struct InventorySlot
     {
         int numberOfPlaces;
         int firstPlaceItemID;
         int secondPlaceItemID;
         CPad pad1[28];
+#if __linux__
+    } __attribute__((packed));
+#else
     };
+#pragma pack(pop)
+#endif
 
+#if _WIN32
+#pragma pack(push, 1)
+#endif
     struct Human
     {
         static constexpr std::size_t VanillaCount = 256;
@@ -110,5 +129,10 @@ namespace structs
         int necklaceID;
         int lastUpdatedWantedGroup;
         CPad pad24[72];
+#if __linux__
+    } __attribute__((packed));
+#else
     };
+#pragma pack(pop)
+#endif
 }

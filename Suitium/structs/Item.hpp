@@ -7,6 +7,9 @@
 
 namespace structs
 {
+#if _WIN32
+#pragma pack(push, 1)
+#endif
     // 7040 (0x1B80)
     struct Item
     {
@@ -60,5 +63,10 @@ namespace structs
         CPad pad12[1316];
 
         ItemType *GetType() const;
+#if __linux__
+    } __attribute__((packed));
+#else
     };
+#pragma pack(pop)
+#endif
 }

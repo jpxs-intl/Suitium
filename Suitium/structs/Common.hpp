@@ -6,11 +6,22 @@
 
 namespace structs
 {
+#if _WIN32
+#pragma pack(push, 1)
+#endif
     struct CPad
     {
         char p;
+#if __linux__
+    } __attribute__((packed));
+#else
     };
+#pragma pack(pop)
+#endif
 
+#if _WIN32
+#pragma pack(push, 1)
+#endif
     struct CInteger
     {
         int i;
@@ -41,8 +52,16 @@ namespace structs
         {
             return std::to_string(this->i);
         }
+#if __linux__
+    } __attribute__((packed));
+#else
     };
+#pragma pack(pop)
+#endif
 
+#if _WIN32
+#pragma pack(push, 1)
+#endif
     struct CBoolean
     {
         struct
@@ -79,8 +98,16 @@ namespace structs
         {
             return this->b1 ? "true" : "false";
         }
+#if __linux__
+    } __attribute__((packed));
+#else
     };
+#pragma pack(pop)
+#endif
 
+#if _WIN32
+#pragma pack(push, 1)
+#endif
     struct CVector3
     {
         union
@@ -135,8 +162,16 @@ namespace structs
         {
             return fmt::format("{}, {}, {}", this->x, this->y, this->z);
         }
+#if __linux__
+    } __attribute__((packed));
+#else
     };
+#pragma pack(pop)
+#endif
 
+#if _WIN32
+#pragma pack(push, 1)
+#endif
     struct COrientation
     {
         union
@@ -181,5 +216,10 @@ namespace structs
         {
             return fmt::format("{},\n{},\n{}", (std::string)this->right, (std::string)this->up, (std::string)this->back);
         }
+#if __linux__
+    } __attribute__((packed));
+#else
     };
+#pragma pack(pop)
+#endif
 }

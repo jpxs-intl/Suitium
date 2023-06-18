@@ -6,6 +6,10 @@
 
 namespace structs
 {
+#if _WIN32
+#pragma pack(push, 1)
+#endif
+    // 99776 (0x185C0)
     struct VehicleType
     {
         static constexpr std::size_t VanillaCount = 17;
@@ -25,7 +29,7 @@ namespace structs
         char name[32];
         int price;
         float mass;
-        CPad pad2[99716 - sizeof(CustomData) - 4];  // For some reason it crashes if I don't add some extra space
+        CPad pad2[99716 - sizeof(CustomData)];
         CustomData customData;
 
         std::string GetName() const;
@@ -33,5 +37,10 @@ namespace structs
 
         int GetIndex() const;
         std::string GetTypeID() const;
+#if __linux__
+    } __attribute__((packed));
+#else
     };
+#pragma pack(pop)
+#endif
 }
