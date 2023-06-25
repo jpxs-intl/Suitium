@@ -1,5 +1,6 @@
 #include "TypeManager.hpp"
 
+#include <algorithm>
 #include <array>
 #include <stdexcept>
 #include <string>
