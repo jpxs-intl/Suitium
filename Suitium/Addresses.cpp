@@ -93,16 +93,16 @@ label_client: {}
     addresses::CSKeyboard.Register(baseAddress + DYNADDR(0x43F7C964, 0x0));
     addresses::CSTextures.Register(baseAddress + DYNADDR(0x67971DA0, 0x0));
 
-    addresses::IsInGame.Register(baseAddress + DYNADDR(0x43EBFAA0, 0x0));
-    addresses::GamePaused.Register(baseAddress + DYNADDR(0x43EBFAA8, 0x0));
+    addresses::IsInGame.Register(baseAddress + DYNADDR(0x43EBFAA0, 0x1CE18FE0));
+    addresses::GamePaused.Register(baseAddress + DYNADDR(0x43EBFAA8, 0x1CE18FE8));
     addresses::MenuOptionsSectionID.Register((std::uintptr_t)&menuOptionsSectionID);
-    addresses::MenuTypeID.Register(baseAddress + DYNADDR(0x43EBFAA4, 0x0));
+    addresses::MenuTypeID.Register(baseAddress + DYNADDR(0x43EBFAA4, 0x1CE18FE4));
     
-    addresses::NextMenuButtonPositionX.Register(baseAddress + DYNADDR(0x10F610D8, 0x0));
-    addresses::NextMenuButtonPositionY.Register(baseAddress + DYNADDR(0x10F610DC, 0x0));
-    addresses::NextMenuButtonSizeX.Register(baseAddress + DYNADDR(0x10F610E0, 0x0));
-    addresses::NextMenuButtonSizeY.Register(baseAddress + DYNADDR(0x10F610E4, 0x0));
-    addresses::NextMenuButtonKey.Register(baseAddress + DYNADDR(0x10F610F4, 0x0));
+    addresses::NextMenuButtonPositionX.Register(baseAddress + DYNADDR(0x10F610D8, 0x6A8A76C0));
+    addresses::NextMenuButtonPositionY.Register(baseAddress + DYNADDR(0x10F610DC, 0x6A8A76C4));
+    addresses::NextMenuButtonSizeX.Register(baseAddress + DYNADDR(0x10F610E0, 0x6A8A76B8));
+    addresses::NextMenuButtonSizeY.Register(baseAddress + DYNADDR(0x10F610E4, 0x6A8A76BC));
+    addresses::NextMenuButtonKey.Register(baseAddress + DYNADDR(0x10F610F4, 0x6A8A76D4));
 
     addresses::ServerName.Register(baseAddress + DYNADDR(0x6D04ADD4, 0x0));
 
@@ -114,11 +114,11 @@ label_client: {}
     addresses::CSDrawTextFunc.Register(baseAddress + DYNADDR(0x6D930, 0x2C62C));
     addresses::DrawMenuFunc.Register(baseAddress + DYNADDR(0x72450, 0x30821));
     addresses::DrawMenuButtonFunc.Register(baseAddress + DYNADDR(0x6F1F0, 0x2602F));
-    addresses::DrawMenuButtonSelectableFunc.Register(baseAddress + DYNADDR(0x6F5A0, 0x0));
-    addresses::DrawMenuListFunc.Register(baseAddress + DYNADDR(0x6F8D0, 0x0));
-    addresses::DrawMenuSliderFunc.Register(baseAddress + DYNADDR(0x71440, 0x0));
-    addresses::DrawMenuTextBoxFunc.Register(baseAddress + DYNADDR(0x70060, 0x0));
-    addresses::DrawMenuToggleFunc.Register(baseAddress + DYNADDR(0x71910, 0x0));
+    addresses::DrawMenuButtonSelectableFunc.Register(baseAddress + DYNADDR(0x6F5A0, 0x2636E));
+    addresses::DrawMenuListFunc.Register(baseAddress + DYNADDR(0x6F8D0, 0x28D32));
+    addresses::DrawMenuSliderFunc.Register(baseAddress + DYNADDR(0x71440, 0x26C96));
+    addresses::DrawMenuTextBoxFunc.Register(baseAddress + DYNADDR(0x70060, 0x27FBF));
+    addresses::DrawMenuToggleFunc.Register(baseAddress + DYNADDR(0x71910, 0x26168));
     addresses::PrintfFunc.Register(0);
     addresses::ResetGameFunc.Register(baseAddress + DYNADDR(0x127910, 0x0));
     addresses::ServerMainFunc.Register(0);
