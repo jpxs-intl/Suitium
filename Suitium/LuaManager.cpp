@@ -83,7 +83,7 @@ void LuaManager::Initialize()
 	this->_L->new_usertype<LuaHook>(
 		"Hook",
 
-		sol::call_constructor, [&](std::string &hookName, sol::function &hookFunction, const sol::variadic_args &flags)
+		sol::call_constructor, [&](const std::string &hookName, const sol::function &hookFunction, const sol::variadic_args &flags)
 		{
 			std::shared_ptr<LuaHook> hook = std::make_shared<LuaHook>();
 
@@ -255,20 +255,26 @@ void LuaManager::DefineGameTypes()
 		"orientation", &structs::Item::orientation,
 
 		"Create", sol::overload(
-			[](structs::ItemType &typeID, structs::CVector3 &position, structs::COrientation &orientation)
+			[](const structs::ItemType &itemType, const structs::CVector3 &position, const structs::COrientation &orientation)
 			{
-				structs::CVector3 velocity = structs::CVector3();
+				structs::CVector3 realPosition = position;
+				structs::CVector3 realVelocity = structs::CVector3();
+				structs::COrientation realOrientation = orientation;
 
 				subhook::ScopedHookRemove scopedRemove(createItemHook);
-				int itemID = addresses::CreateItemFunc(typeID.customData.index, &position, &velocity, &orientation);
+				int itemID = addresses::CreateItemFunc(itemType.customData.index, &realPosition, &realVelocity, &realOrientation);
 				if (itemID < 0)
 					throw std::runtime_error("Could not create item");
 				return &addresses::Items[itemID];
 			},
-			[](structs::ItemType &typeID, structs::CVector3 &position, structs::COrientation &orientation, structs::CVector3 &velocity)
+			[](const structs::ItemType &itemType, const structs::CVector3 &position, const structs::COrientation &orientation, const structs::CVector3 &velocity)
 			{
+				structs::CVector3 realPosition = position;
+				structs::CVector3 realVelocity = velocity;
+				structs::COrientation realOrientation = orientation;
+
 				subhook::ScopedHookRemove scopedRemove(createItemHook);
-				int itemID = addresses::CreateItemFunc(typeID.customData.index, &position, &velocity, &orientation);
+				int itemID = addresses::CreateItemFunc(itemType.customData.index, &realPosition, &realVelocity, &realOrientation);
 				if (itemID < 0)
 					throw std::runtime_error("Could not create item");
 				return &addresses::Items[itemID];
@@ -312,20 +318,26 @@ void LuaManager::DefineGameTypes()
 		"orientation", &structs::Vehicle::orientation,
 
 		"Create", sol::overload(
-			[](structs::VehicleType &typeID, int colorID, structs::CVector3 &position, structs::COrientation &orientation)
+			[](const structs::VehicleType &itemType, int colorID, const structs::CVector3 &position, const structs::COrientation &orientation)
 			{
-				structs::CVector3 velocity = structs::CVector3();
+				structs::CVector3 realPosition = position;
+				structs::CVector3 realVelocity = structs::CVector3();
+				structs::COrientation realOrientation = orientation;
 
 				subhook::ScopedHookRemove scopedRemove(createVehicleHook);
-				int vehicleID = addresses::CreateVehicleFunc(typeID.customData.index, &position, &velocity, &orientation, colorID);
+				int vehicleID = addresses::CreateVehicleFunc(itemType.customData.index, &realPosition, &realVelocity, &realOrientation, colorID);
 				if (vehicleID < 0)
 					throw std::runtime_error("Could not create vehicle");
 				return &addresses::Vehicles[vehicleID];
 			},
-			[](structs::VehicleType &typeID, int colorID, structs::CVector3 &position, structs::COrientation &orientation, structs::CVector3 &velocity)
+			[](const structs::VehicleType &itemType, int colorID, const structs::CVector3 &position, const structs::COrientation &orientation, const structs::CVector3 &velocity)
 			{
+				structs::CVector3 realPosition = position;
+				structs::CVector3 realVelocity = velocity;
+				structs::COrientation realOrientation = orientation;
+
 				subhook::ScopedHookRemove scopedRemove(createVehicleHook);
-				int vehicleID = addresses::CreateVehicleFunc(typeID.customData.index, &position, &velocity, &orientation, colorID);
+				int vehicleID = addresses::CreateVehicleFunc(itemType.customData.index, &realPosition, &realVelocity, &realOrientation, colorID);
 				if (vehicleID < 0)
 					throw std::runtime_error("Could not create vehicle");
 				return &addresses::Vehicles[vehicleID];
