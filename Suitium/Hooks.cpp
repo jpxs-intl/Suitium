@@ -10,10 +10,16 @@
 #include "hooks/CSDrawAtlasEntry.hpp"
 #include "hooks/CSDrawText.hpp"
 #include "hooks/ClientMain.hpp"
-#include "hooks/DrawMenu.hpp"
 #include "hooks/ConnectMasterServer.hpp"
 #include "hooks/CreateItem.hpp"
 #include "hooks/CreateVehicle.hpp"
+#include "hooks/DrawMenu.hpp"
+#include "hooks/DrawMenuButton.hpp"
+#include "hooks/DrawMenuButtonSelectable.hpp"
+#include "hooks/DrawMenuList.hpp"
+#include "hooks/DrawMenuSlider.hpp"
+#include "hooks/DrawMenuTextBox.hpp"
+#include "hooks/DrawMenuToggle.hpp"
 #include "hooks/Printf.hpp"
 #include "hooks/ResetGame.hpp"
 #include "hooks/ServerMain.hpp"
@@ -38,8 +44,14 @@ void InstallHooks()
         {(void **)&addresses::CSDrawAtlasEntryFunc.ptr, (void *)&CSDrawAtlasEntryHookFunc, &csDrawAtlasEntryHook},
         {(void **)&addresses::CSDrawTextFunc.ptr, (void *)&CSDrawTextHookFunc, &csDrawTextHook},
         {(void **)&addresses::ClientMainFunc.ptr, (void *)&ClientMainHookFunc, &clientMainHook},
-        {(void **)&addresses::ResetGameFunc.ptr, (void *)&ResetGameHookFunc, &resetGameHook},
         {(void **)&addresses::DrawMenuFunc.ptr, (void *)&DrawMenuHookFunc, &drawMenuHook},
+        {(void **)&addresses::DrawMenuButtonFunc.ptr, (void *)&DrawMenuButtonHookFunc, &drawMenuButtonHook},
+        {(void **)&addresses::DrawMenuButtonSelectableFunc.ptr, (void *)&DrawMenuButtonSelectableHookFunc, &drawMenuButtonSelectableHook},
+        {(void **)&addresses::DrawMenuListFunc.ptr, (void *)&DrawMenuListHookFunc, &drawMenuListHook},
+        {(void **)&addresses::DrawMenuSliderFunc.ptr, (void *)&DrawMenuSliderHookFunc, &drawMenuSliderHook},
+        {(void **)&addresses::DrawMenuTextBoxFunc.ptr, (void *)&DrawMenuTextBoxHookFunc, &drawMenuTextBoxHook},
+        {(void **)&addresses::DrawMenuToggleFunc.ptr, (void *)&DrawMenuToggleHookFunc, &drawMenuToggleHook},
+        {(void **)&addresses::ResetGameFunc.ptr, (void *)&ResetGameHookFunc, &resetGameHook},
         {(void **)&addresses::PrintfFunc.ptr, (void *)&PrintfHookFunc, &printfHook},
         {(void **)&addresses::ServerMainFunc.ptr, (void *)&ServerMainHookFunc, &serverMainHook},
         {(void **)&addresses::SetupItemTypesFunc.ptr, (void *)&SetupItemTypesHookFunc, &setupItemTypesHook},

@@ -3,6 +3,7 @@
 #include <subhook.h>
 
 extern subhook::Hook *drawMenuHook;
+extern int drawMenuOptionsSection;
 
 int DrawMenuHookFunc(int unk);
 
@@ -40,9 +41,45 @@ int DrawMenuHookFunc(int unk)
         *addresses::NextMenuButtonSizeY = 24.0f;
         *addresses::NextMenuButtonKey = (SDL_Scancode)-1;
         if (addresses::DrawMenuButtonFunc("Addons"))
-            *addresses::MenuTypeID = 100 + 0; // 100 is the base ID for suitium menus
+            *addresses::MenuTypeID = 100 + 0;
     }
-    else if (!*addresses::IsInGame && *addresses::MenuTypeID >= 100)
+    else if (*addresses::MenuTypeID == 3)
+    {
+        // The options menu is being drawn!
+
+        *addresses::NextMenuButtonPositionX = 4.0f;
+        *addresses::NextMenuButtonPositionY = 48.0f;
+        *addresses::NextMenuButtonSizeX = 85.0f;
+        *addresses::NextMenuButtonSizeY = 24.0f;
+        addresses::DrawMenuButtonSelectableFunc("General", addresses::MenuOptionsSectionID.ptr, 0);
+        *addresses::NextMenuButtonPositionX = 4.0f + (85.0f * 1.0f) + 2.0f;
+        *addresses::NextMenuButtonPositionY = 48.0f;
+        *addresses::NextMenuButtonSizeX = 85.0f;
+        *addresses::NextMenuButtonSizeY = 24.0f;
+        addresses::DrawMenuButtonSelectableFunc("Video", addresses::MenuOptionsSectionID.ptr, 1);
+        *addresses::NextMenuButtonPositionX = 4.0f + (85.0f * 2.0f) + 4.0f;
+        *addresses::NextMenuButtonPositionY = 48.0f;
+        *addresses::NextMenuButtonSizeX = 85.0f;
+        *addresses::NextMenuButtonSizeY = 24.0f;
+        addresses::DrawMenuButtonSelectableFunc("Audio", addresses::MenuOptionsSectionID.ptr, 2);
+        *addresses::NextMenuButtonPositionX = 4.0f + (85.0f * 3.0f) + 6.0f;
+        *addresses::NextMenuButtonPositionY = 48.0f;
+        *addresses::NextMenuButtonSizeX = 85.0f;
+        *addresses::NextMenuButtonSizeY = 24.0f;
+        addresses::DrawMenuButtonSelectableFunc("Input", addresses::MenuOptionsSectionID.ptr, 3);
+
+        /*api::DrawText("Video:", 4.0f, 75.0f, 24.0f, glm::vec4(1.0f), api::TextAlignment::Right);
+
+
+        static int enableHDWater = 0;
+        *addresses::NextMenuButtonPositionX = 4.0f;
+        *addresses::NextMenuButtonPositionY = 100.0f + (32.0f * 3.5f) - 4.0f;
+        *addresses::NextMenuButtonSizeX = 240.0f;
+        *addresses::NextMenuButtonSizeY = 32.0f;
+        *addresses::NextMenuButtonKey = (SDL_Scancode)-1;
+        addresses::DrawMenuToggleFunc("Enable HD water", &enableHDWater);*/
+    }
+    else if (*addresses::MenuTypeID >= 100) // 100 is the base ID for suitium menus
     {
         int customMenuTypeID = *addresses::MenuTypeID - 100;
         if (customMenuTypeID == 0)

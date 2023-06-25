@@ -32,6 +32,7 @@ DataAddress<structs::CSKeyboard> addresses::CSKeyboard;
 DataAddress<structs::CSTexture> addresses::CSTextures;
 DataAddress<structs::CBoolean> addresses::IsInGame;
 DataAddress<structs::CBoolean> addresses::GamePaused;
+DataAddress<int> addresses::MenuOptionsSectionID;
 DataAddress<int> addresses::MenuTypeID;
 DataAddress<float> addresses::NextMenuButtonPositionX;
 DataAddress<float> addresses::NextMenuButtonPositionY;
@@ -48,6 +49,10 @@ FuncAddress<addresses::CSDrawTextFuncType> addresses::CSDrawTextFunc;
 FuncAddress<addresses::DrawMenuFuncType> addresses::DrawMenuFunc;
 FuncAddress<addresses::DrawMenuButtonFuncType> addresses::DrawMenuButtonFunc;
 FuncAddress<addresses::DrawMenuButtonSelectableFuncType> addresses::DrawMenuButtonSelectableFunc;
+FuncAddress<addresses::DrawMenuListFuncType> addresses::DrawMenuListFunc;
+FuncAddress<addresses::DrawMenuSliderFuncType> addresses::DrawMenuSliderFunc;
+FuncAddress<addresses::DrawMenuTextBoxFuncType> addresses::DrawMenuTextBoxFunc;
+FuncAddress<addresses::DrawMenuToggleFuncType> addresses::DrawMenuToggleFunc;
 FuncAddress<addresses::PrintfFuncType> addresses::PrintfFunc;
 FuncAddress<addresses::VoidFuncType> addresses::ResetGameFunc;
 FuncAddress<addresses::VoidFuncType> addresses::ServerMainFunc;
@@ -55,6 +60,7 @@ FuncAddress<addresses::VoidFuncType> addresses::SetupItemTypesFunc;
 FuncAddress<addresses::VoidFuncType> addresses::SetupVehicleTypesFunc;
 
 static bool isDedicated = false;
+static int menuOptionsSectionID = 0;
 
 bool addresses::Map(std::uintptr_t baseAddress)
 {
@@ -89,6 +95,7 @@ label_client: {}
 
     addresses::IsInGame.Register(baseAddress + DYNADDR(0x43EBFAA0, 0x0));
     addresses::GamePaused.Register(baseAddress + DYNADDR(0x43EBFAA8, 0x0));
+    addresses::MenuOptionsSectionID.Register((std::uintptr_t)&menuOptionsSectionID);
     addresses::MenuTypeID.Register(baseAddress + DYNADDR(0x43EBFAA4, 0x0));
     
     addresses::NextMenuButtonPositionX.Register(baseAddress + DYNADDR(0x10F610D8, 0x0));
@@ -108,6 +115,10 @@ label_client: {}
     addresses::DrawMenuFunc.Register(baseAddress + DYNADDR(0x72450, 0x30821));
     addresses::DrawMenuButtonFunc.Register(baseAddress + DYNADDR(0x6F1F0, 0x2602F));
     addresses::DrawMenuButtonSelectableFunc.Register(baseAddress + DYNADDR(0x6F5A0, 0x0));
+    addresses::DrawMenuListFunc.Register(baseAddress + DYNADDR(0x6F8D0, 0x0));
+    addresses::DrawMenuSliderFunc.Register(baseAddress + DYNADDR(0x71440, 0x0));
+    addresses::DrawMenuTextBoxFunc.Register(baseAddress + DYNADDR(0x70060, 0x0));
+    addresses::DrawMenuToggleFunc.Register(baseAddress + DYNADDR(0x71910, 0x0));
     addresses::PrintfFunc.Register(0);
     addresses::ResetGameFunc.Register(baseAddress + DYNADDR(0x127910, 0x0));
     addresses::ServerMainFunc.Register(0);
@@ -144,6 +155,7 @@ label_dedicated: {}
 
     addresses::IsInGame.Register(0);
     addresses::GamePaused.Register(0);
+    addresses::MenuOptionsSectionID.Register(0);
     addresses::MenuTypeID.Register(0);
 
     addresses::NextMenuButtonPositionX.Register(0);
@@ -163,6 +175,10 @@ label_dedicated: {}
     addresses::DrawMenuFunc.Register(0);
     addresses::DrawMenuButtonFunc.Register(0);
     addresses::DrawMenuButtonSelectableFunc.Register(0);
+    addresses::DrawMenuListFunc.Register(0);
+    addresses::DrawMenuSliderFunc.Register(0);
+    addresses::DrawMenuTextBoxFunc.Register(0);
+    addresses::DrawMenuToggleFunc.Register(0);
     addresses::PrintfFunc.Register(baseAddress + DYNADDR(0xB36F0, 0x0));
     addresses::ResetGameFunc.Register(baseAddress + DYNADDR(0xB4790, 0x0));
     addresses::ServerMainFunc.Register(baseAddress + DYNADDR(0x4AF40, 0x0));

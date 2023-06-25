@@ -41,6 +41,7 @@ namespace addresses
 
     extern DataAddress<structs::CBoolean> IsInGame;
     extern DataAddress<structs::CBoolean> GamePaused;
+    extern DataAddress<int> MenuOptionsSectionID;
     extern DataAddress<int> MenuTypeID;
 
     extern DataAddress<float> NextMenuButtonPositionX;
@@ -81,6 +82,18 @@ namespace addresses
 
     using DrawMenuButtonSelectableFuncType = int (const char *text, int *selected, int selectedCmp);
     extern FuncAddress<DrawMenuButtonSelectableFuncType> DrawMenuButtonSelectableFunc;
+
+    using DrawMenuListFuncType = int (const char *text, int unk1, int unk2, int unk3, int unk4, int unk5, void *unk6, void *unk7, int unk8, int unk9);
+    extern FuncAddress<DrawMenuListFuncType> DrawMenuListFunc;
+
+    using DrawMenuSliderFuncType = int (const char *text, int *value, int minValue, int maxValue, int unk);
+    extern FuncAddress<DrawMenuSliderFuncType> DrawMenuSliderFunc;
+
+    using DrawMenuTextBoxFuncType = int (const char *text, int *value, int unk1, int unk2);
+    extern FuncAddress<DrawMenuTextBoxFuncType> DrawMenuTextBoxFunc;
+
+    using DrawMenuToggleFuncType = int (const char *text, int *value);
+    extern FuncAddress<DrawMenuToggleFuncType> DrawMenuToggleFunc;
 
     using PrintfFuncType = int (const char *format, ...);
     extern FuncAddress<PrintfFuncType> PrintfFunc;
