@@ -7,7 +7,7 @@ fi
 
 pushd Output
 mkdir moonjit
-cp -r ..\Modules\moonjit .\moonjit
+cp -r ../Modules/moonjit ./moonjit
 pushd moonjit
 make -j4
 popd
