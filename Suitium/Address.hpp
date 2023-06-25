@@ -45,7 +45,7 @@ struct FuncAddress
 #if _WIN32
     auto operator()(Args&&... args) const
 #else 
-    auto operator(Args... args) const // packed field errors
+    auto operator()(Args... args) const // packed field errors
 #endif
     {
         return this->ptr(std::forward<Args>(args)...);
