@@ -25,7 +25,7 @@ add_library(
     Hooks.cpp
     Hotfixes.cpp
     LuaManager.cpp
-    Typemanager.cpp
+    TypeManager.cpp
     Version.cpp
 
     # Libraries

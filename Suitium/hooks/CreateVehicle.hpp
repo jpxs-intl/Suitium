@@ -26,11 +26,11 @@ int CreateVehicleHookFunc(int typeID, structs::CVector3 *position, structs::CVec
     structs::CInteger actualTypeID = typeID;
     structs::CInteger actualColorID = colorID;
     structs::CVector3 actualPosition;
-    actualPosition = (position != nullptr) ? *position : glm::vec3();
+    actualPosition = (position != nullptr) ? *position : structs::CVector3();
     structs::CVector3 actualVelocity;
-    actualVelocity = (velocity != nullptr) ? *velocity : glm::vec3();
+    actualVelocity = (velocity != nullptr) ? *velocity : structs::CVector3();
     structs::COrientation actualOrientation;
-    actualOrientation = (orientation != nullptr) ? *orientation : glm::mat3(1.0f);
+    actualOrientation = (orientation != nullptr) ? *orientation : structs::COrientation();
 
     GetMainLuaManager()->CallHooks("CreateVehicle", "pre", addresses::VehicleTypes[actualTypeID.i], &actualColorID, &actualPosition, &actualOrientation, &actualVelocity);
 

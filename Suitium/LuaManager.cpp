@@ -171,29 +171,30 @@ void LuaManager::DefineGameTypes()
 		"y", &structs::CVector3::y,
 		"z", &structs::CVector3::z,
 
-		sol::call_constructor, [](float n)
+		sol::call_constructor, []()
 		{
-			return (structs::CVector3)glm::vec3(n);
+			return structs::CVector3();
 		},
 		sol::call_constructor, [](float x, float y, float z)
 		{
-			return (structs::CVector3)glm::vec3(x, y, z);
+			return structs::CVector3(x, y, z);
 		},
 
+		"Set", &structs::CVector3::operator =,
+
+		"length", sol::property(&structs::CVector3::Length),
 		"Dot", &structs::CVector3::Dot,
 		"Cross", &structs::CVector3::Cross,
-
-		"Set", &structs::CVector3::Set,
 
 		"__tostring", &structs::CVector3::operator std::string,
 
 		"Zero", sol::property([]()
 		{
-			return (structs::CVector3)glm::vec3(0.0f);
+			return (structs::CVector3)structs::CVector3(0.0f, 0.0f, 0.0f);
 		}),
 		"One", sol::property([]()
 		{
-			return (structs::CVector3)glm::vec3(1.0f);
+			return (structs::CVector3)structs::CVector3(1.0f, 1.0f, 1.0f);
 		})
 	);
 
@@ -206,16 +207,16 @@ void LuaManager::DefineGameTypes()
 
 		sol::call_constructor, []()
 		{
-			return (structs::COrientation)glm::mat3(1.0f);
+			return structs::COrientation();
 		},
 
-		"Set", &structs::COrientation::Set,
+		"Set", &structs::COrientation::operator =,
 
 		"__tostring", &structs::COrientation::operator std::string,
 
 		"Identity", sol::property([]()
 		{
-			return (structs::COrientation)glm::mat3(1.0f);
+			return structs::COrientation();
 		})
 	);
 
@@ -256,7 +257,7 @@ void LuaManager::DefineGameTypes()
 		"Create", sol::overload(
 			[](structs::ItemType &typeID, structs::CVector3 &position, structs::COrientation &orientation)
 			{
-				structs::CVector3 velocity = glm::vec3(0.0f);
+				structs::CVector3 velocity = structs::CVector3();
 
 				subhook::ScopedHookRemove scopedRemove(createItemHook);
 				int itemID = addresses::CreateItemFunc(typeID.customData.index, &position, &velocity, &orientation);
@@ -313,7 +314,7 @@ void LuaManager::DefineGameTypes()
 		"Create", sol::overload(
 			[](structs::VehicleType &typeID, int colorID, structs::CVector3 &position, structs::COrientation &orientation)
 			{
-				structs::CVector3 velocity = glm::vec3(0.0f);
+				structs::CVector3 velocity = structs::CVector3();
 
 				subhook::ScopedHookRemove scopedRemove(createVehicleHook);
 				int vehicleID = addresses::CreateVehicleFunc(typeID.customData.index, &position, &velocity, &orientation, colorID);
