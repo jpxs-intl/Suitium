@@ -11,7 +11,6 @@
 
 namespace api
 {
-
     Logger::Logger(const std::string &name, const std::string &decoration)
     {
         this->_name = name;

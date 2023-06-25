@@ -10,10 +10,10 @@
 
 static std::vector<std::unique_ptr<Addon>> addons;
 
-Addon::Addon(const std::string &folderPath, bool asSR)
+Addon::Addon(const std::string &folderPath, int asType)
 {
     this->_folderPath = folderPath;
-    this->_asSR = asSR;
+    this->_asType = asType;
 
     for (auto it = this->_folderPath.begin(); it != this->_folderPath.end(); ++it)
     {
@@ -41,9 +41,12 @@ void Addon::Load()
         return;
     }
 
-    if (this->_asSR)
+    if (this->_asType >= 0)
     {
-        this->LoadAsSR();
+        if (this->_asType == 0)
+            this->LoadAsSR();
+        else if (this->_asType == 1)
+            this->LoadAsSuitium();
         return;
     }
 
@@ -83,6 +86,11 @@ void Addon::Load()
         if (this->_id == "sub_rosa")
         {
             errorMessage = "Addon uses a reserved ID \"sub_rosa\"";
+            goto label_error;
+        }
+        if (this->_id == "suitium")
+        {
+            errorMessage = "Addon uses a reserved ID \"suitium\"";
             goto label_error;
         }
 
@@ -153,6 +161,21 @@ void Addon::LoadAsSR()
 
     this->_isLoaded = true;
 }
+void Addon::LoadAsSuitium()
+{
+    this->_id = "suitium";
+
+    this->_name = "Suitium";
+    this->_description = "Suitium reserved addon.";
+    this->_logDecoration = "<red><b>";
+
+    this->_requires.clear();
+    this->_conflicts.clear();
+
+    this->_logger.reset();
+
+    this->_isLoaded = true;
+}
 
 const std::string &Addon::ID() const
 {
@@ -184,7 +207,7 @@ bool Addon::CheckDependencies()
 {
     if (!this->IsLoaded())
         throw std::logic_error("Addon is not loaded");
-    if (this->_asSR)
+    if (this->_asType >= 0)
         return true;
 
     for (auto it = this->_requires.begin(); it != this->_requires.end(); ++it)
@@ -213,8 +236,13 @@ api::Logger *Addon::GetLogger() const
 {
     if (!this->IsLoaded())
         throw std::logic_error("Addon is not loaded");
-    if (this->_asSR)
-        return api::GetSRLogger();
+    if (this->_asType >= 0)
+    {
+        if (this->_asType == 0)
+            return api::GetSRLogger();
+        else if (this->_asType == 1)
+            return api::GetSuitiumLogger();
+    }
     return this->_logger.get();
 }
 
@@ -222,7 +250,7 @@ bool Addon::PrepareLua(LuaManager *manager, bool ignoreClient)
 {
     if (!this->IsLoaded())
         throw std::logic_error("Addon is not loaded");
-    if (this->_asSR)
+    if (this->_asType >= 0)
         return true;
 
     this->_addonThread = std::make_unique<sol::thread>(manager->L()->lua_state());
@@ -303,9 +331,14 @@ void DiscoverAddons()
 
     const std::string addonsFolderPath = "suitium/addons";
 
-    std::string srAddonPath = addonsFolderPath;
-    srAddonPath.append("/sub_rosa");
-    addons.push_back(std::make_unique<Addon>(srAddonPath, true));
+    {
+        std::string srAddonPath = addonsFolderPath + "/sub_rosa";
+        addons.push_back(std::make_unique<Addon>(srAddonPath, 0));
+    }
+    {
+        std::string suitiumAddonPath = addonsFolderPath + "/suitium";
+        addons.push_back(std::make_unique<Addon>(suitiumAddonPath, 1));
+    }
 
     for (auto &entry : std::filesystem::directory_iterator(addonsFolderPath))
     {

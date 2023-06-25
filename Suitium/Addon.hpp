@@ -12,12 +12,12 @@ class Addon
 {
 public:
     Addon() = delete;
-    Addon(const std::string &folderPath, bool asSR = false);
+    Addon(const std::string &folderPath, int asType = -1);
     ~Addon() noexcept;
 
 private:
     std::string _folderPath;
-    bool _asSR;
+    int _asType;
 
 public:
     bool IsLoaded() const;
@@ -25,6 +25,7 @@ public:
     void Unload();
 private:
     void LoadAsSR();
+    void LoadAsSuitium();
 
     bool _isLoaded;
 
