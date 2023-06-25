@@ -17,6 +17,10 @@ int DrawMenuHookFunc(int unk);
 #include <fmt/format.h>
 #include <glm/glm.hpp>
 
+#if _WIN32
+#include <Windows.h>
+#endif
+
 #include "../Addon.hpp"
 #include "../Addresses.hpp"
 #include "../api/Text.hpp"
@@ -68,16 +72,40 @@ int DrawMenuHookFunc(int unk)
         *addresses::NextMenuButtonSizeY = 24.0f;
         addresses::DrawMenuButtonSelectableFunc("Input", addresses::MenuOptionsSectionID.ptr, 3);
 
-        /*api::DrawText("Video:", 4.0f, 75.0f, 24.0f, glm::vec4(1.0f), api::TextAlignment::Right);
-
-
-        static int enableHDWater = 0;
-        *addresses::NextMenuButtonPositionX = 4.0f;
-        *addresses::NextMenuButtonPositionY = 100.0f + (32.0f * 3.5f) - 4.0f;
-        *addresses::NextMenuButtonSizeX = 240.0f;
-        *addresses::NextMenuButtonSizeY = 32.0f;
-        *addresses::NextMenuButtonKey = (SDL_Scancode)-1;
-        addresses::DrawMenuToggleFunc("Enable HD water", &enableHDWater);*/
+        if (*addresses::MenuOptionsSectionID == 1)
+        {
+            static int enableHDWater = 1;
+            *addresses::NextMenuButtonPositionX = 4.0f;
+            *addresses::NextMenuButtonPositionY = 120.0f + (32.0f * 3.5f) - 4.0f;
+            *addresses::NextMenuButtonSizeX = 240.0f;
+            *addresses::NextMenuButtonSizeY = 32.0f;
+            *addresses::NextMenuButtonKey = (SDL_Scancode)-1;
+            if (addresses::DrawMenuToggleFunc("Enable HD water", &enableHDWater))
+            {
+#if _WIN32
+                std::uintptr_t baseAddress = (std::uintptr_t)addresses::Base.ptr;
+                DWORD oldProtect;
+                VirtualProtect((LPVOID)(baseAddress + 0x957BF), 5, PAGE_EXECUTE_READWRITE, &oldProtect);
+                if (enableHDWater)
+                {
+                    *(std::uint8_t *)(baseAddress + 0x957BF + 0) = 0xE8;
+                    *(std::uint8_t *)(baseAddress + 0x957BF + 1) = 0x4C;
+                    *(std::uint8_t *)(baseAddress + 0x957BF + 2) = 0x8A;
+                    *(std::uint8_t *)(baseAddress + 0x957BF + 3) = 0x08;
+                    *(std::uint8_t *)(baseAddress + 0x957BF + 4) = 0x00;
+                }
+                else
+                {
+                    *(std::uint8_t *)(baseAddress + 0x957BF + 0) = 0x90;
+                    *(std::uint8_t *)(baseAddress + 0x957BF + 1) = 0x90;
+                    *(std::uint8_t *)(baseAddress + 0x957BF + 2) = 0x90;
+                    *(std::uint8_t *)(baseAddress + 0x957BF + 3) = 0x90;
+                    *(std::uint8_t *)(baseAddress + 0x957BF + 4) = 0x90;
+                }
+                VirtualProtect((LPVOID)(baseAddress + 0x957BF), 5, oldProtect, &oldProtect);
+#endif
+            }
+        }
     }
     else if (*addresses::MenuTypeID >= 100) // 100 is the base ID for suitium menus
     {

@@ -28,26 +28,26 @@ bool hotfixes::Make(std::uintptr_t baseAddress)
     if (!*addresses::IsDedicated.ptr)
     {
         DWORD oldProtect;
-        VirtualProtect((LPVOID)(baseAddress + 0x2CABD), 5, PAGE_EXECUTE_READWRITE, &oldProtect);
+        VirtualProtect((LPVOID)(baseAddress + 0x2CABD), 6, PAGE_EXECUTE_READWRITE, &oldProtect);
         *(std::uint8_t *)(baseAddress + 0x2CABD + 0) = 0x0F;
         *(std::uint8_t *)(baseAddress + 0x2CABD + 1) = 0x84;
         *(std::uint8_t *)(baseAddress + 0x2CABD + 2) = 0xD2;
         *(std::uint8_t *)(baseAddress + 0x2CABD + 3) = 0x00;
         *(std::uint8_t *)(baseAddress + 0x2CABD + 4) = 0x00;
         *(std::uint8_t *)(baseAddress + 0x2CABD + 5) = 0x00;
-        VirtualProtect((LPVOID)(baseAddress + 0x2CABD), 5, oldProtect, &oldProtect);
+        VirtualProtect((LPVOID)(baseAddress + 0x2CABD), 6, oldProtect, &oldProtect);
     }
     else
     {
         DWORD oldProtect;
-        VirtualProtect((LPVOID)(baseAddress + 0x1F9A6), 5, PAGE_EXECUTE_READWRITE, &oldProtect);
+        VirtualProtect((LPVOID)(baseAddress + 0x1F9A6), 6, PAGE_EXECUTE_READWRITE, &oldProtect);
         *(std::uint8_t *)(baseAddress + 0x1F9A6 + 0) = 0x0F;
         *(std::uint8_t *)(baseAddress + 0x1F9A6 + 1) = 0x84;
         *(std::uint8_t *)(baseAddress + 0x1F9A6 + 2) = 0xD2;
         *(std::uint8_t *)(baseAddress + 0x1F9A6 + 3) = 0x00;
         *(std::uint8_t *)(baseAddress + 0x1F9A6 + 4) = 0x00;
         *(std::uint8_t *)(baseAddress + 0x1F9A6 + 5) = 0x00;
-        VirtualProtect((LPVOID)(baseAddress + 0x1F9A6), 5, oldProtect, &oldProtect);
+        VirtualProtect((LPVOID)(baseAddress + 0x1F9A6), 6, oldProtect, &oldProtect);
     }
 
     return true;
