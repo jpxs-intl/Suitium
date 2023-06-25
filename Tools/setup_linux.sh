@@ -1,16 +1,12 @@
 #! /bin/bash
 
-if [ ! -d "Output"] 
+if [ ! -d "Output"]
 then
     mkdir Output
 fi
 
 pushd Output
-mkdir moonjit
-cp -r ../Modules/moonjit ./moonjit
-pushd moonjit
-make -j4
-popd
+
 popd
 
 echo /////////////
