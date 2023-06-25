@@ -165,8 +165,8 @@ std::int64_t CSDrawTextHookFunc(const char *format, unsigned int flags, int a, i
     else if (returnAddress == 0x8D488)
     {
         // The last credits menu section is being drawn!
-        addresses::CSDrawTextFunc("Suitium is made by", x, y + 64, size, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
-        addresses::CSDrawTextFunc("JPXS", x + 120, y + 64, size, newFlags, 1.0f, 0.75f, 0.0f, 1.0f);
+        addresses::CSDrawTextFunc("Suitium is made by", x, y + 64, size, flags, 1.0f, 0.0f, 0.0f, 1.0f);
+        addresses::CSDrawTextFunc("JPXS", x + 120, y + 64, size, flags, 1.0f, 0.75f, 0.0f, 1.0f);
     }
     else if (returnAddress == 0x15759D)
     {
