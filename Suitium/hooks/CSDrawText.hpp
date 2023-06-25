@@ -172,7 +172,7 @@ std::int64_t CSDrawTextHookFunc(const char *format, unsigned int flags, int a, i
     {
         return addresses::CSDrawTextFunc("Generating...", flags, a, b, x, y, scale, red, green, blue, alpha, c);
     }
-    else if (returnAddress == 0x157618)
+    else if (returnAddress == 0x15761F)
     {
         return addresses::CSDrawTextFunc("Connecting...", flags, a, b, x, y, scale, red, green, blue, alpha, c);
     }
