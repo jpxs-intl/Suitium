@@ -122,8 +122,8 @@ label_client: {}
     addresses::PrintfFunc.Register(0);
     addresses::ResetGameFunc.Register(baseAddress + DYNADDR(0x127910, 0x0));
     addresses::ServerMainFunc.Register(0);
-    addresses::SetupItemTypesFunc.Register(baseAddress + DYNADDR(0x1402C0, 0x0));
-    addresses::SetupVehicleTypesFunc.Register(baseAddress + DYNADDR(0x145BB0, 0x116BD5));
+    addresses::SetupItemTypesFunc.Register(baseAddress + DYNADDR(0x1402C0, 0xBA01E));
+    addresses::SetupVehicleTypesFunc.Register(baseAddress + DYNADDR(0x145BB0, 0x11A79A));
 
     isDedicated = false;
     return true;
