@@ -6,7 +6,8 @@
 #include <vector>
 
 #include "api/Logging.hpp"
-#include "LuaManager.hpp"
+
+class LuaManager;
 
 class Addon
 {

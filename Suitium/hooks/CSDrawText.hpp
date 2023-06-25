@@ -151,7 +151,7 @@ std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size
 #elif __linux__
 std::int64_t CSDrawTextHookFunc(const char *format, int params, int a, int b, float x, float y, float scale, float red, float green, float blue, float alpha, void * c)
 {
-    subhook::ScopedHookRemove scopedRemove(drawTextHook);
+    subhook::ScopedHookRemove scopedRemove(csDrawTextHook);
 
     return addresses::CSDrawTextFunc(format, params, a, b, x, y, scale, red, green, blue, alpha, c);
 }

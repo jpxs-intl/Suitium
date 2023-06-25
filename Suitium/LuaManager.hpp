@@ -6,9 +6,9 @@
 #include <stdexcept>
 #include <utility>
 
-#define LUAMANAGER_LUAADDONINDEX 500
+#include "Addon.hpp"
 
-class Addon;
+#define LUAMANAGER_LUAADDONINDEX 500
 
 struct LuaHook
 {

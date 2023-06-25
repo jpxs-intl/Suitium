@@ -7,6 +7,7 @@
 #include <stdexcept>
 
 #include "api/Logging.hpp"
+#include "LuaManager.hpp"
 
 static std::vector<std::unique_ptr<Addon>> addons;
 
