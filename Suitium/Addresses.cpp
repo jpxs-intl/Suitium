@@ -83,7 +83,7 @@ label_client: {}
     addresses::AuthName.Register(baseAddress + DYNADDR(0x11E4594C, 0x1C87CFEC));
     addresses::AuthStatus.Register(baseAddress + DYNADDR(0x2B165F40, 0x34C453D8));
 
-    addresses::SteamEnabled.Register(baseAddress + DYNADDR(0x429F8BC0, 0x1C0f67E0));
+    addresses::SteamEnabled.Register(baseAddress + DYNADDR(0x429F8BC0, 0x1C0F67E0));
     addresses::SteamTicketRetrieved.Register(baseAddress + DYNADDR(0x429F8FD8, 0x1C0F6BF8));
     addresses::SteamTicketLength.Register(baseAddress + DYNADDR(0x429F8BD4, 0x1C0F67F4));
     addresses::SteamTicketBuffer.Register(baseAddress + DYNADDR(0x429F8BD8, 0x1C0F67F8));
@@ -98,10 +98,10 @@ label_client: {}
     addresses::MenuOptionsSectionID.Register((std::uintptr_t)&menuOptionsSectionID);
     addresses::MenuTypeID.Register(baseAddress + DYNADDR(0x43EBFAA4, 0x1CE18FE4));
     
-    addresses::NextMenuButtonPositionX.Register(baseAddress + DYNADDR(0x10F610D8, 0x6A8A76C0));
-    addresses::NextMenuButtonPositionY.Register(baseAddress + DYNADDR(0x10F610DC, 0x6A8A76C4));
-    addresses::NextMenuButtonSizeX.Register(baseAddress + DYNADDR(0x10F610E0, 0x6A8A76B8));
-    addresses::NextMenuButtonSizeY.Register(baseAddress + DYNADDR(0x10F610E4, 0x6A8A76BC));
+    addresses::NextMenuButtonPositionX.Register(baseAddress + DYNADDR(0x10F610D8, 0x6A8A76B8));
+    addresses::NextMenuButtonPositionY.Register(baseAddress + DYNADDR(0x10F610DC, 0x6A8A76BC));
+    addresses::NextMenuButtonSizeX.Register(baseAddress + DYNADDR(0x10F610E0, 0x6A8A76C0));
+    addresses::NextMenuButtonSizeY.Register(baseAddress + DYNADDR(0x10F610E4, 0x6A8A76C4));
     addresses::NextMenuButtonKey.Register(baseAddress + DYNADDR(0x10F610F4, 0x6A8A76D4));
 
     addresses::ServerName.Register(baseAddress + DYNADDR(0x6D04ADD4, 0x0));
