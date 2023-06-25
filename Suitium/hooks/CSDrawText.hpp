@@ -9,7 +9,7 @@ extern subhook::Hook *csDrawTextHook;
 #if _WIN32
 std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size, unsigned int flags, float red, float green, float blue, float alpha, ...);
 #elif __linux__
-std::int64_t CSDrawTextHookFunc(const char *format, int, int, int, float, float, float, float, float, float, float, void *);
+std::int64_t CSDrawTextHookFunc(const char *format, unsigned int flags, int a, int b, float x, float y, float scale, float red, float green, float blue, float alpha, void *c);
 #endif
 
 // I need stuff!!!!
@@ -149,7 +149,7 @@ std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size
     return addresses::CSDrawTextFunc(newFormatStream.str().c_str(), x, y, size, newFlags, red, green, blue, alpha);
 }
 #elif __linux__
-std::int64_t CSDrawTextHookFunc(const char *format, int params, int a, int b, float x, float y, float scale, float red, float green, float blue, float alpha, void * c)
+std::int64_t CSDrawTextHookFunc(const char *format, unsigned int flags, int a, int b, float x, float y, float scale, float red, float green, float blue, float alpha, void *c)
 {
     subhook::ScopedHookRemove scopedRemove(csDrawTextHook);
 
@@ -170,14 +170,14 @@ std::int64_t CSDrawTextHookFunc(const char *format, int params, int a, int b, fl
     }
     else if (returnAddress == 0x15759D)
     {
-        return addresses::CSDrawTextFunc("Generating...", x, y, size, newFlags, red, green, blue, alpha);
+        return addresses::CSDrawTextFunc("Generating...", flags, a, b, x, y, scale, red, green, blue, alpha, c);
     }
     else if (returnAddress == 0x157618)
     {
-        return addresses::CSDrawTextFunc("Connecting...", x, y, size, newFlags, red, green, blue, alpha);
+        return addresses::CSDrawTextFunc("Connecting...", flags, a, b, x, y, scale, red, green, blue, alpha, c);
     }
 
-    return addresses::CSDrawTextFunc(format, params, a, b, x, y, scale, red, green, blue, alpha, c);
+    return addresses::CSDrawTextFunc(format, flags, a, b, x, y, scale, red, green, blue, alpha, c);
 }
 #endif
 
