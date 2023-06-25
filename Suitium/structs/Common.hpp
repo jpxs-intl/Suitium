@@ -159,7 +159,7 @@ namespace structs
 
         float Length() const
         {
-            return std::sqrtf(this->x * this->x + this->y * this->y + this->z * this->z);
+            return std::sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
         }
         float Dot(const CVector3 &right) const
         {
