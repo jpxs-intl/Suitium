@@ -59,7 +59,7 @@ void LuaManager::Initialize()
 	this->_L->open_libraries(sol::lib::table);
 	this->_L->open_libraries(sol::lib::bit32);
 
-	(*this->_L)["print"] = [&](sol::this_state &state, sol::variadic_args &args)
+	(*this->_L)["print"] = [&](const sol::this_state &state, const sol::variadic_args &args)
 	{
 		std::stringstream stream;
 		for (std::string str : args)
@@ -69,7 +69,7 @@ void LuaManager::Initialize()
 		text.pop_back(); // Pop last tab
 		this->GetCurrentAddon()->GetLogger()->LogText(text);
 	};
-	(*this->_L)["warn"] = [&](sol::this_state &state, sol::variadic_args &args)
+	(*this->_L)["warn"] = [&](const sol::this_state &state, const sol::variadic_args &args)
 	{
 		std::stringstream stream;
 		for (std::string str : args)
@@ -83,7 +83,7 @@ void LuaManager::Initialize()
 	this->_L->new_usertype<LuaHook>(
 		"Hook",
 
-		sol::call_constructor, [&](std::string &hookName, sol::function &hookFunction, sol::variadic_args flags)
+		sol::call_constructor, [&](std::string &hookName, sol::function &hookFunction, const sol::variadic_args &flags)
 		{
 			std::shared_ptr<LuaHook> hook = std::make_shared<LuaHook>();
 
@@ -119,7 +119,7 @@ void LuaManager::Initialize()
 		"description", sol::property(&Addon::GetDescription),
 		"logDecoration", sol::property(&Addon::GetLogDecoration),
 
-		"GetAll", [&](sol::this_state &state)
+		"GetAll", [&](const sol::this_state &state)
 		{
 			sol::table table = sol::table::create(state.L);
 			std::size_t sz = 1;
@@ -229,7 +229,7 @@ void LuaManager::DefineGameTypes()
 		"index", sol::property(&structs::ItemType::GetIndex),
 		"typeID", sol::property(&structs::ItemType::GetTypeID),
 
-		"GetAll", [](sol::this_state &state)
+		"GetAll", [](const sol::this_state &state)
 		{
 			sol::table table = sol::table::create(state.L);
 			for (std::size_t itemTypeCount = 0; itemTypeCount < structs::ItemType::VanillaCount; itemTypeCount++)
@@ -286,7 +286,7 @@ void LuaManager::DefineGameTypes()
 		"index", sol::property(&structs::VehicleType::GetIndex),
 		"typeID", sol::property(&structs::VehicleType::GetTypeID),
 
-		"GetAll", [](sol::this_state &state)
+		"GetAll", [](const sol::this_state &state)
 		{
 			sol::table table = sol::table::create(state.L);
 			for (std::size_t vehicleTypeCount = 0; vehicleTypeCount < structs::VehicleType::VanillaCount; vehicleTypeCount++)
