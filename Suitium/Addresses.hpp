@@ -83,7 +83,11 @@ namespace addresses
     using DrawMenuButtonSelectableFuncType = int (const char *text, int *selected, int selectedCmp);
     extern FuncAddress<DrawMenuButtonSelectableFuncType> DrawMenuButtonSelectableFunc;
 
+#if _WIN32
     using DrawMenuListFuncType = int (const char *text, int unk1, int unk2, int unk3, int unk4, int unk5, void *unk6, void *unk7, int unk8, int unk9);
+#elif __linux__
+    using DrawMenuListFuncType = int (const char *text, std::uint64_t unk1, void *unk2, void *unk3, std::uint64_t unk4, unsigned int *unk5, float unk6, float unk7, float unk8, float unk9);
+#endif
     extern FuncAddress<DrawMenuListFuncType> DrawMenuListFunc;
 
     using DrawMenuSliderFuncType = int (const char *text, int *value, int minValue, int maxValue, int unk);
