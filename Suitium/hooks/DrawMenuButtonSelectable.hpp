@@ -27,7 +27,13 @@ int DrawMenuButtonSelectableHookFunc(const char *text, int *value, int selectedC
         return addresses::DrawMenuButtonSelectableFunc(text, value, selectedCmp); // we dont care if this is not options menu
 
 #if _WIN32
-    if (_ReturnAddress() == (void *)((std::uintptr_t)addresses::Base.ptr + 0xFEF27)) // Push to talk key button
+    if ((std::uintptr_t)_ReturnAddress() - (std::uintptr_t)addresses::Base.ptr == 0xFEF27) // Push to talk key button
+    {
+        if (*addresses::MenuOptionsSectionID != 2)
+            return 0;
+    }
+#elif __linux__
+    if ((std::uintptr_t)__builtin_return_address(0) - (std::uintptr_t)addresses::Base.ptr == 0xAFA4E) // Push to talk key button
     {
         if (*addresses::MenuOptionsSectionID != 2)
             return 0;
