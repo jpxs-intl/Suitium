@@ -123,15 +123,15 @@ std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size
     newFlags |= 0x40; // Add unformatted flag, since we already formatted it
 
     std::uintptr_t returnAddress = (std::uintptr_t)_ReturnAddress() - (std::uintptr_t)addresses::Base.ptr;
-    if (returnAddress == 0x986D8) // 0x986D8 is the instruction after the game renders the "Sub Rosa" main menu text
+    if (returnAddress == 0x986D8)
     {
         return 0; // Remove "Sub Rosa" text
     }
-    else if (returnAddress == 0x9873D) // 0x9873D is the instruction after the game renders the version main menu text
+    else if (returnAddress == 0x9873D)
     {
         return 0; // Remove version text
     }
-    else if (returnAddress == 0xFCFD2) // 0xFCFD2 is the instruction after the game renders the last credits section
+    else if (returnAddress == 0xFCFD2)
     {
         // The last credits menu section is being drawn!
         addresses::CSDrawTextFunc("Suitium is made by", x, y + 64, size, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
@@ -152,6 +152,30 @@ std::int64_t CSDrawTextHookFunc(const char *format, float x, float y, float size
 std::int64_t CSDrawTextHookFunc(const char *format, int params, int a, int b, float x, float y, float scale, float red, float green, float blue, float alpha, void * c)
 {
     subhook::ScopedHookRemove scopedRemove(csDrawTextHook);
+
+    std::uintptr_t returnAddress = (std::uintptr_t)__builtin_return_address(0) - (std::uintptr_t)addresses::Base.ptr;
+    if (returnAddress == 0x8DA05)
+    {
+        return 0; // Remove "Sub Rosa" text
+    }
+    else if (returnAddress == 0x8DA53)
+    {
+        return 0; // Remove version text
+    }
+    else if (returnAddress == 0x8D488)
+    {
+        // The last credits menu section is being drawn!
+        addresses::CSDrawTextFunc("Suitium is made by", x, y + 64, size, newFlags, 1.0f, 0.0f, 0.0f, 1.0f);
+        addresses::CSDrawTextFunc("JPXS", x + 120, y + 64, size, newFlags, 1.0f, 0.75f, 0.0f, 1.0f);
+    }
+    else if (returnAddress == 0x15759D)
+    {
+        return addresses::CSDrawTextFunc("Generating...", x, y, size, newFlags, red, green, blue, alpha);
+    }
+    else if (returnAddress == 0x157618)
+    {
+        return addresses::CSDrawTextFunc("Connecting...", x, y, size, newFlags, red, green, blue, alpha);
+    }
 
     return addresses::CSDrawTextFunc(format, params, a, b, x, y, scale, red, green, blue, alpha, c);
 }
