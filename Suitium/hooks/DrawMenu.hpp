@@ -19,6 +19,8 @@ int DrawMenuHookFunc(int unk);
 
 #if _WIN32
 #include <Windows.h>
+#elif __linux__
+#include "../Hotfixes.hpp"
 #endif
 
 #include "../Addon.hpp"
@@ -103,6 +105,27 @@ int DrawMenuHookFunc(int unk)
                     *(std::uint8_t *)(baseAddress + 0x957BF + 4) = 0x90;
                 }
                 VirtualProtect((LPVOID)(baseAddress + 0x957BF), 5, oldProtect, &oldProtect);
+#elif __linux__
+                std::uintptr_t baseAddress = (std::uintptr_t)addresses::Base.ptr;
+                DWORD oldProtect;
+                VirtualProtect((LPVOID)(baseAddress + 0xC2B59), 5, PAGE_EXECUTE_READWRITE, &oldProtect);
+                if (enableHDWater)
+                {
+                    *(std::uint8_t *)(baseAddress + 0xC2B59 + 0) = 0xE8;
+                    *(std::uint8_t *)(baseAddress + 0xC2B59 + 1) = 0x46;
+                    *(std::uint8_t *)(baseAddress + 0xC2B59 + 2) = 0xF2;
+                    *(std::uint8_t *)(baseAddress + 0xC2B59 + 3) = 0xFF;
+                    *(std::uint8_t *)(baseAddress + 0xC2B59 + 4) = 0xFF;
+                }
+                else
+                {
+                    *(std::uint8_t *)(baseAddress + 0xC2B59 + 0) = 0x90;
+                    *(std::uint8_t *)(baseAddress + 0xC2B59 + 1) = 0x90;
+                    *(std::uint8_t *)(baseAddress + 0xC2B59 + 2) = 0x90;
+                    *(std::uint8_t *)(baseAddress + 0xC2B59 + 3) = 0x90;
+                    *(std::uint8_t *)(baseAddress + 0xC2B59 + 4) = 0x90;
+                }
+                VirtualProtect((LPVOID)(baseAddress + 0xC2B59), 5, oldProtect, &oldProtect);
 #endif
             }
         }
