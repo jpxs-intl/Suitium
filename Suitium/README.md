@@ -17,7 +17,7 @@ This is the base feature of Suitium, the ability to hook functions and add logic
 
 ### Server-Client scripting
 
-Status: ⚒️
+Status: ✅
 
 Developers can script both the server and client, including new UI elements, and graphics-related stuff.
 
