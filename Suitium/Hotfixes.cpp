@@ -1,5 +1,6 @@
 #include "Hotfixes.hpp"
 
+#include <cstddef>
 #include <cstdint>
 #include <cstring>
 
@@ -7,9 +8,40 @@
 
 #if _WIN32
 #include <windows.h>
+#elif __linux__
+#include <sys/mman.h>
 #endif
 
 #define NOP(address, size) std::memset(address, 0x90, size);
+
+#if __linux__
+#define PAGE_READONLY           0x02    
+#define PAGE_READWRITE          0x04
+#define PAGE_EXECUTE            0x10    
+#define PAGE_EXECUTE_READ       0x20    
+#define PAGE_EXECUTE_READWRITE  0x40    
+static int VirtualProtect(void *address, std::size_t size, int protection, int *oldProtection)
+{
+    int prot = PROT_NONE;
+    if (protection & PAGE_READONLY)
+        prot |= PROT_READ;
+    if (protection & PAGE_READWRITE)
+        prot |= PROT_READ | PROT_WRITE;
+    if (protection & PAGE_EXECUTE)
+        prot |= PROT_EXEC;
+    if (protection & PAGE_EXECUTE_READ)
+        prot |= PROT_READ | PROT_EXEC;
+    if (protection & PAGE_EXECUTE_READWRITE)
+        prot |= PROT_READ | PROT_WRITE | PROT_EXEC;
+
+    mprotect(address, size, prot);
+
+    if (oldProtection)
+        *oldProtection = prot;
+
+    return 1;
+}
+#endif
 
 bool hotfixes::Make(std::uintptr_t baseAddress)
 {
@@ -52,6 +84,15 @@ bool hotfixes::Make(std::uintptr_t baseAddress)
 
     return true;
 #elif __linux__
-    return true; // TODO: true for testing
+    // This is needed for custom menus, it allows new menu IDs to exist
+    if (!*addresses::IsDedicated.ptr)
+    {
+        int oldProtect;
+        VirtualProtect((void *)(baseAddress + 0x158FC8), 9, PAGE_EXECUTE_READWRITE, &oldProtect);
+        NOP((std::uint8_t *)(baseAddress + 0x158FC8), 9);
+        VirtualProtect((void *)(baseAddress + 0x158FC8), 9, oldProtect, &oldProtect);
+    }
+
+    return true;
 #endif
 }
