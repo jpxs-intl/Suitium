@@ -9,10 +9,6 @@ cd Output
 mkdir moonjit
 cp -r ../Modules/moonjit ./
 cd moonjit
-make -j4
+make -j4 BUILDMODE=static
 cd ..
 cd ..
-
-echo /////////////
-echo If moonjit was compiled successfully, copy libluajit.so to your game folder
-echo \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

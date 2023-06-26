@@ -10,10 +10,6 @@ pushd Output
 mkdir moonjit
 xcopy ..\Modules\moonjit .\moonjit /E
 pushd moonjit\src
-call msvcbuild
+call msvcbuild static
 popd
 popd
-
-echo /////////////
-echo If moonjit was compiled successfully, copy lua51.dll to your game folder
-echo \\\\\\\\\\\\\
