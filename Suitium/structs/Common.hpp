@@ -197,11 +197,11 @@ namespace structs
             this->up = CVector3(0.0f, 1.0f, 0.0f);
             this->back = CVector3(0.0f, 0.0f, 1.0f);
         }
-        COrientation(const COrientation &other)
+        COrientation(const COrientation &right)
         {
-            this->right = right;
-            this->up = up;
-            this->back = back;
+            this->right = right.right;
+            this->up = right.up;
+            this->back = right.back;
         }
 
         COrientation &operator =(const COrientation &right)

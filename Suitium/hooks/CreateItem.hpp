@@ -24,12 +24,9 @@ int CreateItemHookFunc(int typeID, structs::CVector3 *position, structs::CVector
     subhook::ScopedHookRemove scopedRemove(createItemHook);
 
     structs::CInteger actualTypeID = typeID;
-    structs::CVector3 actualPosition;
-    actualPosition = (position != nullptr) ? *position : structs::CVector3();
-    structs::CVector3 actualVelocity;
-    actualVelocity = (velocity != nullptr) ? *velocity : structs::CVector3();
-    structs::COrientation actualOrientation;
-    actualOrientation = (orientation != nullptr) ? *orientation : structs::COrientation();
+    structs::CVector3 actualPosition = (position != nullptr) ? *position : structs::CVector3();
+    structs::CVector3 actualVelocity = (velocity != nullptr) ? *velocity : structs::CVector3();
+    structs::COrientation actualOrientation = (orientation != nullptr) ? *orientation : structs::COrientation();
 
     GetMainLuaManager()->CallHooks("CreateItem", "pre", addresses::ItemTypes[actualTypeID.i], &actualPosition, &actualOrientation, &actualVelocity);
 
