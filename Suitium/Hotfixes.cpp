@@ -92,9 +92,9 @@ bool hotfixes::Make(std::uintptr_t baseAddress)
     if (!*addresses::IsDedicated.ptr)
     {
         int oldProtect;
-        VirtualProtect((void *)(baseAddress + 0x158FC8), 9, PAGE_EXECUTE_READWRITE, &oldProtect);
-        NOP((std::uint8_t *)(baseAddress + 0x158FC8), 9);
-        VirtualProtect((void *)(baseAddress + 0x158FC8), 9, oldProtect, &oldProtect);
+        VirtualProtect((void *)(baseAddress + 0x158FC8), 10, PAGE_EXECUTE_READWRITE, &oldProtect);
+        NOP((std::uint8_t *)(baseAddress + 0x158FC8), 10);
+        VirtualProtect((void *)(baseAddress + 0x158FC8), 10, oldProtect, &oldProtect);
     }
 
     return true;
