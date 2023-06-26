@@ -10,6 +10,7 @@
 #include <windows.h>
 #elif __linux__
 #include <sys/mman.h>
+#include <unistd.h>
 #endif
 
 #define NOP(address, size) std::memset(address, 0x90, size);
