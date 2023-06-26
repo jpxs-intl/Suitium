@@ -41,6 +41,7 @@ if (WIN32)
     target_link_libraries(Suitium "Ws2_32")
     target_link_libraries(Suitium "${CMAKE_SOURCE_DIR}/Output/moonjit/src/lua51.lib" "${CMAKE_SOURCE_DIR}/Output/moonjit/src/luajit.lib")
 elseif (UNIX)
+    set_property(TARGET Suitium PROPERTY POSITION_INDEPENDENT_CODE ON)
     target_link_libraries(Suitium "${CMAKE_SOURCE_DIR}/Output/moonjit/src/libluajit.a")
 endif ()
 
