@@ -23,16 +23,16 @@
 static int VirtualProtect(void *address, std::size_t size, int protection, int *oldProtection)
 {
     int prot = PROT_NONE;
-    if (protection & PAGE_READONLY)
-        prot |= PROT_READ;
-    if (protection & PAGE_READWRITE)
-        prot |= PROT_READ | PROT_WRITE;
-    if (protection & PAGE_EXECUTE)
-        prot |= PROT_EXEC;
-    if (protection & PAGE_EXECUTE_READ)
-        prot |= PROT_READ | PROT_EXEC;
-    if (protection & PAGE_EXECUTE_READWRITE)
-        prot |= PROT_READ | PROT_WRITE | PROT_EXEC;
+    if (protection == PAGE_READONLY)
+        prot = PROT_READ;
+    if (protection == PAGE_READWRITE)
+        prot = PROT_READ | PROT_WRITE;
+    if (protection == PAGE_EXECUTE)
+        prot = PROT_EXEC;
+    if (protection == PAGE_EXECUTE_READ)
+        prot = PROT_READ | PROT_EXEC;
+    if (protection == PAGE_EXECUTE_READWRITE)
+        prot = PROT_READ | PROT_WRITE | PROT_EXEC;
 
     mprotect(address, size, prot);
 
