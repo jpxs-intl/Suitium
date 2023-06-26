@@ -40,7 +40,7 @@ if (WIN32)
     target_compile_definitions(Suitium PRIVATE SUBHOOK_STATIC) # Windows will give "dllimport" errors without this define.
     target_link_libraries(Suitium "Ws2_32")
     target_link_libraries(Suitium "${CMAKE_SOURCE_DIR}/Output/moonjit/src/lua51.lib" "${CMAKE_SOURCE_DIR}/Output/moonjit/src/luajit.lib")
-elseif (LINUX)
+elseif (UNIX)
     target_link_libraries(Suitium "${CMAKE_SOURCE_DIR}/Output/moonjit/src/libluajit.a")
 endif ()
 
