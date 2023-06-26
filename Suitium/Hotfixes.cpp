@@ -36,8 +36,8 @@ static int VirtualProtect(void *address, std::size_t size, int protection, int *
 
     mprotect(address, size, prot);
 
-    if (oldProtection)
-        *oldProtection = prot;
+    if (oldProtection != nullptr)
+        *oldProtection = protection;
 
     return 1;
 }
