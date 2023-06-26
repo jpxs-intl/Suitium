@@ -22,6 +22,9 @@
 #define PAGE_EXECUTE_READWRITE  0x40    
 static int VirtualProtect(void *address, std::size_t size, int protection, int *oldProtection)
 {
+    long pagesize = sysconf(_SC_PAGESIZE);
+    void *alignedAddress = (void *)((std::uintptr_t)address & ~(pagesize - 1));
+
     int prot = PROT_NONE;
     if (protection == PAGE_READONLY)
         prot = PROT_READ;
@@ -34,7 +37,7 @@ static int VirtualProtect(void *address, std::size_t size, int protection, int *
     if (protection == PAGE_EXECUTE_READWRITE)
         prot = PROT_READ | PROT_WRITE | PROT_EXEC;
 
-    mprotect(address, size, prot);
+    mprotect(alignedAddress, pagesize, prot);
 
     if (oldProtection != nullptr)
         *oldProtection = protection;
