@@ -1,15 +1,25 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 
 #include "Common.hpp"
 
 namespace structs
 {
+#if _WIN32
+#pragma pack(push, 1)
+#endif
     //  5072 (0x13D0)
     struct ItemType
     {
         static constexpr std::size_t VanillaCount = 46;
+
+        struct CustomData
+        {
+            int index;
+            std::string *typeIDPtr;
+        };
 
         CPad pad1[4];
         int price;
@@ -39,8 +49,20 @@ namespace structs
         CVector3 boundsCenter;
         CPad pad9[12];
         CBoolean linkableMap[46];
-        CPad pad10[4544];
+        CustomData customData;
+        CPad pad10[4544 - sizeof(CustomData)];
         CVector3 gunHoldPosition;
         CPad pad11[48];
+
+        std::string GetName() const;
+        void SetName(const std::string &right);
+
+        int GetIndex() const;
+        std::string GetTypeID() const;
+#if __linux__
+    } __attribute__((packed));
+#elif _WIN32
     };
+#pragma pack(pop)
+#endif
 }

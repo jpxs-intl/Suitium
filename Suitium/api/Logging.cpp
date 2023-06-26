@@ -11,7 +11,6 @@
 
 namespace api
 {
-
     Logger::Logger(const std::string &name, const std::string &decoration)
     {
         this->_name = name;
@@ -173,5 +172,16 @@ namespace api
 #if _WIN32
         SetConsoleTextAttribute(stdOutput, originalAttributes);
 #endif
+    }
+
+    Logger *GetSRLogger()
+    {
+        static Logger s = Logger("Sub Rosa", "<blue><b>");
+        return &s;
+    }
+    Logger *GetSuitiumLogger()
+    {
+        static Logger s = Logger("Suitium", "<red><b>");
+        return &s;
     }
 }

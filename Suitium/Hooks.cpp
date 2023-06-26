@@ -7,36 +7,65 @@
 #include "Addresses.hpp"
 
 #define IMPLEMENT_HOOKS 1
-#include "hooks/ConnectMasterServer.hpp"
-#include "hooks/CreateVehicle.hpp"
+#include "hooks/CSDrawAtlasEntry.hpp"
 #include "hooks/CSDrawText.hpp"
-#include "hooks/MainMenu.hpp"
+#include "hooks/ClientMain.hpp"
+#include "hooks/ConnectMasterServer.hpp"
+#include "hooks/CreateItem.hpp"
+#include "hooks/CreateVehicle.hpp"
+#include "hooks/DrawMenu.hpp"
+#include "hooks/DrawMenuButton.hpp"
+#include "hooks/DrawMenuButtonSelectable.hpp"
+#include "hooks/DrawMenuList.hpp"
+#include "hooks/DrawMenuSlider.hpp"
+#include "hooks/DrawMenuTextBox.hpp"
+#include "hooks/DrawMenuToggle.hpp"
 #include "hooks/Printf.hpp"
+#include "hooks/ResetGame.hpp"
+#include "hooks/ServerMain.hpp"
+#include "hooks/SetupItemTypes.hpp"
 #include "hooks/SetupVehicleTypes.hpp"
 
 // FuncAddress, hook function and hook object
-using HookEntry = std::pair<void **, std::pair<void *, subhook::Hook **>>;
-
-static std::vector<HookEntry> hookEntries = 
+struct HookEntry 
 {
-    std::make_pair((void **)&addresses::ConnectMasterServerFunc.ptr, std::make_pair((void *)&ConnectMasterServerHookFunc, &connectMasterServerHook)),
-    std::make_pair((void **)&addresses::CreateVehicleFunc.ptr, std::make_pair((void *)&CreateVehicleHookFunc, &createVehicleHook)),
-    std::make_pair((void **)&addresses::CSDrawTextFunc.ptr, std::make_pair((void *)&CSDrawTextHookFunc, &drawTextHook)),
-    std::make_pair((void **)&addresses::MainMenuFunc.ptr, std::make_pair((void *)&MainMenuHookFunc, &mainMenuHook)),
-    std::make_pair((void **)&addresses::PrintfFunc.ptr, std::make_pair((void *)&PrintfHookFunc, &printfHook)),
-    std::make_pair((void **)&addresses::SetupVehicleTypesFunc.ptr, std::make_pair((void *)&SetupVehicleTypesHookFunc, &setupVehicleTypesHook))
+    void** sourceFunction;
+    void* hookedFunction;
+    subhook::Hook** hook;
 };
 
 void InstallHooks()
 {
-    for (auto it = hookEntries.begin(); it != hookEntries.end(); ++it)
+    static std::vector<HookEntry> hookEntries =
     {
-        if (!*(*it).first) // Some versions might not contain one or two hooks
-            continue;
+        {(void **)&addresses::ConnectMasterServerFunc.ptr, (void *)&ConnectMasterServerHookFunc, &connectMasterServerHook},
+        {(void **)&addresses::CreateItemFunc.ptr, (void *)&CreateItemHookFunc, &createItemHook},
+        {(void **)&addresses::CreateVehicleFunc.ptr, (void *)&CreateVehicleHookFunc, &createVehicleHook},
+        {(void **)&addresses::CSDrawAtlasEntryFunc.ptr, (void *)&CSDrawAtlasEntryHookFunc, &csDrawAtlasEntryHook},
+        {(void **)&addresses::CSDrawTextFunc.ptr, (void *)&CSDrawTextHookFunc, &csDrawTextHook},
+        {(void **)&addresses::ClientMainFunc.ptr, (void *)&ClientMainHookFunc, &clientMainHook},
+        {(void **)&addresses::DrawMenuFunc.ptr, (void *)&DrawMenuHookFunc, &drawMenuHook},
+        {(void **)&addresses::DrawMenuButtonFunc.ptr, (void *)&DrawMenuButtonHookFunc, &drawMenuButtonHook},
+        {(void **)&addresses::DrawMenuButtonSelectableFunc.ptr, (void *)&DrawMenuButtonSelectableHookFunc, &drawMenuButtonSelectableHook},
+        {(void **)&addresses::DrawMenuListFunc.ptr, (void *)&DrawMenuListHookFunc, &drawMenuListHook},
+        {(void **)&addresses::DrawMenuSliderFunc.ptr, (void *)&DrawMenuSliderHookFunc, &drawMenuSliderHook},
+        {(void **)&addresses::DrawMenuTextBoxFunc.ptr, (void *)&DrawMenuTextBoxHookFunc, &drawMenuTextBoxHook},
+        {(void **)&addresses::DrawMenuToggleFunc.ptr, (void *)&DrawMenuToggleHookFunc, &drawMenuToggleHook},
+        {(void **)&addresses::ResetGameFunc.ptr, (void *)&ResetGameHookFunc, &resetGameHook},
+        {(void **)&addresses::PrintfFunc.ptr, (void *)&PrintfHookFunc, &printfHook},
+        {(void **)&addresses::ServerMainFunc.ptr, (void *)&ServerMainHookFunc, &serverMainHook},
+        {(void **)&addresses::SetupItemTypesFunc.ptr, (void *)&SetupItemTypesHookFunc, &setupItemTypesHook},
+        {(void **)&addresses::SetupVehicleTypesFunc.ptr, (void *)&SetupVehicleTypesHookFunc, &setupVehicleTypesHook}
+    };
 
-        subhook::Hook *hook = new subhook::Hook(*(*it).first, (*it).second.first, subhook::HookFlag64BitOffset);
+    for (HookEntry entry : hookEntries) 
+    {
+        if (!*entry.sourceFunction) // Some versions might not contain one or two hooks
+          continue ;
+
+        subhook::Hook *hook = new subhook::Hook(*entry.sourceFunction, entry.hookedFunction, subhook::HookFlag64BitOffset);
         hook->Install();
 
-        *(*it).second.second = hook;
+        *entry.hook = hook;
     }
 }

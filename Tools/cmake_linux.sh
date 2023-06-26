@@ -1,6 +1,6 @@
 #! /bin/bash
 
-if [ ! -d "Output"] 
+if [ ! -d "Output" ] 
 then
     mkdir Output
 fi

@@ -2,7 +2,7 @@
 
 #include <subhook.h>
 
-#include "../Addresses.hpp"
+extern subhook::Hook *connectMasterServerHook;
 
 void ConnectMasterServerHookFunc();
 
@@ -13,13 +13,15 @@ void ConnectMasterServerHookFunc();
 
 #if IMPLEMENT_HOOKS
 
-static subhook::Hook *connectMasterServerHook;
+#include "../Addresses.hpp"
+
+subhook::Hook *connectMasterServerHook;
 
 void ConnectMasterServerHookFunc()
 {
     subhook::ScopedHookRemove scopedRemove(connectMasterServerHook);
 
-    return addresses::ConnectMasterServerFunc(); // This might be used in the future
+    addresses::ConnectMasterServerFunc(); // This might be used in the future
 }
 
 #endif

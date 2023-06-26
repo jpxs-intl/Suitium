@@ -3,9 +3,13 @@
 #include <cstddef>
 
 #include "Common.hpp"
+#include "VehicleType.hpp"
 
 namespace structs
 {
+#if _WIN32
+#pragma pack(push, 1)
+#endif
     // 20840 (0x5168)
     struct Vehicle
     {
@@ -44,5 +48,12 @@ namespace structs
         CPad pad10[304];
         int numberOfSeats;
         CPad pad11[136];
+
+        VehicleType *GetType() const;
+#if __linux__
+    } __attribute__((packed));
+#elif _WIN32
     };
+#pragma pack(pop)
+#endif
 }

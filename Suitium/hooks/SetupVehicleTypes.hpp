@@ -2,8 +2,7 @@
 
 #include <subhook.h>
 
-#include "../Addresses.hpp"
-#include "../structs/VehicleType.hpp"
+extern subhook::Hook *setupVehicleTypesHook;
 
 void SetupVehicleTypesHookFunc();
 
@@ -14,7 +13,10 @@ void SetupVehicleTypesHookFunc();
 
 #if IMPLEMENT_HOOKS
 
-static subhook::Hook *setupVehicleTypesHook;
+#include "../Addresses.hpp"
+#include "../structs/VehicleType.hpp"
+
+subhook::Hook *setupVehicleTypesHook;
 
 void SetupVehicleTypesHookFunc()
 {
@@ -22,8 +24,36 @@ void SetupVehicleTypesHookFunc()
 
     addresses::SetupVehicleTypesFunc();
 
-    for (int vehicleTypeID = 0; vehicleTypeID < structs::VehicleType::VanillaCount; vehicleTypeID++)
-        addresses::VehicleTypes[vehicleTypeID].customData.health = 100; // lets just make it the default for now
+    for (std::size_t vehicleTypeCount = 0; vehicleTypeCount < structs::VehicleType::VanillaCount; vehicleTypeCount++)
+    {
+        addresses::VehicleTypes[vehicleTypeCount].customData.index = vehicleTypeCount;
+        addresses::VehicleTypes[vehicleTypeCount].customData.health = 100;
+    }
+
+    GetVehicleTypeManager()->Clear();
+    for (std::size_t vehicleTypeCount = 0; vehicleTypeCount < structs::VehicleType::VanillaCount; vehicleTypeCount++)
+    {
+        std::stringstream stream;
+        std::string vehicleTypeName = addresses::VehicleTypes[vehicleTypeCount].name;
+        for (char c : vehicleTypeName)
+        {
+            if (c == ' ')
+                stream << '_';
+            else if (c == '-')
+                continue;
+            else if (c == '.')
+                continue;
+            else
+                stream << (char)std::tolower(c);
+        }
+
+        // This is an empty type
+        if (vehicleTypeCount == 14)
+            stream << "unknown";
+
+        GetVehicleTypeManager()->NewID("sub_rosa", stream.str());
+        *addresses::VehicleTypes[vehicleTypeCount].customData.typeIDPtr = std::string("sub_rosa:") + stream.str();
+    }
 }
 
 #endif

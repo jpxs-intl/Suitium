@@ -38,7 +38,7 @@ void InjectDLL(HANDLE process, const char *dllPath)
     CloseHandle(remoteThread);
 }
 
-int WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, int cmdShow)
+int WINAPI WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, int cmdShow)
 {
     (void)instance; (void)prevInstance; (void)cmdLine; (void)cmdShow;
 

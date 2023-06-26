@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <type_traits>
+#include <utility>
 
 #if _WIN32
 #define DYNADDR(windows, linux) windows
@@ -24,6 +25,11 @@ struct DataAddress
         return ptr[n];
     }
 
+    auto operator ->() const
+    {
+        return ptr;
+    }
+
     void Register(std::uintptr_t iptr)
     {
         this->ptr = (T *)iptr;
@@ -36,7 +42,11 @@ struct FuncAddress
     F *ptr = nullptr;
 
     template<typename... Args>
+#if _WIN32
     auto operator()(Args&&... args) const
+#else 
+    auto operator()(Args... args) const // packed field errors
+#endif
     {
         return this->ptr(std::forward<Args>(args)...);
     }
