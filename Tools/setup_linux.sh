@@ -9,6 +9,6 @@ cd Output
 mkdir moonjit
 cp -r ../Modules/moonjit ./
 cd moonjit
-make -j4 BUILDMODE=static
+make -j4 BUILDMODE=static STATIC_CC="$(CROSS)$(CC) -fPIC"
 cd ..
 cd ..
