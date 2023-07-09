@@ -239,6 +239,8 @@ void LuaManager::DefineGameTypes()
 		"GetByID", [](const std::string &typeID)
 		{
 			std::pair<std::string, std::string> decomposed = DecomposeTypeID(typeID);
+			if (!GetItemTypeManager()->HasID(decomposed.first, decomposed.second))
+				return (structs::ItemType *)nullptr; // The conversion is because of msvc shit
 			return &addresses::ItemTypes[GetItemTypeManager()->GetID(decomposed.first, decomposed.second)];
 		}
 	);
@@ -302,6 +304,8 @@ void LuaManager::DefineGameTypes()
 		"GetByID", [](const std::string &typeID)
 		{
 			std::pair<std::string, std::string> decomposed = DecomposeTypeID(typeID);
+			if (!GetVehicleTypeManager()->HasID(decomposed.first, decomposed.second))
+				return (structs::VehicleType *)nullptr; // The conversion is because of msvc shit
 			return &addresses::VehicleTypes[GetVehicleTypeManager()->GetID(decomposed.first, decomposed.second)];
 		}
 	);
