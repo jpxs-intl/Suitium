@@ -341,6 +341,9 @@ void DiscoverAddons()
         addons.push_back(std::make_unique<Addon>(suitiumAddonPath, 1));
     }
 
+    if (!std::filesystem::is_directory(addonsFolderPath))
+        return;
+
     for (auto &entry : std::filesystem::directory_iterator(addonsFolderPath))
     {
         if (std::filesystem::is_directory(entry.status()))
