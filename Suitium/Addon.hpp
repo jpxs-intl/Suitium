@@ -34,11 +34,11 @@ private:
 public:
     const std::string &ID() const;
 
-    std::string _name;
+    std::string _title;
     std::string _description;
     std::string _logDecoration;
 public:
-    const std::string &GetName() const;
+    const std::string &GetTitle() const;
     const std::string &GetDescription() const;
     const std::string &GetLogDecoration() const;
 

@@ -115,7 +115,7 @@ void LuaManager::Initialize()
 
 		"id", sol::property(&Addon::ID),
 
-		"name", sol::property(&Addon::GetName),
+		"title", sol::property(&Addon::GetTitle),
 		"description", sol::property(&Addon::GetDescription),
 		"logDecoration", sol::property(&Addon::GetLogDecoration),
 

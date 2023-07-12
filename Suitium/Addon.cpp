@@ -95,7 +95,7 @@ void Addon::Load()
             goto label_error;
         }
 
-        this->_name = addonsJSON.contains("name") ? addonsJSON["name"].get<std::string>() : this->_id;
+        this->_title = addonsJSON.contains("title") ? addonsJSON["title"].get<std::string>() : this->_id;
         this->_description = addonsJSON.contains("description") ? addonsJSON["description"].get<std::string>() : "NO DESCRIPTION PROVIDED";
         this->_logDecoration = addonsJSON.contains("log-decoration") ? addonsJSON["log-decoration"].get<std::string>() : "";
 
@@ -128,7 +128,7 @@ void Addon::Load()
     this->_isLoaded = true;
     api::GetSuitiumLogger()->Log("Loaded addon \"{}{}<reset>\"!", this->GetLogDecoration(), this->ID());
 
-    this->_logger = std::make_unique<api::Logger>(this->GetName(), this->GetLogDecoration());
+    this->_logger = std::make_unique<api::Logger>(this->GetTitle(), this->GetLogDecoration());
 
     return;
 
@@ -151,7 +151,7 @@ void Addon::LoadAsSR()
 {
     this->_id = "sub_rosa";
 
-    this->_name = "Sub Rosa";
+    this->_title = "Sub Rosa";
     this->_description = "The base Sub Rosa game.";
     this->_logDecoration = "<blue><b>";
 
@@ -166,7 +166,7 @@ void Addon::LoadAsSuitium()
 {
     this->_id = "suitium";
 
-    this->_name = "Suitium";
+    this->_title = "Suitium";
     this->_description = "Suitium reserved addon.";
     this->_logDecoration = "<red><b>";
 
@@ -185,11 +185,11 @@ const std::string &Addon::ID() const
     return this->_id;
 }
 
-const std::string &Addon::GetName() const
+const std::string &Addon::GetTitle() const
 {
     if (!this->IsLoaded())
         throw std::logic_error("Addon is not loaded");
-    return this->_name;
+    return this->_title;
 }
 const std::string &Addon::GetDescription() const
 {
@@ -288,10 +288,7 @@ bool Addon::PrepareLua(LuaManager *manager, bool ignoreClient)
         }
     }
 
-
-    if (ignoreClient)
-        return true;
-
+    if (!ignoreClient)
     {
         std::string path = "/client/init.lua";
         std::string fullPath = this->_folderPath + path;
